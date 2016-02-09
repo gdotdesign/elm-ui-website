@@ -5,6 +5,7 @@ import StartApp
 import Effects
 import Task
 import Hop
+import Dict
 
 import Html.Attributes exposing (href, class, src)
 import Html exposing (node, div, span, strong, text, a, img)
@@ -14,18 +15,24 @@ import Ui.Button
 import Ui.App
 import Ui
 
+import Reference
+
 type alias Model =
   { app : Ui.App.Model
   , page : String
+  , reference : Reference.Model
   }
 
 type Action
   = App Ui.App.Action
   | Navigate String Hop.Payload
+  | NavigateReference Hop.Payload
+  | Reference Reference.Action
 
 routes : List (String, Hop.Payload -> Action)
 routes =
-  List.map (\(page, _) -> ("/" ++ page, (Navigate page))) pages
+  ( [("/reference/:component", NavigateReference)]
+    ++ (List.map (\(page, _) -> ("/" ++ page, (Navigate page))) pages))
 
 pages : List (String, String)
 pages =
@@ -45,13 +52,32 @@ init : Model
 init =
   { app = Ui.App.init "Elm-UI"
   , page = "home"
+  , reference = Reference.init
   }
+
+component payload =
+  payload.params
+    |> Dict.get "component"
+    |> Maybe.withDefault ""
 
 update : Action -> Model -> (Model, Effects.Effects Action)
 update action model =
   case action of
     Navigate page _ ->
-      ({ model | page = page }, Effects.none)
+      ({ model | page = page
+               , reference = Reference.selectComponent "" model.reference }
+               , Effects.none)
+
+    NavigateReference payload ->
+      ( { model | page = "reference"
+                , reference = Reference.selectComponent (component payload) model.reference }
+      , Effects.none)
+
+    Reference act ->
+      let
+        (reference, effect) = Reference.update act model.reference
+      in
+        ({ model | reference = reference }, Effects.map Reference effect)
 
     App act ->
       let
@@ -89,8 +115,9 @@ home =
       ]
     ]
 
-content model =
+content address model =
   case model.page of
+    "reference" -> Reference.view (forwardTo address Reference) model.reference
     "documentation" -> text ""
     "home" -> home
     _ -> text ""
@@ -106,7 +133,7 @@ view address model =
          , Ui.headerTitle [] [text "Elm-UI"]
          ] ++ (viewHeader model))
       ]
-    , content model
+    , content address model
     ]
 
 renderHeader model (page, label) =
@@ -118,7 +145,9 @@ renderHeader model (page, label) =
         ""
   in
     node "ui-header-item" [class className]
-      [ a [href ("#/" ++ page)] [text label]
+      [ a [href ("#/" ++ page)]
+        [ span [] [text label]
+        ]
       ]
 
 viewHeader model =
@@ -137,3 +166,7 @@ main =
 port tasks : Signal (Task.Task Effects.Never ())
 port tasks =
   app.tasks
+
+port routeRunTask : Task.Task () ()
+port routeRunTask =
+  router.run
