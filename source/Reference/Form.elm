@@ -1,18 +1,18 @@
-module Reference.Form where
+module Reference.Form exposing (..)
 
 import Html exposing (node, div, text)
-import Signal exposing (forwardTo)
+import Html.App
+
 import Dict exposing (Dict)
-import Effects
 
 import Ui.Checkbox
 import Ui.Chooser
 import Ui.Input
 
-type Action
-  = Checkboxes String Ui.Checkbox.Action
-  | Choosers String Ui.Chooser.Action
-  | Inputs String Ui.Input.Action
+type Msg
+  = Checkboxes String Ui.Checkbox.Msg
+  | Choosers String Ui.Chooser.Msg
+  | Inputs String Ui.Input.Msg
 
 type alias Model =
   { checkboxes : Dict String (Int, Ui.Checkbox.Model)
@@ -84,10 +84,10 @@ updateDict name act fn dict =
       in
         (effect, Dict.insert name (index, updateValue) dict)
     Nothing ->
-      (Effects.none, dict)
+      (Cmd.none, dict)
 
 {-- Update --}
-update : Action -> Model -> (Model, Effects.Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     Checkboxes name act ->
@@ -96,40 +96,40 @@ update action model =
           updateDict name act Ui.Checkbox.update model.checkboxes
       in
         ( { model | checkboxes = updatedCheckboxes }
-        , Effects.map (Checkboxes name) effect)
+        , Cmd.map (Checkboxes name) effect)
     Choosers name act ->
       let
         (effect, updatedChoosers) =
           updateDict name act Ui.Chooser.update model.choosers
       in
         ( { model | choosers = updatedChoosers }
-        , Effects.map (Choosers name) effect)
+        , Cmd.map (Choosers name) effect)
     Inputs name act ->
       let
         (effect, updatedInputs) =
           updateDict name act Ui.Input.update model.inputs
       in
         ( { model | inputs = updatedInputs }
-        , Effects.map (Inputs name) effect)
+        , Cmd.map (Inputs name) effect)
 
 {-- View --}
-view : Signal.Address Action -> Model -> Html.Html
-view address fields =
+view : Model -> Html.Html Msg
+view fields =
   let
     renderCheckbox name data =
       inlineField
         name
-        (Ui.Checkbox.view (forwardTo address (Checkboxes name)) data)
+        (Html.App.map (Checkboxes name) (Ui.Checkbox.view data))
 
     renderChooser name data =
       blockField
         name
-        (Ui.Chooser.view (forwardTo address (Choosers name)) data)
+        (Html.App.map (Choosers name) (Ui.Chooser.view data))
 
     renderInput name data =
       blockField
         name
-        (Ui.Input.view (forwardTo address (Inputs name)) data)
+        (Html.App.map (Inputs name) (Ui.Input.view data))
 
     blockField name child =
       node "ui-form-block" []

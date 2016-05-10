@@ -1,11 +1,9 @@
-module Reference where
-
-import Signal exposing (forwardTo)
-import Effects
+module Reference exposing (..)
 
 import Html.Attributes exposing (href)
 import Html exposing (div, span, strong, text, node, a)
 import Html.Events exposing (onClick)
+import Html.App
 
 import Ui.Container
 import Ui.Button
@@ -23,17 +21,17 @@ type alias Model =
   , active : String
   }
 
-type Action
-  = ButtonAction Button.Action
-  | ChooserAction Chooser.Action
-  | CalendarAction Calendar.Action
+type Msg
+  = ButtonAction Button.Msg
+  | ChooserAction Chooser.Msg
+  | CalendarAction Calendar.Msg
 
 init : Model
 init =
   { button = Button.init
   , chooser = Chooser.init
   , calendar = Calendar.init
-  , active = ""
+  , active = "calendar"
   }
 
 components =
@@ -46,26 +44,26 @@ selectComponent : String -> Model -> Model
 selectComponent component model =
   { model | active = component }
 
-update : Action -> Model -> (Model, Effects.Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
     ButtonAction act ->
       let
         (button, effect) = Button.update act model.button
       in
-        ({ model | button = button }, Effects.map ButtonAction effect)
+        ({ model | button = button }, Cmd.map ButtonAction effect)
 
     CalendarAction act ->
       let
         (calendar, effect) = Calendar.update act model.calendar
       in
-        ({ model | calendar = calendar }, Effects.map CalendarAction effect)
+        ({ model | calendar = calendar }, Cmd.map CalendarAction effect)
 
     ChooserAction act ->
       let
         (chooser, effect) = Chooser.update act model.chooser
       in
-        ({ model | chooser = chooser }, Effects.map ChooserAction effect)
+        ({ model | chooser = chooser }, Cmd.map ChooserAction effect)
 
 renderLi (slug, label)  =
   let
@@ -73,21 +71,21 @@ renderLi (slug, label)  =
   in
     node "li" [] [a [href url] [text label]]
 
-view : Signal.Address Action -> Model -> Html.Html
-view address model =
+view : Model -> Html.Html Msg
+view model =
   let
     componentView =
       case model.active of
         "button" ->
-          Button.render (forwardTo address ButtonAction) model.button
+          Html.App.map ButtonAction (Button.render model.button)
         "chooser" ->
-          Chooser.render (forwardTo address ChooserAction) model.chooser
+          Html.App.map ChooserAction (Chooser.render model.chooser)
         "calendar" ->
-          Calendar.render (forwardTo address CalendarAction) model.calendar
+          Html.App.map CalendarAction (Calendar.render model.calendar)
         _ ->
-          [text "No component is selected! Select one on the right!"]
+          text "No component is selected! Select one on the right!"
   in
     node "ui-reference" []
       [ node "ul" [] (List.map renderLi components)
-      , node "ui-playground" [] componentView
+      , node "ui-playground" [] [componentView]
       ]

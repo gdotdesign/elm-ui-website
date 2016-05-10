@@ -1,8 +1,7 @@
-module Reference.Button where
+module Reference.Button exposing (..)
 
 import Html exposing (node, div, text, pre, code)
-import Signal exposing (forwardTo)
-import Effects
+import Html.App
 import String
 
 import Ui.Container
@@ -11,8 +10,8 @@ import Ui
 
 import Reference.Form as Form
 
-type Action
-  = Form Form.Action
+type Msg
+  = Form Form.Msg
   | Nothing
 
 type alias Model =
@@ -44,7 +43,7 @@ init =
                          }
   }
 
-update : Action -> Model -> (Model, Effects.Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   let
     updatedModel =
@@ -53,8 +52,8 @@ update action model =
           let
             (fields, effect) = Form.update act model.fields
           in
-            ({ model | fields = fields }, Effects.map Form effect)
-        _ -> (model, Effects.none)
+            ({ model | fields = fields }, Cmd.map Form effect)
+        _ -> (model, Cmd.none)
   in
     updatedModel
       |> updateState
@@ -86,16 +85,17 @@ infos =
   , pre [] [code [] [text (String.trim modelCodeString)]]
   ]
 
-fields : Signal.Address Action -> Model -> Html.Html
-fields address model =
-  Form.view (forwardTo address Form) (model.fields)
+fields : Model -> Html.Html Msg
+fields model =
+  Html.App.map Form (Form.view model.fields)
 
-view : Signal.Address Action -> Model -> Html.Html
-view address model =
-  Ui.Button.view address Nothing model.model
+view : Model -> Html.Html Msg
+view model =
+  Ui.Button.view Nothing model.model
 
 
-render address model =
-  [ node "ui-playground-viewport" [] [(view address model)]
-  , fields address model
-  ]
+render model =
+  node "div" []
+    [ node "ui-playground-viewport" [] [(view model)]
+    , fields model
+    ]

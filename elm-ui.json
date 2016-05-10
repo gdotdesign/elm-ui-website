@@ -9,7 +9,6 @@
   ],
   "exposed-modules": [],
   "dependencies": {
-    "sporto/hop": "2.1.0 <= v < 3.0.0"
   },
   "elm-version": "0.16.0 <= v < 0.17.0"
 }

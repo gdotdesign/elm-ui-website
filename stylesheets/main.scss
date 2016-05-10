@@ -1,7 +1,11 @@
 @import 'ui';
 
+body {
+  color: #444;
+}
+
 %container {
-  max-width: 900px;
+  max-width: 1160px;
   margin: 0 auto;
 }
 
@@ -25,27 +29,27 @@ ui-app {
       padding: 20px;
     }
   }
-
-  > ui-header > ui-container {
-    > ui-header-title {
-      margin-left: 10px;
-    }
-
-    > ui-header-item + ui-header-item {
-      margin-left: 20px;
-    }
-  }
 }
 
+ui-header {
+  padding: 0 60px;
+}
+
+ui-header-title {
+  margin-right: auto;
+}
 
 ui-header-item {
   cursor: pointer;
   font-size: 18px;
   font-weight: 600;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
 
   &.active a span {
     border-bottom: 2px solid currentColor;
+  }
+
+  &:hover {
+    color: #FFF;
   }
 
   a {
@@ -133,5 +137,27 @@ ui-form {
 
   ui-form-label {
     font-weight: 600;
+  }
+}
+
+ui-hero {
+  @extend %container;
+  display: block;
+}
+
+ui-section {
+  display: block;
+  padding: 50px;
+
+  &:nth-child(even) {
+    background: #FFF;
+  }
+
+  > ui-container {
+    @extend %container;
+
+    > div {
+      flex: 1;
+    }
   }
 }

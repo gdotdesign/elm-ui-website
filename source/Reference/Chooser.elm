@@ -1,8 +1,7 @@
-module Reference.Chooser where
+module Reference.Chooser exposing (..)
 
 import Html exposing (node, div, text, pre, code)
-import Signal exposing (forwardTo)
-import Effects
+import Html.App
 import String
 
 import Ui.Container
@@ -11,9 +10,9 @@ import Ui
 
 import Reference.Form as Form exposing (valueOfCheckbox, valueOfInput)
 
-type Action
-  = Form Form.Action
-  | Chooser Ui.Chooser.Action
+type Msg
+  = Form Form.Msg
+  | Chooser Ui.Chooser.Msg
 
 type alias Model =
   { model : Ui.Chooser.Model
@@ -50,14 +49,14 @@ update action model =
       let
         (fields, effect) = Form.update act model.fields
       in
-        ({ model | fields = fields }, Effects.map Form effect)
+        ({ model | fields = fields }, Cmd.map Form effect)
           |> updateState
 
     Chooser act ->
       let
         (chooser, effect) = Ui.Chooser.update act model.model
       in
-        ({ model | model = chooser }, Effects.map Chooser effect)
+        ({ model | model = chooser }, Cmd.map Chooser effect)
           |> updateFields
 
 updateFields (model, effect) =
@@ -100,13 +99,14 @@ infos =
   , pre [] [code [] [text (String.trim modelCodeString)]]
   ]
 
-fields address model =
-  Form.view (forwardTo address Form) (model.fields)
+fields model =
+  Html.App.map Form (Form.view model.fields)
 
-view address model =
-  Ui.Chooser.view (forwardTo address Chooser) model.model
+view model =
+  Html.App.map Chooser (Ui.Chooser.view model.model)
 
-render address model =
-  [ node "ui-playground-viewport" [] [(view address model)]
-  , fields address model
-  ]
+render model =
+  node "div" []
+    [ node "ui-playground-viewport" [] [(view model)]
+    , fields model
+    ]
