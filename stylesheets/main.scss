@@ -1,9 +1,5 @@
 @import 'ui';
 
-body {
-  color: #444;
-}
-
 %container {
   max-width: 1160px;
   margin: 0 auto;
@@ -48,10 +44,6 @@ ui-header-item {
     border-bottom: 2px solid currentColor;
   }
 
-  &:hover {
-    color: #FFF;
-  }
-
   a {
     display: block;
     color: inherit;
@@ -64,13 +56,20 @@ ui-playground {
   flex-direction: row;
   flex: 1;
 
-  ui-playground-viewport {
-    padding: 20px;
-    margin-right: 20px;
-    flex: 1;
-    display: flex;
+  > div {
     justify-content: center;
     align-items: center;
+    display: flex;
+    flex: 1;
+  }
+
+  ui-playground-viewport {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 20px;
+    flex: 1;
+    margin-right: 20px;
     background: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
                 linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
     background-position: 0 0, 10px 10px;

@@ -5,6 +5,7 @@ import Html exposing (div, span, strong, text, node, a)
 import Html.Events exposing (onClick)
 import Html.App
 
+import Ui.Helpers.Emitter as Emitter
 import Ui.Container
 import Ui.Button
 import Ui.App
@@ -18,35 +19,33 @@ type alias Model =
   { button : Button.Model
   , chooser : Chooser.Model
   , calendar : Calendar.Model
-  , active : String
   }
 
 type Msg
   = ButtonAction Button.Msg
   | ChooserAction Chooser.Msg
   | CalendarAction Calendar.Msg
+  | Navigate String
 
 init : Model
 init =
   { button = Button.init
   , chooser = Chooser.init
   , calendar = Calendar.init
-  , active = "calendar"
   }
 
 components =
-  [ ("button", "Button")
-  , ("chooser", "Chooser")
-  , ("calendar", "Calendar")
+  [ ("/reference/button", "Button")
+  , ("/reference/chooser", "Chooser")
+  , ("/reference/calendar", "Calendar")
   ]
-
-selectComponent : String -> Model -> Model
-selectComponent component model =
-  { model | active = component }
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case action of
+    Navigate url ->
+      (model, Emitter.sendString "navigation" url)
+
     ButtonAction act ->
       let
         (button, effect) = Button.update act model.button
@@ -65,17 +64,14 @@ update action model =
       in
         ({ model | chooser = chooser }, Cmd.map ChooserAction effect)
 
-renderLi (slug, label)  =
-  let
-    url = "#/reference/" ++ slug
-  in
-    node "li" [] [a [href url] [text label]]
+renderLi (url, label)  =
+  node "li" [] [a [onClick (Navigate url)] [text label]]
 
-view : Model -> Html.Html Msg
-view model =
+view : Model -> String ->Html.Html Msg
+view model active =
   let
     componentView =
-      case model.active of
+      case active of
         "button" ->
           Html.App.map ButtonAction (Button.render model.button)
         "chooser" ->

@@ -35,7 +35,7 @@ kindData =
 
 init : Model
 init =
-  { model = { text = "Test", kind = "primary", size = "medium", disabled = False }
+  { model = { text = "Test", kind = "primary", size = "medium", disabled = False, readonly = False }
   , fields = Form.init { checkboxes = [("disabled", 0, False)]
                          , choosers = [ ("kind", 1, kindData, "", "primary")
                                       , ("size", 3, sizeData, "", "medium")]
