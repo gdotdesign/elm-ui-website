@@ -71,7 +71,7 @@ ui-reference {
   display: flex;
 
   ul {
-    border-right: 1px solid rgba(#000, 0.1);
+    border-right: 5px solid rgba(#000, 0.1);
     min-width: 230px;
     flex: 0 0 auto;
     padding: 0;
@@ -243,5 +243,58 @@ ui-reference-demo {
     display: flex;
     padding: 40px;
     flex: 1;
+  }
+}
+
+ui-docs {
+  padding: 30px;
+  display: block;
+  background: $input;
+}
+
+ui-docs-entity {
+  display: block;
+
+  + ui-docs-entity {
+    border-top: 1px dashed rgba(#000, 0.1);
+    padding-top: 30px;
+    margin-top: 30px;
+  }
+
+  ui-docs-entity-description {
+    display: block;
+    margin-left: 20px;
+
+    pre {
+      padding: 20px;
+      border-radius: $border-radius;
+      border: 1px solid rgba(#000, 0.05);
+      background: #F7f7f7;
+    }
+
+    code {
+      font-family: Space Mono;
+    }
+  }
+
+  ui-docs-entity-title {
+    display: flex;
+    font-size: 18px;
+    font-family: Space Mono;
+
+    span {
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    div {
+      &:first-child {
+        color: $primary;
+      }
+
+      &:nth-child(2) {
+        margin: 0 10px;
+      }
+    }
   }
 }

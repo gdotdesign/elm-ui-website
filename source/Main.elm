@@ -3,22 +3,28 @@ module Main exposing (..)
 import Hop.Matchers exposing (match1, match2, str)
 import Hop.Types
 import Hop
+
 import Navigation
 import Task
 import Dict
+
 import Html.Attributes exposing (href, class, src)
 import Html.Events exposing (onClick)
 import Html exposing (node, div, span, strong, text, a, img)
 import Html.App
+
 import Ui.Helpers.Emitter as Emitter
 import Ui.Container
 import Ui.Header
 import Ui.Button
 import Ui.App
 import Ui
+
 import Reference
 import Debug exposing (log)
 
+import Docs.Types
+import Http
 
 type alias Model =
   { app : Ui.App.Model
@@ -33,6 +39,8 @@ type Msg
   = App Ui.App.Msg
   | Navigate String
   | Reference Reference.Msg
+  | Failed Http.Error
+  | Loaded Docs.Types.Documentation
 
 
 
@@ -92,7 +100,7 @@ init ( route, location ) =
     , route = route
     , location = location
     }
-  , Cmd.none
+  , Task.perform Failed Loaded (Http.get Docs.Types.decodeDocumentation "/documentation.json")
   )
 
 
@@ -105,6 +113,12 @@ component payload =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
+    Failed _ ->
+      (model, Cmd.none)
+
+    Loaded docs ->
+      ({ model | reference = Reference.setDocumentation docs model.reference }, Cmd.none)
+
     Navigate path ->
       let
         _ =
