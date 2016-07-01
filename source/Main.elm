@@ -3,26 +3,22 @@ module Main exposing (..)
 import Hop.Matchers exposing (match1, match2, str)
 import Hop.Types
 import Hop
-
 import Navigation
 import Task
 import Dict
-
 import Html.Attributes exposing (href, class, src)
 import Html.Events exposing (onClick)
 import Html exposing (node, div, span, strong, text, a, img)
 import Html.App
-
 import Ui.Helpers.Emitter as Emitter
 import Ui.Container
 import Ui.Header
 import Ui.Button
 import Ui.App
 import Ui
-
 import Reference
-
 import Debug exposing (log)
+
 
 type alias Model =
   { app : Ui.App.Model
@@ -32,13 +28,16 @@ type alias Model =
   , location : Hop.Types.Location
   }
 
+
 type Msg
   = App Ui.App.Msg
   | Navigate String
   | Reference Reference.Msg
 
 
+
 -------------- ROUTING ---------------------------------------------------------
+
 
 type Route
   = Component String
@@ -56,11 +55,13 @@ matchers =
 
 urlParser : Navigation.Parser ( Route, Hop.Types.Location )
 urlParser =
-    Navigation.makeParser (.href >> Hop.matchUrl routerConfig)
+  Navigation.makeParser (.href >> Hop.matchUrl routerConfig)
+
 
 urlUpdate : ( Route, Hop.Types.Location ) -> Model -> ( Model, Cmd Msg )
 urlUpdate ( route, location ) model =
-    ( { model | route = route, location = location }, Cmd.none )
+  ( { model | route = route, location = location }, Cmd.none )
+
 
 routerConfig : Hop.Types.Config Route
 routerConfig =
@@ -70,73 +71,91 @@ routerConfig =
   , notFound = Home
   }
 
+
+
 --------------------------------------------------------------------------------
 
-pages : List (String, String)
+
+pages : List ( String, String )
 pages =
-  [ ("/", "Home")
-  , ("/documentation", "Documentation")
-  , ("/reference/button", "Reference")
+  [ ( "/", "Home" )
+  , ( "/documentation", "Documentation" )
+  , ( "/reference/button", "Reference" )
   ]
 
-init : ( Route, Hop.Types.Location ) -> (Model, Cmd Msg)
-init (route, location) =
-  ({ app = Ui.App.init "Elm-UI"
-  , page = "reference"
-  , reference = Reference.init
-  , route = route
-  , location = location
-  }, Cmd.none)
+
+init : ( Route, Hop.Types.Location ) -> ( Model, Cmd Msg )
+init ( route, location ) =
+  ( { app = Ui.App.init "Elm-UI"
+    , page = "reference"
+    , reference = Reference.init
+    , route = route
+    , location = location
+    }
+  , Cmd.none
+  )
+
 
 component payload =
   payload.params
     |> Dict.get "component"
     |> Maybe.withDefault ""
 
-update : Msg -> Model -> (Model, Cmd Msg)
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
     Navigate path ->
       let
-        _ = log "a" (Hop.makeUrl routerConfig path)
+        _ =
+          log "a" (Hop.makeUrl routerConfig path)
+
         command =
           Hop.makeUrl routerConfig path
-              |> Navigation.newUrl
+            |> Navigation.newUrl
       in
         ( model, command )
 
     Reference act ->
       let
-        (reference, effect) = Reference.update act model.reference
+        ( reference, effect ) =
+          Reference.update act model.reference
       in
-        ({ model | reference = reference }, Cmd.map Reference effect)
+        ( { model | reference = reference }, Cmd.map Reference effect )
 
     App act ->
       let
-        (app, effect) = Ui.App.update act model.app
+        ( app, effect ) =
+          Ui.App.update act model.app
       in
-        ({ model | app = app }, Cmd.map App effect)
+        ( { model | app = app }, Cmd.map App effect )
+
 
 home : Html.Html Msg
 home =
   Ui.Container.column []
-    [ node "ui-hero" []
-      [ Ui.title [] [text "Elm-UI"]
-      , Ui.subTitle [] [text "A user interface library and web app framework!"]
-      , node "pre" []
-        [ node "code" []
-          [ text "npm install elm-ui -g"
-          , text "\nelm-ui init my-awesome-elm-project"
-          , text "\ncd my-awesome-elm-project"
-          , text "\nelm-ui install"
-          , text "\nelm-ui server"
-          ]
+    [ node "ui-hero"
+        []
+        [ node "ui-hero-title" [] [ text "Elm-UI" ]
+        , node "ui-hero-subtitle" [] [ text "A user interface library and framework!" ]
+        , node "terminal"
+            []
+            [ node "terminal-header" [] []
+            , node "terminal-code"
+                []
+                [ text "$ npm install elm-ui -g"
+                , text "\n$ elm-ui init my-awesome-elm-project"
+                , text "\n$ cd my-awesome-elm-project"
+                , text "\n$ elm-ui install"
+                , text "\n$ elm-ui server"
+                ]
+            ]
         ]
-      ]
-    , node "ui-section" []
-      [ Ui.Container.row []
-        [ div []
-          [ text """
+    , node "ui-section"
+        []
+        [ Ui.Container.row []
+            [ div []
+                [ text """
 ## Development Workflow
 Elm-UI gives you the perfect tools so you can focus on the code instead of the environment:
 - Development server with **live reload**
@@ -145,49 +164,64 @@ Elm-UI gives you the perfect tools so you can focus on the code instead of the e
 - **Building and minifying** your final files
 - **Environment configurations**
 """
-          ]
-        , img [src "images/errors.png"] []
+                ]
+            , img [ src "images/errors.png" ] []
+            ]
         ]
-      ]
-    , node "ui-section" []
-      [ Ui.Container.row []
-        [ text "Sass" ]
-      ]
-    , node "ui-section" []
-      [ Ui.Container.row []
-        [ text "Building" ]
-      , Ui.Container.row []
-        [ text "Development Server" ]
-      , Ui.Container.row []
-        [ text "Lost of components" ]
-      ]
+    , node "ui-section"
+        []
+        [ Ui.Container.row []
+            [ text "Sass" ]
+        ]
+    , node "ui-section"
+        []
+        [ Ui.Container.row []
+            [ text "Building" ]
+        , Ui.Container.row []
+            [ text "Development Server" ]
+        , Ui.Container.row []
+            [ text "Lost of components" ]
+        ]
     ]
+
 
 content model =
   case log "a" model.route of
-    Home -> home
-    Component comp -> Html.App.map Reference (Reference.view model.reference comp)
-    Documentation -> text ""
+    Home ->
+      home
+
+    Component comp ->
+      Html.App.map Reference (Reference.view model.reference comp)
+
+    Documentation ->
+      text ""
+
 
 view : Model -> Html.Html Msg
 view model =
-  Ui.App.view App model.app
+  Ui.App.view App
+    model.app
     [ Ui.Header.view []
-      ([ Ui.Header.icon "code-working" False []
-       , Ui.Header.title [] [text "Elm-UI"]
-       ] ++ (viewHeader model))
+        ([ Ui.Header.title [] [ text "Elm-UI" ]
+         ]
+          ++ (viewHeader model)
+        )
     , content model
     ]
 
-renderHeader model (page, label) =
-  node "ui-header-item" []
-    [ a [onClick (Navigate page)]
-      [ span [] [text label]
-      ]
+
+renderHeader model ( page, label ) =
+  node "ui-header-item"
+    []
+    [ a [ onClick (Navigate page) ]
+        [ span [] [ text label ]
+        ]
     ]
+
 
 viewHeader model =
   List.map (renderHeader model) pages
+
 
 main =
   Navigation.program urlParser
@@ -195,9 +229,10 @@ main =
     , view = view
     , update = update
     , urlUpdate = urlUpdate
-    , subscriptions = \model ->
-      Sub.batch [ Emitter.listenString "navigation" Navigate
-                , Sub.map Reference (Reference.subscriptions model.reference)
-                ]
+    , subscriptions =
+        \model ->
+          Sub.batch
+            [ Emitter.listenString "navigation" Navigate
+            , Sub.map Reference (Reference.subscriptions model.reference)
+            ]
     }
-

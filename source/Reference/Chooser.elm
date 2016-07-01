@@ -10,6 +10,8 @@ import Ui
 
 import Reference.Form as Form exposing (valueOfCheckbox, valueOfInput)
 
+import Components.Reference
+
 type Msg
   = Form Form.Msg
   | Chooser Ui.Chooser.Msg
@@ -106,7 +108,4 @@ view model =
   Html.App.map Chooser (Ui.Chooser.view model.model)
 
 render model =
-  node "div" []
-    [ node "ui-playground-viewport" [] [(view model)]
-    , fields model
-    ]
+  Components.Reference.view (view model) (fields model)

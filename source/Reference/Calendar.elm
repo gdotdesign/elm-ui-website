@@ -9,6 +9,7 @@ import Ui.Calendar
 import Ui
 
 import Reference.Form as Form
+import Components.Reference
 
 type Msg
   = Form Form.Msg
@@ -73,7 +74,4 @@ view model =
 
 
 render model =
-  node "div" []
-    [ node "ui-playground-viewport" [] [(view model)]
-    , fields model
-    ]
+  Components.Reference.view (view model) (fields model)

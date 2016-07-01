@@ -1,50 +1,42 @@
+@import 'https://fonts.googleapis.com/css?family=Abel|Space+Mono';
 @import 'ui';
+
+body {
+  overflow-y: scroll;
+}
 
 %container {
   max-width: 1160px;
   margin: 0 auto;
 }
 
-ui-app {
-  > ui-container {
-    padding-top: 60px;
-    overflow: auto;
-    display: block;
-    height: calc(100vh - 60px);
-
-    > div {
-      @extend %container;
-    }
-
-    pre {
-      @include colors(dampen($background, 3%));
-      border: 1px solid dampen($background, 10%);
-      border-radius: 5px;
-      font-size: 20px;
-      line-height: 1.5em;
-      padding: 20px;
-    }
-  }
-}
-
 ui-header {
-  padding: 0 60px;
+  box-shadow: none;
+  background-color: #1a4561;
+  background-image: url('images/noise.png');
+  padding: 0 30px;
+  border-bottom: 0;
+  font-family: Abel;
 }
 
 ui-header-title {
   margin-right: auto;
+  font-weight: normal;
+  font-size: 24px;
 }
 
 ui-header-item {
   cursor: pointer;
-  font-size: 18px;
   font-weight: 600;
+  text-transform: uppercase;
 
   &.active a span {
     border-bottom: 2px solid currentColor;
   }
 
   a {
+    font-size: 20px;
+    font-weight: normal;
     display: block;
     color: inherit;
     text-decoration: none;
@@ -52,13 +44,13 @@ ui-header-item {
 }
 
 ui-playground {
-  display: flex;
   flex-direction: row;
+  display: flex;
   flex: 1;
 
   > div {
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     display: flex;
     flex: 1;
   }
@@ -70,43 +62,51 @@ ui-playground {
     padding: 20px;
     flex: 1;
     margin-right: 20px;
-    background: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
-                linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
-    background-position: 0 0, 10px 10px;
-    background-size: 20px 20px;
+
   }
 }
 
 ui-reference {
+  min-height: calc(100vh - 60px);
   display: flex;
-  padding: 30px;
 
   ul {
+    border-right: 1px solid rgba(#000, 0.1);
+    min-width: 230px;
     flex: 0 0 auto;
     padding: 0;
     margin: 0;
-    margin-right: 50px;
     list-style: none;
 
     li {
       font-size: 18px;
       line-height: 40px;
-      padding: 0 10px;
+      padding: 0 30px;
 
       + li {
-        border-top: 1px solid #CCC;
+        border-top: 1px solid rgba(#000, 0.1);
       }
 
       a {
         text-decoration: none;
+        display: block;
         color: inherit;
+
+        &:hover {
+          cursor: pointer;
+          color: $focus;
+        }
       }
     }
   }
 }
 
 ui-form {
+  border-left: 1px solid rgba(#000, 0.1);
   display: block;
+  padding: 20px;
+  padding-right: 30px;
+  width: 300px;
 
   > * + * {
     margin-top: 12px;
@@ -140,8 +140,25 @@ ui-form {
 }
 
 ui-hero {
-  @extend %container;
-  display: block;
+  background: url('images/noise.png'), linear-gradient(#1a4561, #158DD8);
+  height: calc(100vh - 120px);
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+
+  color: #FFF;
+
+  ui-hero-title {
+    font-size: 100px;
+    font-family: Abel;
+    line-height: 1;
+  }
+
+  ui-hero-subtitle {
+    font-size: 16px;
+    opacity: 0.6;
+  }
 }
 
 ui-section {
@@ -158,5 +175,73 @@ ui-section {
     > div {
       flex: 1;
     }
+  }
+}
+
+terminal {
+  border-radius: 7px;
+  min-width: 600px;
+  background: rgba(#000, 0.65);
+  margin-top: 60px;
+
+  terminal-header {
+    background: rgba(#FFF, 0.15);
+    border-radius: 7px 7px 0 0;
+    height: 34px;
+    display: block;
+    padding: 8px;
+
+    &:before,
+    &:after {
+      content: "";
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      background: rgba(#FFF, 0.15);
+      border-radius: 50%;
+      margin: 3px;
+    }
+  }
+
+  terminal-code {
+    font-family: Space Mono;
+    display: block;
+    white-space: pre;
+    font-size: 18px;
+    line-height: 30px;
+    padding: 20px;
+    color: #EEE;
+  }
+}
+
+ui-reference-title {
+  text-transform: uppercase;
+  font-size: 22px;
+  font-family: Abel;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(#000, 0.1);
+  display: block;
+}
+
+ui-reference-content {
+  display: block;
+  flex: 1;
+}
+
+ui-reference-demo {
+  border-bottom: 1px solid rgba(#000, 0.1);
+  display: flex;
+
+  ui-reference-demo-viewport {
+    background: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
+                linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
+    background-position: 0 0, 10px 10px;
+    background-size: 20px 20px;
+
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 40px;
+    flex: 1;
   }
 }

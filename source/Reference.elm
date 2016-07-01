@@ -99,5 +99,5 @@ view model active =
   in
     node "ui-reference" []
       [ node "ul" [] (List.map renderLi components)
-      , node "ui-playground" [] [componentView]
+      , node "ui-reference-content" [] [componentView]
       ]

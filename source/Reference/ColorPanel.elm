@@ -12,6 +12,8 @@ import Ui
 
 import Reference.Form as Form exposing (valueOfCheckbox, valueOfInput)
 
+import Components.Reference
+
 type Msg
   = Form Form.Msg
   | ColorPanel Ui.ColorPanel.Msg
@@ -82,7 +84,4 @@ view model =
   Html.App.map ColorPanel (Ui.ColorPanel.view model.model)
 
 render model =
-  node "div" []
-    [ node "ui-playground-viewport" [] [(view model)]
-    , fields model
-    ]
+  Components.Reference.view (view model) (fields model)
