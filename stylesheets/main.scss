@@ -231,6 +231,7 @@ ui-reference-content {
 ui-reference-demo {
   border-bottom: 1px solid rgba(#000, 0.1);
   display: flex;
+  min-height: 400px;
 
   ui-reference-demo-viewport {
     background: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
@@ -264,6 +265,7 @@ ui-docs-entity {
   ui-docs-entity-description {
     display: block;
     margin-left: 20px;
+    font-size: 14px;
 
     pre {
       padding: 20px;
@@ -279,7 +281,7 @@ ui-docs-entity {
 
   ui-docs-entity-title {
     display: flex;
-    font-size: 18px;
+    font-size: 16px;
     font-family: Space Mono;
 
     span {
@@ -297,4 +299,10 @@ ui-docs-entity {
       }
     }
   }
+}
+
+ui-footer {
+  height: 300px;
+  display: block;
+  background: #333;
 }

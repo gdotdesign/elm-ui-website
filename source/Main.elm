@@ -221,6 +221,7 @@ view model =
           ++ (viewHeader model)
         )
     , content model
+    , node "ui-footer" [] []
     ]
 
 

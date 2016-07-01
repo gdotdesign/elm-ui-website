@@ -16,6 +16,7 @@ import Ui.Button
 import Ui.App
 import Ui
 
+import Reference.ColorPicker as ColorPicker
 import Reference.ColorPanel as ColorPanel
 import Reference.Calendar as Calendar
 import Reference.Chooser as Chooser
@@ -28,6 +29,7 @@ type alias Model =
   , chooser : Chooser.Model
   , calendar : Calendar.Model
   , colorPanel : ColorPanel.Model
+  , colorPicker : ColorPicker.Model
   , documentation : Documentation
   }
 
@@ -36,6 +38,7 @@ type Msg
   | ChooserAction Chooser.Msg
   | CalendarAction Calendar.Msg
   | ColorPanelAction ColorPanel.Msg
+  | ColorPickerAction ColorPicker.Msg
   | Navigate String
 
 init : Model
@@ -44,6 +47,7 @@ init =
   , chooser = Chooser.init
   , calendar = Calendar.init
   , colorPanel = ColorPanel.init
+  , colorPicker = ColorPicker.init
   , documentation = { modules = [] }
   }
 
@@ -55,6 +59,7 @@ components =
   , ("/reference/chooser", "Ui.Chooser")
   , ("/reference/calendar", "Ui.Calendar")
   , ("/reference/color-panel", "Ui.ColorPanel")
+  , ("/reference/color-picker", "Ui.ColorPicker")
   ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -75,6 +80,12 @@ update action model =
       in
         ({ model | colorPanel = colorPanel }, Cmd.map ColorPanelAction effect)
 
+    ColorPickerAction act ->
+      let
+        (colorPicker, effect) = ColorPicker.update act model.colorPicker
+      in
+        ({ model | colorPicker = colorPicker }, Cmd.map ColorPickerAction effect)
+
     CalendarAction act ->
       let
         (calendar, effect) = Calendar.update act model.calendar
@@ -91,7 +102,10 @@ renderLi (url, label)  =
   node "li" [] [a [onClick (Navigate url)] [text label]]
 
 subscriptions model =
-  Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
+  Sub.batch
+  [ Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
+  , Sub.map ColorPickerAction (ColorPicker.subscriptions model.colorPicker)
+  ]
 
 findDocumentation name docs =
   List.Extra.find (\mod -> mod.name == name) docs.modules
@@ -170,6 +184,8 @@ view model active =
           Html.App.map CalendarAction (Calendar.render model.calendar)
         "color-panel" ->
           Html.App.map ColorPanelAction (ColorPanel.render model.colorPanel)
+        "color-picker" ->
+          Html.App.map ColorPickerAction (ColorPicker.render model.colorPicker)
         _ ->
           text "No component is selected! Select one on the right!"
 
@@ -177,6 +193,7 @@ view model active =
       case active of
         "button" -> documentation "Ui.Button" model.documentation
         "color-panel" -> documentation "Ui.ColorPanel" model.documentation
+        "color-picker" -> documentation "Ui.ColorPicker" model.documentation
         "calendar" -> documentation "Ui.Calendar" model.documentation
         _ -> text ""
   in
