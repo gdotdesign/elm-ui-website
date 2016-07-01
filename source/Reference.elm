@@ -131,7 +131,7 @@ renderDocumentation mod =
     renderDefinition def =
       String.split "->" def
       |> List.map String.trim
-      |> List.map (\item -> "-> " ++ item)
+      |> List.indexedMap (\index item -> if index /= 0 then "-> " ++ item else item)
       |> List.map (\item -> node "span" [] [text item])
 
     renderAlias alias =

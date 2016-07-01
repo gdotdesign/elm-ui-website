@@ -294,6 +294,10 @@ ui-docs-entity {
         color: $primary;
       }
 
+      &:last-child span:first-child {
+        margin-right: 10px;
+      }
+
       &:nth-child(2) {
         margin: 0 10px;
       }
