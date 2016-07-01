@@ -195,6 +195,9 @@ main =
     , view = view
     , update = update
     , urlUpdate = urlUpdate
-    , subscriptions = \_ -> Emitter.listenString "navigation" Navigate
+    , subscriptions = \model ->
+      Sub.batch [ Emitter.listenString "navigation" Navigate
+                , Sub.map Reference (Reference.subscriptions model.reference)
+                ]
     }
 

@@ -11,6 +11,7 @@ import Ui.Button
 import Ui.App
 import Ui
 
+import Reference.ColorPanel as ColorPanel
 import Reference.Calendar as Calendar
 import Reference.Chooser as Chooser
 import Reference.Button as Button
@@ -19,12 +20,14 @@ type alias Model =
   { button : Button.Model
   , chooser : Chooser.Model
   , calendar : Calendar.Model
+  , colorPanel : ColorPanel.Model
   }
 
 type Msg
   = ButtonAction Button.Msg
   | ChooserAction Chooser.Msg
   | CalendarAction Calendar.Msg
+  | ColorPanelAction ColorPanel.Msg
   | Navigate String
 
 init : Model
@@ -32,12 +35,14 @@ init =
   { button = Button.init
   , chooser = Chooser.init
   , calendar = Calendar.init
+  , colorPanel = ColorPanel.init
   }
 
 components =
   [ ("/reference/button", "Button")
   , ("/reference/chooser", "Chooser")
   , ("/reference/calendar", "Calendar")
+  , ("/reference/color-panel", "ColorPanel")
   ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -51,6 +56,12 @@ update action model =
         (button, effect) = Button.update act model.button
       in
         ({ model | button = button }, Cmd.map ButtonAction effect)
+
+    ColorPanelAction act ->
+      let
+        (colorPanel, effect) = ColorPanel.update act model.colorPanel
+      in
+        ({ model | colorPanel = colorPanel }, Cmd.map ColorPanelAction effect)
 
     CalendarAction act ->
       let
@@ -67,6 +78,9 @@ update action model =
 renderLi (url, label)  =
   node "li" [] [a [onClick (Navigate url)] [text label]]
 
+subscriptions model =
+  Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
+
 view : Model -> String ->Html.Html Msg
 view model active =
   let
@@ -78,6 +92,8 @@ view model active =
           Html.App.map ChooserAction (Chooser.render model.chooser)
         "calendar" ->
           Html.App.map CalendarAction (Calendar.render model.calendar)
+        "color-panel" ->
+          Html.App.map ColorPanelAction (ColorPanel.render model.colorPanel)
         _ ->
           text "No component is selected! Select one on the right!"
   in
