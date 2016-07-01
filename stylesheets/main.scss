@@ -1,8 +1,12 @@
 @import 'https://fonts.googleapis.com/css?family=Abel|Space+Mono';
 @import 'ui';
 
+$code-font: Space Mono, serif;
+$title-font: Abel, Open Sans;
+
 body {
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 %container {
@@ -15,8 +19,9 @@ ui-header {
   background-color: #1a4561;
   background-image: url('images/noise.png');
   padding: 0 30px;
+  padding-right: 20px;
   border-bottom: 0;
-  font-family: Abel;
+  font-family: $title-font;
 }
 
 ui-header-title {
@@ -79,23 +84,19 @@ ui-reference {
     list-style: none;
 
     li {
+      border-bottom: 1px solid rgba(#000, 0.1);
       font-size: 18px;
       line-height: 40px;
-      padding: 0 30px;
+      text-decoration: none;
+      padding: 5px 30px;
+      padding-right: 40px;
+      display: block;
+      color: inherit;
 
-      + li {
-        border-top: 1px solid rgba(#000, 0.1);
-      }
-
-      a {
-        text-decoration: none;
-        display: block;
-        color: inherit;
-
-        &:hover {
-          cursor: pointer;
-          color: $focus;
-        }
+      &.active, &:hover {
+        background: $input;
+        cursor: pointer;
+        color: $focus;
       }
     }
   }
@@ -104,19 +105,22 @@ ui-reference {
 ui-form {
   border-left: 1px solid rgba(#000, 0.1);
   display: block;
-  padding: 20px;
-  padding-right: 30px;
   width: 300px;
 
+  > * {
+    padding: 10px;
+    padding-right: 30px;
+  }
+
   > * + * {
-    margin-top: 12px;
+    border-top: 1px solid rgba(#000, 0.05);
   }
 
   ui-form-block {
     display: block;
 
     ui-form-label {
-      margin-bottom: 5px;
+      margin-bottom: 7px;
       display: block;
 
       + * {
@@ -136,6 +140,7 @@ ui-form {
 
   ui-form-label {
     font-weight: 600;
+    text-transform: capitalize;
   }
 }
 
@@ -151,7 +156,7 @@ ui-hero {
 
   ui-hero-title {
     font-size: 100px;
-    font-family: Abel;
+    font-family: $title-font;
     line-height: 1;
   }
 
@@ -204,7 +209,7 @@ terminal {
   }
 
   terminal-code {
-    font-family: Space Mono;
+    font-family: $code-font;
     display: block;
     white-space: pre;
     font-size: 18px;
@@ -215,12 +220,16 @@ terminal {
 }
 
 ui-reference-title {
-  text-transform: uppercase;
-  font-size: 22px;
-  font-family: Abel;
+  font-size: 26px;
+  font-family: $title-font;
   padding: 12px 20px;
   border-bottom: 1px solid rgba(#000, 0.1);
   display: block;
+
+  &.upcase {
+    text-transform: uppercase;
+    font-size: 20px;
+  }
 }
 
 ui-reference-content {
@@ -232,6 +241,10 @@ ui-reference-demo {
   border-bottom: 1px solid rgba(#000, 0.1);
   display: flex;
   min-height: 400px;
+
+  ui-chooser {
+    min-width: 300px;
+  }
 
   ui-reference-demo-viewport {
     background: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
@@ -275,14 +288,14 @@ ui-docs-entity {
     }
 
     code {
-      font-family: Space Mono;
+      font-family: $code-font;
     }
   }
 
   ui-docs-entity-title {
     display: flex;
     font-size: 16px;
-    font-family: Space Mono;
+    font-family: $code-font;
 
     span {
       white-space: nowrap;

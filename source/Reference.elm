@@ -1,6 +1,6 @@
 module Reference exposing (..)
 
-import Html.Attributes exposing (href)
+import Html.Attributes exposing (classList, class)
 import Html exposing (div, span, strong, text, node, a)
 import Html.Events exposing (onClick)
 import Html.App
@@ -9,6 +9,7 @@ import List.Extra
 import Markdown
 import String
 import Regex
+import Dict
 
 import Ui.Helpers.Emitter as Emitter
 import Ui.Container
@@ -55,12 +56,16 @@ setDocumentation docs model =
   { model | documentation = docs }
 
 components =
-  [ ("/reference/button", "Ui.Button")
-  , ("/reference/chooser", "Ui.Chooser")
-  , ("/reference/calendar", "Ui.Calendar")
-  , ("/reference/color-panel", "Ui.ColorPanel")
-  , ("/reference/color-picker", "Ui.ColorPicker")
-  ]
+  Dict.fromList
+    [ ("button", ("Ui.Button", True))
+    , ("chooser", ("Ui.Chooser", True))
+    , ("calendar", ("Ui.Calendar", True))
+    , ("color-panel", ("Ui.ColorPanel", True))
+    , ("color-picker", ("Ui.ColorPicker", True))
+    , ("ext-color", ("Ext.Color", False))
+    , ("ext-number", ("Ext.Number", False))
+    , ("native_file-manager", ("Ui.Native.FileManager", False))
+    ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
@@ -98,8 +103,12 @@ update action model =
       in
         ({ model | chooser = chooser }, Cmd.map ChooserAction effect)
 
-renderLi (url, label)  =
-  node "li" [] [a [onClick (Navigate url)] [text label]]
+renderLi active (url, (label, _))  =
+  node "li"
+    [ classList [("active", active == url)]
+    , onClick (Navigate ("/reference/" ++ url))
+    ]
+    [ text label ]
 
 subscriptions model =
   Sub.batch
@@ -166,7 +175,7 @@ renderDocumentation mod =
     node "ui-docs" []
       (aliases ++ functions)
 
-documentation name docs =
+documentation docs name =
   findDocumentation name docs
   |> Maybe.map renderDocumentation
   |> Maybe.withDefault (text "")
@@ -177,30 +186,53 @@ view model active =
     componentView =
       case active of
         "button" ->
-          Html.App.map ButtonAction (Button.render model.button)
+          Html.App.map ButtonAction (Button.view model.button)
         "chooser" ->
-          Html.App.map ChooserAction (Chooser.render model.chooser)
+          Html.App.map ChooserAction (Chooser.view model.chooser)
         "calendar" ->
-          Html.App.map CalendarAction (Calendar.render model.calendar)
+          Html.App.map CalendarAction (Calendar.view model.calendar)
         "color-panel" ->
           Html.App.map ColorPanelAction (ColorPanel.render model.colorPanel)
         "color-picker" ->
           Html.App.map ColorPickerAction (ColorPicker.render model.colorPicker)
         _ ->
-          text "No component is selected! Select one on the right!"
+          text ""
 
     docs =
-      case active of
-        "button" -> documentation "Ui.Button" model.documentation
-        "color-panel" -> documentation "Ui.ColorPanel" model.documentation
-        "color-picker" -> documentation "Ui.ColorPicker" model.documentation
-        "calendar" -> documentation "Ui.Calendar" model.documentation
-        _ -> text ""
+      case Dict.get active components of
+        Just (label, haveDemo) ->
+          let
+            (title, className) =
+              if haveDemo then
+                ("Documentation", "upcase")
+              else
+                (label, "")
+          in
+            [ node "ui-reference-title" [class className] [ text title ]
+            , documentation model.documentation label
+            ]
+        _ ->
+          [ ]
+
+    nav =
+      Dict.toList components
+      |> List.sortBy (\(_, (name, _)) -> name)
+      |> List.map (renderLi active)
+
+    content =
+      case Dict.get active components of
+        Just (label, haveDemo) ->
+          if haveDemo then
+            [ node "ui-reference-title" [] [ text label ]
+            , componentView
+            ]
+          else
+            []
+        _ ->
+          [ text "No component is selected!" ]
   in
     node "ui-reference" []
-      [ node "ul" [] (List.map renderLi components)
+      [ node "ul" [] nav
       , node "ui-reference-content" []
-        [ componentView
-        , docs
-        ]
+        (content ++ docs)
       ]

@@ -1,77 +1,103 @@
 module Reference.Calendar exposing (..)
 
-import Html exposing (node, div, text, pre, code)
-import Html.App
-import Ext.Date
-import String
-
-import Ui.Calendar
-import Ui
-
 import Reference.Form as Form
 import Components.Reference
+import Ui.Calendar
+import Ext.Date
+import Html.App
+import Html
+
 
 type Msg
   = Form Form.Msg
   | Calendar Ui.Calendar.Msg
 
+
 type alias Model =
   { calendar : Ui.Calendar.Model
-  , fields : Form.Model
+  , form : Form.Model
   }
 
 
 init : Model
 init =
-  { calendar = Ui.Calendar.init (Ext.Date.now ())
-  , fields = Form.init { checkboxes = [ ("disabled", 0, False)
-                                      , ("readonly", 0, False)
-                                      , ("selectable", 0, True)
-                                      ]
-                       , choosers = []
-                       , inputs = []
-                       }
-  }
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
   let
-    updatedModel =
-      case action of
-        Calendar act ->
-          let
-            (calendar, effect) = Ui.Calendar.update act model.calendar
-          in
-            ({ model | calendar = calendar }, Cmd.map Calendar effect)
-
-        Form act ->
-          let
-            (fields, effect) = Form.update act model.fields
-          in
-            ({ model | fields = fields }, Cmd.map Form effect)
+    now =
+      Ext.Date.now ()
   in
-    updatedModel
-      |> updateState
+    { calendar = Ui.Calendar.init now
+    , form =
+        Form.init
+          { checkboxes =
+              [ ( "selectable", 2, True )
+              , ( "disabled", 3, False )
+              , ( "readonly", 4, False )
+              ]
+          , dates =
+              [ ( "value", 1, now )
+              , ( "date", 0, now )
+              ]
+          , choosers = []
+          , inputs = []
+          }
+    }
 
-updateState (model, effect) =
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update action model =
+  case action of
+    Calendar act ->
+      let
+        ( calendar, effect ) =
+          Ui.Calendar.update act model.calendar
+      in
+        ( { model | calendar = calendar }, Cmd.map Calendar effect )
+          |> updateForm
+
+    Form act ->
+      let
+        ( form, effect ) =
+          Form.update act model.form
+      in
+        ( { model | form = form }, Cmd.map Form effect )
+          |> updateState
+
+
+updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+updateForm ( model, effect ) =
   let
+    updatedForm =
+      Form.updateDate "date" model.calendar.date model.form
+        |> Form.updateDate "value" model.calendar.value
+  in
+    ( { model | form = updatedForm }, effect )
+
+
+updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+updateState ( model, effect ) =
+  let
+    now =
+      Ext.Date.now ()
+
     updated calendar =
-      { calendar | disabled = Form.valueOfCheckbox "disabled" False model.fields
-                 , readonly = Form.valueOfCheckbox "readonly" False model.fields
-                 , selectable = Form.valueOfCheckbox "selectable" True model.fields
+      { calendar
+        | selectable = Form.valueOfCheckbox "selectable" True model.form
+        , disabled = Form.valueOfCheckbox "disabled" False model.form
+        , readonly = Form.valueOfCheckbox "readonly" False model.form
+        , value = Form.valueOfDate "value" now model.form
+        , date = Form.valueOfDate "date" now model.form
       }
   in
-    ({ model | calendar = updated model.calendar }, effect)
+    ( { model | calendar = updated model.calendar }, effect )
 
-
-fields : Model -> Html.Html Msg
-fields model =
-  Html.App.map Form (Form.view model.fields)
 
 view : Model -> Html.Html Msg
 view model =
-  Html.App.map Calendar (Ui.Calendar.view "en_us" model.calendar)
+  let
+    form =
+      Html.App.map Form (Form.view model.form)
 
-
-render model =
-  Components.Reference.view (view model) (fields model)
+    demo =
+      Html.App.map Calendar (Ui.Calendar.view "en_us" model.calendar)
+  in
+    Components.Reference.view demo form

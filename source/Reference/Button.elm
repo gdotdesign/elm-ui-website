@@ -1,100 +1,106 @@
 module Reference.Button exposing (..)
 
-import Html exposing (node, div, text, pre, code)
-import Html.App
-import String
-
-import Ui.Container
-import Ui.Button
-import Ui
-
 import Reference.Form as Form
-
 import Components.Reference
+import Ui.Chooser
+import Ui.Button
+import Html.App
+import Html
+
 
 type Msg
   = Form Form.Msg
   | Nothing
 
+
 type alias Model =
-  { model : Ui.Button.Model
-  , fields : Form.Model
+  { button : Ui.Button.Model
+  , form : Form.Model
   }
 
+
+sizeData : List Ui.Chooser.Item
 sizeData =
   [ { label = "Medium", value = "medium" }
-  , { label = "Big", value = "big" }
   , { label = "Small", value = "small" }
+  , { label = "Big", value = "big" }
   ]
 
+
+kindData : List Ui.Chooser.Item
 kindData =
-  [ { label = "Primary", value = "primary" }
-  , { label = "Secondary", value = "secondary" }
+  [ { label = "Secondary", value = "secondary" }
+  , { label = "Primary", value = "primary" }
   , { label = "Success", value = "success" }
-  , { label = "Danger", value = "danger" }
   , { label = "Warning", value = "warning" }
+  , { label = "Danger", value = "danger" }
   ]
+
 
 init : Model
 init =
-  { model = { text = "Test", kind = "primary", size = "medium", disabled = False, readonly = False }
-  , fields = Form.init { checkboxes = [("disabled", 0, False)]
-                         , choosers = [ ("kind", 1, kindData, "", "primary")
-                                      , ("size", 3, sizeData, "", "medium")]
-                         , inputs = [("text", 2, "Text...", "Test")]
-                         }
+  { button =
+      { text = "Sign Up Free"
+      , disabled = False
+      , readonly = False
+      , kind = "primary"
+      , size = "big"
+      }
+  , form =
+      Form.init
+        { dates = []
+        , inputs =
+            [ ( "text", 2, "Text...", "Sign Up Free" )
+            ]
+        , checkboxes =
+            [ ( "disabled", 3, False )
+            , ( "readonly", 4, False )
+            ]
+        , choosers =
+            [ ( "kind", 0, kindData, "", "primary" )
+            , ( "size", 1, sizeData, "", "big" )
+            ]
+        }
   }
 
-update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
-  let
-    updatedModel =
-      case action of
-        Form act ->
-          let
-            (fields, effect) = Form.update act model.fields
-          in
-            ({ model | fields = fields }, Cmd.map Form effect)
-        _ -> (model, Cmd.none)
-  in
-    updatedModel
-      |> updateState
 
-updateState (model, effect) =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update action model =
+  case action of
+    Form act ->
+      let
+        ( form, effect ) =
+          Form.update act model.form
+      in
+        ( { model | form = form }, Cmd.map Form effect )
+          |> updateState
+
+    _ ->
+      ( model, Cmd.none )
+
+
+updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+updateState ( model, effect ) =
   let
     updatedButton button =
-      { button | disabled = Form.valueOfCheckbox "disabled" False model.fields
-               , kind     = Form.valueOfChooser "kind" "primary" model.fields
-               , text     = Form.valueOfInput "text" "Test" model.fields
-               , size     = Form.valueOfChooser "size" "medium" model.fields
+      { button
+        | disabled = Form.valueOfCheckbox "disabled" False model.form
+        , readonly = Form.valueOfCheckbox "readonly" False model.form
+        , kind = Form.valueOfChooser "kind" "primary" model.form
+        , size = Form.valueOfChooser "size" "medium" model.form
+        , text = Form.valueOfInput "text" "Test" model.form
       }
   in
-    ({ model | model = updatedButton model.model }, effect)
+    ( { model | button = updatedButton model.button }, effect )
 
-
-modelCodeString = """
-{ disabled : Bool
-, text : String
-, kind : String
-}
-"""
-
-infos =
-  [ Ui.title [] [text "Buttons"]
-  , div [] [text "Basic buttons for user actions. Handles tabindex and
-                  disabled state."]
-  , Ui.subTitle [] [text "Model"]
-  , pre [] [code [] [text (String.trim modelCodeString)]]
-  ]
-
-fields : Model -> Html.Html Msg
-fields model =
-  Html.App.map Form (Form.view model.fields)
 
 view : Model -> Html.Html Msg
 view model =
-  Ui.Button.view Nothing model.model
+  let
+    form =
+      Html.App.map Form (Form.view model.form)
 
-
-render model =
-  Components.Reference.view (view model) (fields model)
+    demo =
+      Ui.Button.view Nothing model.button
+  in
+    Components.Reference.view demo form

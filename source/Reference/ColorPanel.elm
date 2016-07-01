@@ -30,6 +30,7 @@ init =
                                       ]
                          , choosers = []
                          , inputs = []
+                         , dates = []
                          }
   }
 

@@ -51,6 +51,7 @@ type Route
   = Component String
   | Home
   | Documentation
+  | ReferencePage
 
 
 matchers : List (Hop.Types.PathMatcher Route)
@@ -58,6 +59,7 @@ matchers =
   [ match1 Home ""
   , match1 Documentation "/documentation"
   , match2 Component "/reference/" str
+  , match1 ReferencePage "/reference"
   ]
 
 
@@ -88,7 +90,7 @@ pages : List ( String, String )
 pages =
   [ ( "/", "Home" )
   , ( "/documentation", "Documentation" )
-  , ( "/reference/button", "Reference" )
+  , ( "/reference", "Reference" )
   ]
 
 
@@ -203,6 +205,9 @@ content model =
   case log "a" model.route of
     Home ->
       home
+
+    ReferencePage ->
+      Html.App.map Reference (Reference.view model.reference "")
 
     Component comp ->
       Html.App.map Reference (Reference.view model.reference comp)
