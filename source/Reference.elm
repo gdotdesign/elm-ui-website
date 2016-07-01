@@ -8,6 +8,7 @@ import Html.App
 import List.Extra
 import Markdown
 import String
+import Regex
 
 import Ui.Helpers.Emitter as Emitter
 import Ui.Container
@@ -50,10 +51,10 @@ setDocumentation docs model =
   { model | documentation = docs }
 
 components =
-  [ ("/reference/button", "Button")
-  , ("/reference/chooser", "Chooser")
-  , ("/reference/calendar", "Calendar")
-  , ("/reference/color-panel", "ColorPanel")
+  [ ("/reference/button", "Ui.Button")
+  , ("/reference/chooser", "Ui.Chooser")
+  , ("/reference/calendar", "Ui.Calendar")
+  , ("/reference/color-panel", "Ui.ColorPanel")
   ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -102,6 +103,15 @@ myOptions =
   in
     { options | defaultHighlighting = Just "elm" }
 
+processType definition =
+  let
+   code = String.split "," definition
+     |> List.map String.trim
+     |> String.join "\n, "
+     |> Regex.replace Regex.All (Regex.regex "\\s}") (\_ -> "\n}")
+  in
+    "```\n" ++ code ++ "\n```"
+
 renderDocumentation mod =
   let
     renderDefinition def =
@@ -114,7 +124,10 @@ renderDocumentation mod =
       node "ui-docs-entity" []
         [ node "ui-docs-entity-title" []
           [ node "div" [] [text alias.name]
-          , text alias.definition
+          ]
+        , node "ui-docs-entity-description" []
+          [ Markdown.toHtmlWith myOptions [] alias.comment
+          , Markdown.toHtmlWith myOptions [] (processType alias.definition)
           ]
         ]
 
@@ -164,6 +177,7 @@ view model active =
       case active of
         "button" -> documentation "Ui.Button" model.documentation
         "color-panel" -> documentation "Ui.ColorPanel" model.documentation
+        "calendar" -> documentation "Ui.Calendar" model.documentation
         _ -> text ""
   in
     node "ui-reference" []

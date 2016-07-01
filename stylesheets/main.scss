@@ -70,7 +70,7 @@ ui-reference {
   min-height: calc(100vh - 60px);
   display: flex;
 
-  ul {
+  > ul {
     border-right: 5px solid rgba(#000, 0.1);
     min-width: 230px;
     flex: 0 0 auto;
