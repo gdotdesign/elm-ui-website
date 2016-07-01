@@ -73,6 +73,7 @@ ui-playground {
 
 ui-reference {
   min-height: calc(100vh - 60px);
+  border-top: 2px solid #3b779e;
   display: flex;
 
   > ul {
@@ -85,8 +86,8 @@ ui-reference {
 
     li {
       border-bottom: 1px solid rgba(#000, 0.1);
-      font-size: 18px;
-      line-height: 40px;
+      font-size: 16px;
+      line-height: 30px;
       text-decoration: none;
       padding: 5px 30px;
       padding-right: 40px;
@@ -242,10 +243,6 @@ ui-reference-demo {
   display: flex;
   min-height: 400px;
 
-  ui-chooser {
-    min-width: 300px;
-  }
-
   ui-reference-demo-viewport {
     background: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
                 linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
@@ -257,6 +254,10 @@ ui-reference-demo {
     display: flex;
     padding: 40px;
     flex: 1;
+
+    ui-chooser {
+      min-width: 300px;
+    }
   }
 }
 

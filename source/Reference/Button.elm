@@ -44,7 +44,7 @@ init =
       , disabled = False
       , readonly = False
       , kind = "primary"
-      , size = "big"
+      , size = "medium"
       }
   , form =
       Form.init
@@ -58,7 +58,7 @@ init =
             ]
         , choosers =
             [ ( "kind", 0, kindData, "", "primary" )
-            , ( "size", 1, sizeData, "", "big" )
+            , ( "size", 1, sizeData, "", "medium" )
             ]
         }
   }
