@@ -1,7 +1,7 @@
 module Reference.ColorPicker exposing (..)
 
-import Html exposing (node, div, text, pre, code)
 import Html.App
+import Html
 
 import String
 import Color
@@ -62,18 +62,6 @@ updateState (model, effect) =
   in
     ({ model | model = updatedButton model.model }, effect)
 
-
-modelCodeString = """"""
-
-playground children =
-  node "docs-playground" [] children
-
-infos =
-  [ Ui.title [] [text "ColorPicker"]
-  , div [] [text "..."]
-  , Ui.title [] [text "Model"]
-  , pre [] [code [] [text (String.trim modelCodeString)]]
-  ]
 
 subscriptions model =
   Sub.map ColorPicker (Ui.ColorPicker.subscriptions model.model)

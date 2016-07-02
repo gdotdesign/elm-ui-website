@@ -22,6 +22,13 @@ ui-header {
   padding-right: 20px;
   border-bottom: 0;
   font-family: $title-font;
+
+  transform: translate3d(0,0,0);
+
+  img {
+    margin-right: 5px;
+    width: 24px;
+  }
 }
 
 ui-header-title {
@@ -159,6 +166,11 @@ ui-hero {
     font-size: 100px;
     font-family: $title-font;
     line-height: 1;
+
+    img {
+      margin-right: 15px;
+      width: 70px;
+    }
   }
 
   ui-hero-subtitle {
@@ -255,6 +267,10 @@ ui-reference-demo {
     padding: 40px;
     flex: 1;
 
+    ui-color-picker {
+      min-width: 240px;
+    }
+
     ui-chooser {
       min-width: 300px;
     }
@@ -309,7 +325,7 @@ ui-docs-entity {
       }
 
       &:last-child span:first-child {
-        margin-right: 10px;
+        margin-right: 7px;
       }
 
       &:nth-child(2) {
@@ -323,4 +339,24 @@ ui-footer {
   height: 300px;
   display: block;
   background: #333;
+}
+
+ui-documentation {
+  display: flex;
+
+  > div {
+    background: $input;
+    padding: 30px;
+  }
+
+  pre {
+    padding: 20px;
+    border-radius: $border-radius;
+    border: 1px solid rgba(#000, 0.05);
+    background: #F7f7f7;
+  }
+
+  code {
+    font-family: $code-font;
+  }
 }

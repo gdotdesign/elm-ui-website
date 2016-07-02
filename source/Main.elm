@@ -1,9 +1,10 @@
 module Main exposing (..)
 
-import Hop.Matchers exposing (match1, match2, str)
+import Hop.Matchers exposing (match1, match2)
 import Hop.Types
 import Hop
 
+import Combine exposing (Parser)
 import Navigation
 import Task
 import Dict
@@ -21,6 +22,8 @@ import Ui.App
 import Ui
 
 import Reference
+import Documentation
+
 import Debug exposing (log)
 
 import Docs.Types
@@ -30,6 +33,7 @@ type alias Model =
   { app : Ui.App.Model
   , page : String
   , reference : Reference.Model
+  , docs : Documentation.Model
   , route : Route
   , location : Hop.Types.Location
   }
@@ -41,6 +45,7 @@ type Msg
   | Reference Reference.Msg
   | Failed Http.Error
   | Loaded Docs.Types.Documentation
+  | Docs Documentation.Msg
 
 
 
@@ -51,15 +56,21 @@ type Route
   = Component String
   | Home
   | Documentation
+  | DocumentationPage String
   | ReferencePage
 
+
+all : Parser String
+all =
+  Combine.regex ".+"
 
 matchers : List (Hop.Types.PathMatcher Route)
 matchers =
   [ match1 Home ""
-  , match1 Documentation "/documentation"
-  , match2 Component "/reference/" str
+  , match2 Component "/reference/" all
+  , match2 DocumentationPage "/documentation/" all
   , match1 ReferencePage "/reference"
+  , match1 Documentation "/documentation"
   ]
 
 
@@ -70,7 +81,20 @@ urlParser =
 
 urlUpdate : ( Route, Hop.Types.Location ) -> Model -> ( Model, Cmd Msg )
 urlUpdate ( route, location ) model =
-  ( { model | route = route, location = location }, Cmd.none )
+  let
+    updatedModel =
+      { model | route = route, location = location }
+
+    cmd =
+      case route of
+        Documentation ->
+          Cmd.map Docs (Documentation.load "index")
+
+        DocumentationPage page ->
+          Cmd.map Docs (Documentation.load page)
+        _ -> Cmd.none
+  in
+    ( updatedModel, cmd )
 
 
 routerConfig : Hop.Types.Config Route
@@ -100,6 +124,7 @@ init ( route, location ) =
     , page = "reference"
     , reference = Reference.init
     , route = route
+    , docs = Documentation.init
     , location = location
     }
   , Task.perform Failed Loaded (Http.get Docs.Types.decodeDocumentation "/documentation.json")
@@ -139,6 +164,13 @@ update action model =
       in
         ( { model | reference = reference }, Cmd.map Reference effect )
 
+    Docs act ->
+      let
+        ( docs, effect ) =
+          Documentation.update act model.docs
+      in
+        ( { model | docs = docs }, Cmd.map Docs effect )
+
     App act ->
       let
         ( app, effect ) =
@@ -152,7 +184,10 @@ home =
   Ui.Container.column []
     [ node "ui-hero"
         []
-        [ node "ui-hero-title" [] [ text "Elm-UI" ]
+        [ node "ui-hero-title" []
+          [ img [src "/images/logo.svg"] []
+          , text "Elm-UI"
+          ]
         , node "ui-hero-subtitle" [] [ text "A user interface library and framework!" ]
         , node "terminal"
             []
@@ -160,10 +195,12 @@ home =
             , node "terminal-code"
                 []
                 [ text "$ npm install elm-ui -g"
+                , text "\n$ ----------------------------------"
                 , text "\n$ elm-ui init my-awesome-elm-project"
                 , text "\n$ cd my-awesome-elm-project"
                 , text "\n$ elm-ui install"
                 , text "\n$ elm-ui server"
+                , text "\n  > Listening on localhost:8001..."
                 ]
             ]
         ]
@@ -213,7 +250,10 @@ content model =
       Html.App.map Reference (Reference.view model.reference comp)
 
     Documentation ->
-      text ""
+      Html.App.map Docs (Documentation.view model.docs)
+
+    DocumentationPage page ->
+      Html.App.map Docs (Documentation.view model.docs)
 
 
 view : Model -> Html.Html Msg
@@ -221,7 +261,8 @@ view model =
   Ui.App.view App
     model.app
     [ Ui.Header.view []
-        ([ Ui.Header.title [] [ text "Elm-UI" ]
+        ([ img [src "/images/logo-small.svg"] []
+         , Ui.Header.title [] [ text "Elm-UI" ]
          ]
           ++ (viewHeader model)
         )
