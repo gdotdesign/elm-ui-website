@@ -1,6 +1,6 @@
 module Reference.Button exposing (..)
 
-import Reference.Form as Form
+import Components.Form as Form
 import Components.Reference
 import Ui.Chooser
 import Ui.Button

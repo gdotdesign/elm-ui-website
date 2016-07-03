@@ -4,6 +4,13 @@
 $code-font: Space Mono, serif;
 $title-font: Abel, Open Sans;
 
+@import 'components/ui-nav-list';
+@import 'components/ui-terminal';
+@import 'components/ui-form';
+
+@import 'parts/header.scss';
+@import 'parts/hero.scss';
+
 body {
   overflow-y: scroll;
   overflow-x: hidden;
@@ -12,55 +19,6 @@ body {
 %container {
   max-width: 1160px;
   margin: 0 auto;
-}
-
-ui-header {
-  box-shadow: none;
-  background-color: #1a4561;
-  background-image: url('images/noise.png');
-  padding: 0 20px;
-  border-bottom: 0;
-  font-family: $title-font;
-  transform: translate3d(0,0,0);
-
-  ui-header-title {
-    cursor: pointer;
-  }
-
-  img {
-    vertical-align: middle;
-    margin-right: 5px;
-    margin-top: -2px;
-    width: 24px;
-  }
-}
-
-ui-header-title {
-  margin-right: auto;
-  font-weight: normal;
-  font-size: 24px;
-}
-
-ui-header-item {
-  cursor: pointer;
-  font-weight: 600;
-  text-transform: uppercase;
-
-  &.active a span {
-    border-bottom: 2px solid currentColor;
-  }
-
-  ui-icon {
-    margin-right: 10px;
-  }
-
-  a {
-    font-size: 20px;
-    font-weight: normal;
-    display: block;
-    color: inherit;
-    text-decoration: none;
-  }
 }
 
 ui-playground {
@@ -86,132 +44,14 @@ ui-playground {
   }
 }
 
-ui-nav-list {
-  border-right: 5px solid rgba(#000, 0.1);
-  width: 250px;
-  display: block;
-  flex: 0 0 auto;
-
-  ui-search-input {
-    height: 40px;
-    width: 100%;
-
-    ui-icon {
-      left: 10px;
-      height: inherit;
-    }
-
-    ui-input {
-      height: inherit;
-    }
-
-    input[type=text] {
-      height: inherit;
-      padding-left: 45px;
-      border-radius: 0;
-      border-right: 0;
-    }
-  }
-
-  ui-nav-list-items {
-    border-top: 2px solid rgba(#000, 0.1);
-    list-style: none;
-    display: block;
-    padding: 0;
-    margin: 0;
-  }
-
-  ui-nav-list-item {
-    border-bottom: 1px solid rgba(#000, 0.1);
-    text-decoration: none;
-    padding-right: 30px;
-    line-height: 30px;
-    padding: 5px 20px;
-    font-size: 16px;
-    display: block;
-    color: inherit;
-
-    &.active, &:hover {
-      background: $input;
-      cursor: pointer;
-      color: $focus;
-    }
-  }
+ui-reference,
+ui-documentation {
+  border-top: 2px solid #3b779e;
 }
 
 ui-reference {
   min-height: calc(100vh - 60px);
-  border-top: 2px solid #3b779e;
   display: flex;
-}
-
-ui-form {
-  border-left: 1px solid rgba(#000, 0.1);
-  display: block;
-  width: 300px;
-
-  > * {
-    padding: 10px;
-    padding-right: 30px;
-  }
-
-  > * + * {
-    border-top: 1px solid rgba(#000, 0.05);
-  }
-
-  ui-form-block {
-    display: block;
-
-    ui-form-label {
-      margin-bottom: 7px;
-      display: block;
-
-      + * {
-        width: 100%;
-      }
-    }
-  }
-
-  ui-form-inline {
-    display: flex;
-
-    ui-form-label {
-      margin-left: 10px;
-      line-height: 36px;
-    }
-  }
-
-  ui-form-label {
-    font-weight: 600;
-    text-transform: capitalize;
-  }
-}
-
-ui-hero {
-  background: url('images/noise.png'), linear-gradient(#1a4561, #158DD8);
-  height: calc(100vh - 120px);
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  display: flex;
-
-  color: #FFF;
-
-  ui-hero-title {
-    font-size: 100px;
-    font-family: $title-font;
-    line-height: 1;
-
-    img {
-      margin-right: 15px;
-      width: 70px;
-    }
-  }
-
-  ui-hero-subtitle {
-    font-size: 16px;
-    opacity: 0.6;
-  }
 }
 
 ui-section {
@@ -228,42 +68,6 @@ ui-section {
     > div {
       flex: 1;
     }
-  }
-}
-
-terminal {
-  border-radius: 7px;
-  min-width: 600px;
-  background: rgba(#000, 0.65);
-  margin-top: 60px;
-
-  terminal-header {
-    background: rgba(#FFF, 0.15);
-    border-radius: 7px 7px 0 0;
-    height: 34px;
-    display: block;
-    padding: 8px;
-
-    &:before,
-    &:after {
-      content: "";
-      width: 14px;
-      height: 14px;
-      display: inline-block;
-      background: rgba(#FFF, 0.15);
-      border-radius: 50%;
-      margin: 3px;
-    }
-  }
-
-  terminal-code {
-    font-family: $code-font;
-    display: block;
-    white-space: pre;
-    font-size: 18px;
-    line-height: 30px;
-    padding: 20px;
-    color: #EEE;
   }
 }
 
@@ -378,6 +182,7 @@ ui-footer {
 
 ui-documentation {
   display: flex;
+  min-height: 80vh;
 
   > div {
     background: $input;

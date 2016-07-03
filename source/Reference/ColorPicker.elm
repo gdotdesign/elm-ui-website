@@ -10,8 +10,7 @@ import Ui.Container
 import Ui.ColorPicker
 import Ui
 
-import Reference.Form as Form exposing (valueOfCheckbox, valueOfInput)
-
+import Components.Form as Form exposing (valueOfCheckbox, valueOfInput)
 import Components.Reference
 
 type Msg

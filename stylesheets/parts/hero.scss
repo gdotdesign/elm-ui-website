@@ -1,0 +1,30 @@
+ui-hero {
+  background: url('images/noise.png'), linear-gradient(#1a4561, #158DD8);
+  height: calc(100vh - 120px);
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  color: #FFF;
+
+  ui-hero-title,
+  ui-hero-subtitle {
+    user-select: none;
+  }
+
+  ui-hero-title {
+    font-family: $title-font;
+    font-size: 100px;
+    line-height: 1;
+
+    img {
+      margin-right: 15px;
+      width: 70px;
+    }
+  }
+
+  ui-hero-subtitle {
+    font-size: 16px;
+    opacity: 0.6;
+  }
+}

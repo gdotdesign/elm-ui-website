@@ -26,6 +26,8 @@ import Documentation
 
 import Debug exposing (log)
 
+import Components.Terminal as Terminal
+
 import Docs.Types
 import Http
 
@@ -188,20 +190,14 @@ home =
           , text "Elm-UI"
           ]
         , node "ui-hero-subtitle" [] [ text "A user interface library and framework for Elm!" ]
-        , node "terminal"
-            []
-            [ node "terminal-header" [] []
-            , node "terminal-code"
-                []
-                [ text "$ npm install elm-ui -g"
-                , text "\n$ ----------------------------------"
-                , text "\n$ elm-ui init my-project"
-                , text "\n$ cd my-project"
-                , text "\n$ elm-ui server"
-                , text "\n$ elm-ui install"
-                , text "\n  > Listening on localhost:8001..."
-                ]
-            ]
+        , Terminal.view [ "npm install elm-ui -g"
+                        , "----------------------------------"
+                        , "elm-ui init my-project"
+                        , "cd my-project"
+                        , "elm-ui server"
+                        , "elm-ui install"
+                        , "> Listening on localhost:8001..."
+                        ]
         ]
     , node "ui-section"
         []

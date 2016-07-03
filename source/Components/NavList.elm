@@ -8,6 +8,7 @@ import Html.App
 import Ui.Helpers.Emitter as Emitter
 import Ui.SearchInput
 
+import String
 import Fuzzy
 
 
@@ -55,7 +56,11 @@ match : Model -> Item -> Bool
 match model item =
   let
     result =
-      Fuzzy.match [ Fuzzy.movePenalty 1000 ] [] model.input.value item.label
+      Fuzzy.match
+        [ Fuzzy.movePenalty 500 ]
+        []
+        (String.toLower model.input.value)
+        (String.toLower item.label)
   in
     result.score < 2000
 
