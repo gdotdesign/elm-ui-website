@@ -16,9 +16,10 @@ body {
   overflow-x: hidden;
 }
 
-%container {
-  max-width: 1160px;
-  margin: 0 auto;
+a {
+  color: $focus;
+  text-decoration: none;
+  border-bottom: 1px solid rgba($focus, 0.5);
 }
 
 ui-playground {
@@ -54,21 +55,82 @@ ui-reference {
   display: flex;
 }
 
+ui-browser {
+  border: 1px solid rgba(#000, 0.15);
+  border-radius: 7px;
+  flex: 0 0 auto;
+  width: 600px;
+
+  img {
+    border-radius: 0 0 7px 7px;
+    display: block;
+    width: 100%;
+  }
+
+  ui-browser-title {
+    background: rgba(#000, 0.05);
+    display: block;
+    height: 50px;
+  }
+}
+
 ui-section {
   display: block;
-  padding: 50px;
+  padding: 120px 50px;
+
+  ui-section-container {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+  }
+
+  ui-section-content {
+    flex: 1;
+
+    > div {
+      color: rgba(#000, 0.55);
+    }
+
+    ul {
+      padding: 0;
+      padding-left: 30px;
+      list-style-type: circle;
+    }
+
+    b, strong {
+      color: rgba(#000, 0.7);
+      font-weight: 600;
+    }
+
+    p, li {
+      line-height: 28px;
+    }
+  }
+
+  ui-section-title {
+    font-size: 40px;
+    font-family: Abel;
+    color: rgba(#000, 0.7);
+  }
 
   &:nth-child(even) {
     background: #FFF;
-  }
 
-  > ui-container {
-    @extend %container;
-
-    > div {
-      flex: 1;
+    ui-section-content {
+      margin-right: 60px;
     }
   }
+
+  &:nth-child(odd) {
+    ui-section-container {
+      flex-direction: row-reverse;
+
+      ui-section-content {
+        margin-left: 60px;
+      }
+    }
+  }
+
 }
 
 ui-reference-title {
@@ -187,6 +249,7 @@ ui-documentation {
   > div {
     background: $input;
     padding: 30px;
+    flex: 1;
   }
 
   pre {

@@ -25,8 +25,7 @@ import Reference
 import Documentation
 
 import Debug exposing (log)
-
-import Components.Terminal as Terminal
+import Pages.Index
 
 import Docs.Types
 import Http
@@ -180,63 +179,11 @@ update action model =
         ( { model | app = app }, Cmd.map App effect )
 
 
-home : Html.Html Msg
-home =
-  Ui.Container.column []
-    [ node "ui-hero"
-        []
-        [ node "ui-hero-title" []
-          [ img [src "/images/logo.svg"] []
-          , text "Elm-UI"
-          ]
-        , node "ui-hero-subtitle" [] [ text "A user interface library and framework for Elm!" ]
-        , Terminal.view [ "npm install elm-ui -g"
-                        , "----------------------------------"
-                        , "elm-ui init my-project"
-                        , "cd my-project"
-                        , "elm-ui server"
-                        , "elm-ui install"
-                        , "> Listening on localhost:8001..."
-                        ]
-        ]
-    , node "ui-section"
-        []
-        [ Ui.Container.row []
-            [ div []
-                [ text """
-## Development Workflow
-Elm-UI gives you the perfect tools so you can focus on the code instead of the environment:
-- Development server with **live reload**
-- Colored **errors messages** displayed in the browser
-- **Scaffolding** to quickly start a new project
-- **Building and minifying** your final files
-- **Environment configurations**
-"""
-                ]
-            , img [ src "images/errors.png" ] []
-            ]
-        ]
-    , node "ui-section"
-        []
-        [ Ui.Container.row []
-            [ text "Sass" ]
-        ]
-    , node "ui-section"
-        []
-        [ Ui.Container.row []
-            [ text "Building" ]
-        , Ui.Container.row []
-            [ text "Development Server" ]
-        , Ui.Container.row []
-            [ text "Lost of components" ]
-        ]
-    ]
-
 
 content model =
   case log "a" model.route of
     Home ->
-      home
+      Pages.Index.view Navigate
 
     ReferencePage ->
       Html.App.map Reference (Reference.view model.reference "")

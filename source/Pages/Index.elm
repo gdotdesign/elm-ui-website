@@ -1,0 +1,85 @@
+module Pages.Index exposing (..)
+
+import Html.Attributes exposing (src)
+import Html exposing (node, text, img)
+import Components.Terminal as Terminal
+import Markdown
+
+
+hero : Html.Html msg
+hero =
+  node "ui-hero"
+    []
+    [ node "ui-hero-title"
+        []
+        [ img [ src "/images/logo.svg" ] []
+        , text "Elm-UI"
+        ]
+    , node "ui-hero-subtitle"
+        []
+        [ text "A user interface library and framework for Elm!" ]
+    , Terminal.view
+        [ "npm install elm-ui -g"
+        , "----------------------------------"
+        , "elm-ui init my-project"
+        , "cd my-project"
+        , "elm-ui server"
+        , "elm-ui install"
+        , "> Listening on localhost:8001..."
+        ]
+    ]
+
+
+browser : String -> Html.Html msg
+browser url =
+  node "ui-browser"
+    []
+    [ node "ui-browser-title" [] []
+    , node "ui-browser-content"
+        []
+        [ img [ src url ] [] ]
+    ]
+
+
+section : String -> String -> Html.Html msg
+section title content =
+  node "ui-section"
+    []
+    [ node "ui-section-container"
+        []
+        [ node "ui-section-content" []
+            [ node "ui-section-title" [] [ text title ]
+            , Markdown.toHtml [] content
+            ]
+        , browser "/images/errors.png"
+        ]
+    ]
+
+
+worklfowContent : String
+worklfowContent =
+  """
+Elm-UI gives you the perfect tools so you can focus on the code instead of the environment:
+- Colored **errors messages** displayed in the browser
+- Development server with built in **live reload**
+- **Scaffolding** to quickly start a new project
+- **Building and minifying** your final files
+- **Environment configurations**
+"""
+
+componentLibraryContent : String
+componentLibraryContent =
+  """
+With a plantheora of components you can build a wide variaty of any single page
+apps.
+"""
+
+
+view : (String -> msg) -> Html.Html msg
+view navigateMsg =
+  node "ui-index"
+    []
+    [ hero
+    , section "Development Workflow" worklfowContent
+    , section "Component Library" componentLibraryContent
+    ]

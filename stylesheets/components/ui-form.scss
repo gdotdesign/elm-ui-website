@@ -3,39 +3,52 @@ ui-form {
   display: block;
   width: 300px;
 
-  > * {
-    padding: 10px;
-    padding-right: 30px;
-  }
-
-  > * + * {
-    border-top: 1px solid rgba(#000, 0.05);
-  }
-
-  ui-form-block {
+  ui-form-title {
+    border-bottom: 1px solid rgba(#000, 0.1);
+    background-clip: padding-box;
+    text-transform: uppercase;
+    background: $input;
+    padding: 5px 10px;
+    font-weight: 600;
+    font-size: 14px;
     display: block;
+  }
 
-    ui-form-label {
-      margin-bottom: 7px;
+  ui-form-fields {
+    > * {
+      padding: 10px;
+      padding-right: 30px;
+    }
+
+    > * + * {
+      border-top: 1px solid rgba(#000, 0.05);
+    }
+
+    ui-form-block {
       display: block;
 
-      + * {
-        width: 100%;
+      ui-form-label {
+        margin-bottom: 7px;
+        display: block;
+
+        + * {
+          width: 100%;
+        }
       }
     }
-  }
 
-  ui-form-inline {
-    display: flex;
+    ui-form-inline {
+      display: flex;
+
+      ui-form-label {
+        margin-left: 10px;
+        line-height: 36px;
+      }
+    }
 
     ui-form-label {
-      margin-left: 10px;
-      line-height: 36px;
+      text-transform: capitalize;
+      font-weight: 600;
     }
-  }
-
-  ui-form-label {
-    text-transform: capitalize;
-    font-weight: 600;
   }
 }

@@ -163,7 +163,7 @@ renderDocumentation mod =
     renderAlias alias =
       node "ui-docs-entity" []
         [ node "ui-docs-entity-title" []
-          [ node "div" [] [text alias.name]
+          [ node "div" [] [text ("type alias " ++ alias.name)]
           ]
         , node "ui-docs-entity-description" []
           [ Markdown.toHtmlWith myOptions [] alias.comment

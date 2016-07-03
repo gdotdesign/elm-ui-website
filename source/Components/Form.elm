@@ -235,4 +235,8 @@ view fields =
       List.sortWith (\( a, _ ) ( b, _ ) -> compare a b) items
         |> List.map (\( key, value ) -> ( fields.uid ++ (toString key), value ))
   in
-    Html.Keyed.node "ui-form" [] sortedItems
+    node "ui-form"
+      []
+      [ node "ui-form-title" [] [text "Fields"]
+      , Html.Keyed.node "ui-form-fields" [] sortedItems
+      ]
