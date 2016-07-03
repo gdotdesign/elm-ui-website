@@ -3,26 +3,37 @@ module Documentation exposing (..)
 import Html.Events exposing (onClick)
 import Html exposing (node, text)
 import Markdown
+import Html.App
 import Http
 import Task
 
+import Components.NavList as NavList
+
 type alias Model =
-  { contents : String }
+  { contents : String
+  , list : NavList.Model
+  }
 
 type Msg
   = Load String
   | Loaded String
   | Error Http.Error
+  | List NavList.Msg
 
-pages : List String
+pages : List (String, String)
 pages =
-  [ "getting-started/setup"
-  , "getting-started/adding-components"
+  [ ("getting-started/setup", "Setup")
+  , ("getting-started/adding-components", "Adding Components")
   ]
+
+navItems =
+  List.map (\(url, label) -> { href = url, label = label }) pages
 
 init : Model
 init =
-  { contents = "" }
+  { contents = ""
+  , list = NavList.init "documentation" "Search documentation..." navItems
+  }
 
 setContents : String -> Model -> Model
 setContents contents model =
@@ -51,15 +62,15 @@ update msg model =
     Error _ ->
       (model, Cmd.none)
 
+    List act ->
+      let
+        (list, effect) = NavList.update act model.list
+      in
+        ({ model | list = list }, Cmd.map List effect)
+
 view : Model -> Html.Html Msg
 view model =
-  let
-    renderItem page =
-      node "li" [onClick (Load page)] [text page]
-    items =
-      List.map renderItem pages
-  in
-    node "ui-documentation" []
-      [ node "ul" [] items
-      , Markdown.toHtml [] model.contents
-      ]
+  node "ui-documentation" []
+    [ Html.App.map List (NavList.view "" model.list)
+    , Markdown.toHtml [] model.contents
+    ]
