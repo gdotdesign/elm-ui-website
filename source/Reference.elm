@@ -9,11 +9,13 @@ import List.Extra
 import Markdown
 import String
 import Regex
+import Fuzzy
 import Dict
 
 import Ui.Helpers.Emitter as Emitter
 import Ui.Container
 import Ui.Button
+import Ui.Input
 import Ui.App
 import Ui
 
@@ -32,6 +34,7 @@ type alias Model =
   , colorPanel : ColorPanel.Model
   , colorPicker : ColorPicker.Model
   , documentation : Documentation
+  , input : Ui.Input.Model
   }
 
 type Msg
@@ -40,6 +43,7 @@ type Msg
   | CalendarAction Calendar.Msg
   | ColorPanelAction ColorPanel.Msg
   | ColorPickerAction ColorPicker.Msg
+  | Input Ui.Input.Msg
   | Navigate String
 
 init : Model
@@ -50,6 +54,7 @@ init =
   , colorPanel = ColorPanel.init
   , colorPicker = ColorPicker.init
   , documentation = { modules = [] }
+  , input = Ui.Input.init "" "Search modules..."
   }
 
 setDocumentation docs model =
@@ -111,6 +116,12 @@ update action model =
         (chooser, effect) = Chooser.update act model.chooser
       in
         ({ model | chooser = chooser }, Cmd.map ChooserAction effect)
+
+    Input act ->
+      let
+        (input, effect) = Ui.Input.update act model.input
+      in
+        ({ model | input = input }, Cmd.map Input effect)
 
 renderLi active (url, (label, _))  =
   node "li"
@@ -223,8 +234,12 @@ view model active =
         _ ->
           [ ]
 
+    simpleMatch needle hay =
+      Fuzzy.match [] [] needle hay |> .score
+
     nav =
       Dict.toList components
+      |> List.filter (\(_, (name, _)) -> (simpleMatch model.input.value name) < 2000)
       |> List.sortBy (\(_, (name, _)) -> name)
       |> List.map (renderLi active)
 
@@ -241,7 +256,9 @@ view model active =
           [ text "No component is selected!" ]
   in
     node "ui-reference" []
-      [ node "ul" [] nav
-      , node "ui-reference-content" []
-        (content ++ docs)
+      [ node "div" []
+        [ Html.App.map Input (Ui.Input.view model.input)
+        , node "ul" [] nav
+        ]
+      , node "ui-reference-content" [] (content ++ docs)
       ]

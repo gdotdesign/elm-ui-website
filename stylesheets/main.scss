@@ -18,15 +18,19 @@ ui-header {
   box-shadow: none;
   background-color: #1a4561;
   background-image: url('images/noise.png');
-  padding: 0 30px;
-  padding-right: 20px;
+  padding: 0 20px;
   border-bottom: 0;
   font-family: $title-font;
-
   transform: translate3d(0,0,0);
 
+  ui-header-title {
+    cursor: pointer;
+  }
+
   img {
+    vertical-align: middle;
     margin-right: 5px;
+    margin-top: -2px;
     width: 24px;
   }
 }
@@ -44,6 +48,10 @@ ui-header-item {
 
   &.active a span {
     border-bottom: 2px solid currentColor;
+  }
+
+  ui-icon {
+    margin-right: 10px;
   }
 
   a {
@@ -83,10 +91,26 @@ ui-reference {
   border-top: 2px solid #3b779e;
   display: flex;
 
-  > ul {
+  > div {
     border-right: 5px solid rgba(#000, 0.1);
     min-width: 230px;
     flex: 0 0 auto;
+
+    > ui-input {
+      height: 40px;
+      width: 100%;
+
+      input[type=text] {
+        height: 40px;
+        padding-left: 20px;
+        border-radius: 0;
+        border-right: 0;
+      }
+    }
+  }
+
+  > div > ul {
+    border-top: 2px solid rgba(#000, 0.1);
     padding: 0;
     margin: 0;
     list-style: none;
@@ -96,8 +120,8 @@ ui-reference {
       font-size: 16px;
       line-height: 30px;
       text-decoration: none;
-      padding: 5px 30px;
-      padding-right: 40px;
+      padding: 5px 20px;
+      padding-right: 30px;
       display: block;
       color: inherit;
 

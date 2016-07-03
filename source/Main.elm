@@ -9,7 +9,7 @@ import Navigation
 import Task
 import Dict
 
-import Html.Attributes exposing (href, class, src)
+import Html.Attributes exposing (href, class, src, target)
 import Html.Events exposing (onClick)
 import Html exposing (node, div, span, strong, text, a, img)
 import Html.App
@@ -112,8 +112,7 @@ routerConfig =
 
 pages : List ( String, String )
 pages =
-  [ ( "/", "Home" )
-  , ( "/documentation", "Documentation" )
+  [ ( "/documentation", "Documentation" )
   , ( "/reference", "Reference" )
   ]
 
@@ -188,7 +187,7 @@ home =
           [ img [src "/images/logo.svg"] []
           , text "Elm-UI"
           ]
-        , node "ui-hero-subtitle" [] [ text "A user interface library and framework!" ]
+        , node "ui-hero-subtitle" [] [ text "A user interface library and framework for Elm!" ]
         , node "terminal"
             []
             [ node "terminal-header" [] []
@@ -196,10 +195,10 @@ home =
                 []
                 [ text "$ npm install elm-ui -g"
                 , text "\n$ ----------------------------------"
-                , text "\n$ elm-ui init my-awesome-elm-project"
-                , text "\n$ cd my-awesome-elm-project"
-                , text "\n$ elm-ui install"
+                , text "\n$ elm-ui init my-project"
+                , text "\n$ cd my-project"
                 , text "\n$ elm-ui server"
+                , text "\n$ elm-ui install"
                 , text "\n  > Listening on localhost:8001..."
                 ]
             ]
@@ -261,10 +260,16 @@ view model =
   Ui.App.view App
     model.app
     [ Ui.Header.view []
-        ([ img [src "/images/logo-small.svg"] []
-         , Ui.Header.title [] [ text "Elm-UI" ]
+        ([ Ui.Header.title [ onClick (Navigate "/")]
+            [img [src "/images/logo-small.svg"] []
+            , text "Elm-UI"
+            ]
+
          ]
           ++ (viewHeader model)
+          ++
+          [ renderHeaderLink "Github" "social-github" "https://github.com/gdotdesign/elm-ui"
+          ]
         )
     , content model
     , node "ui-footer" [] []
@@ -276,6 +281,15 @@ renderHeader model ( page, label ) =
     []
     [ a [ onClick (Navigate page) ]
         [ span [] [ text label ]
+        ]
+    ]
+
+renderHeaderLink label glyph link =
+  node "ui-header-item"
+    []
+    [ a [ href link, target "_blank" ]
+        [ Ui.icon glyph False []
+        , span [] [ text label ]
         ]
     ]
 
