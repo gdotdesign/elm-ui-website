@@ -127,13 +127,6 @@ update action model =
       in
         ({ model | list = list }, Cmd.map List effect)
 
-renderLi active (url, (label, _))  =
-  node "li"
-    [ classList [("active", active == url)]
-    , onClick (Navigate ("/reference/" ++ url))
-    ]
-    [ text label ]
-
 subscriptions model =
   Sub.batch
   [ Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)

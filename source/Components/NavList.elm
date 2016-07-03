@@ -5,7 +5,7 @@ import Html.Events exposing (onClick)
 import Html exposing (node, text)
 import Html.App
 import Ui.Helpers.Emitter as Emitter
-import Ui.Input
+import Ui.SearchInput
 import Fuzzy
 
 
@@ -17,21 +17,21 @@ type alias Item =
 
 type alias Model =
   { items : List Item
-  , input : Ui.Input.Model
+  , input : Ui.SearchInput.Model
   , prefix : String
   }
 
 
 type Msg
   = Navigate String
-  | Input Ui.Input.Msg
+  | Input Ui.SearchInput.Msg
 
 
 init : String -> String -> List Item -> Model
 init prefix placeholder items =
   { items = items
   , prefix = prefix
-  , input = Ui.Input.init "" placeholder
+  , input = Ui.SearchInput.init 0 placeholder
   }
 
 
@@ -44,7 +44,7 @@ update msg model =
     Input act ->
       let
         ( input, effect ) =
-          Ui.Input.update act model.input
+          Ui.SearchInput.update act model.input
       in
         ( { model | input = input }, Cmd.map Input effect )
 
@@ -62,7 +62,7 @@ view : String -> Model -> Html.Html Msg
 view active model =
   node "ui-nav-list"
     []
-    [ Html.App.map Input (Ui.Input.view model.input)
+    [ Html.App.map Input (Ui.SearchInput.view model.input)
     , node "ui-nav-list-items" [] (renderItems active model)
     ]
 
