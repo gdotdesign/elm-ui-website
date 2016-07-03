@@ -1,4 +1,4 @@
-@import 'https://fonts.googleapis.com/css?family=Abel|Space+Mono';
+@import 'fonts';
 @import 'ui';
 
 $code-font: Space Mono, serif;
@@ -97,7 +97,7 @@ ui-nav-list {
     width: 100%;
 
     ui-icon {
-      left: 12px;
+      left: 10px;
       height: inherit;
     }
 
@@ -107,7 +107,7 @@ ui-nav-list {
 
     input[type=text] {
       height: inherit;
-      padding-left: 47px;
+      padding-left: 45px;
       border-radius: 0;
       border-right: 0;
     }

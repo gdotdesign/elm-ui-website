@@ -32,7 +32,7 @@ navItems =
 init : Model
 init =
   { contents = ""
-  , list = NavList.init "documentation" "Search documentation..." navItems
+  , list = NavList.init "documentation" "Search the docs..." navItems
   }
 
 setContents : String -> Model -> Model

@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'Abel';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Abel'), local('Abel-Regular'),
+       url('/fonts/abel-v6-latin-regular.woff2') format('woff2'),
+       url('/fonts/abel-v6-latin-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Space Mono'), local('SpaceMono-Regular'),
+       url('/fonts/space-mono-v1-latin-regular.woff2') format('woff2'),
+       url('/fonts/space-mono-v1-latin-regular.woff') format('woff');
+}

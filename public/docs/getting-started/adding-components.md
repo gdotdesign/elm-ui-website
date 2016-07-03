@@ -66,7 +66,7 @@ view model =
 
 Right now we are be seeing something like this:
 
-![Adding Components](../images/adding-components.jpg)
+![Adding Components](/images/adding-components.jpg)
 
 But the number range component doesn't seem work right, it's value cannot be changed by dragging.That is because some components like this one need subscriptions (for mouse and such) and it needs to be wired in to our application.
 
