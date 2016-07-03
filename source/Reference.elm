@@ -78,11 +78,15 @@ components =
     , ("native/browser", ("Ui.Native.Browser", False))
     , ("native/dom", ("Ui.Native.Dom", False))
     , ("native/local-storage", ("Ui.Native.LocalStorage", False))
+    , ("native/scrolls", ("Ui.Native.Scrolls", False))
     , ("helpers/drag", ("Ui.Helpers.Drag", False))
     , ("helpers/emitter", ("Ui.Helpers.Emitter", False))
     , ("helpers/env", ("Ui.Helpers.Env", False))
     , ("helpers/dropdown", ("Ui.Helpers.Dropdown", False))
     , ("helpers/intendable", ("Ui.Helpers.Intendable", False))
+    , ("html/events/geometry", ("Html.Events.Geometry", False))
+    , ("html/events/extra", ("Html.Events.Extra", False))
+    , ("html/events/options", ("Html.Events.Options", False))
     ]
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -149,6 +153,7 @@ processType definition =
      |> List.map String.trim
      |> String.join "\n, "
      |> Regex.replace Regex.All (Regex.regex "\\s}") (\_ -> "\n}")
+     |> Regex.replace Regex.All (Regex.regex "\\s\\)") (\_ -> "\n)")
   in
     "```\n" ++ code ++ "\n```"
 
