@@ -19,6 +19,7 @@ import Ui
 
 import Reference.ColorPicker as ColorPicker
 import Reference.ColorPanel as ColorPanel
+import Reference.FileInput as FileInput
 import Reference.Calendar as Calendar
 import Reference.Chooser as Chooser
 import Reference.Button as Button
@@ -31,6 +32,7 @@ type alias Model =
   { button : Button.Model
   , chooser : Chooser.Model
   , calendar : Calendar.Model
+  , fileInput : FileInput.Model
   , colorPanel : ColorPanel.Model
   , colorPicker : ColorPicker.Model
   , documentation : Documentation
@@ -41,6 +43,7 @@ type Msg
   = ButtonAction Button.Msg
   | ChooserAction Chooser.Msg
   | CalendarAction Calendar.Msg
+  | FileInputAction FileInput.Msg
   | ColorPanelAction ColorPanel.Msg
   | ColorPickerAction ColorPicker.Msg
   | List NavList.Msg
@@ -51,6 +54,7 @@ init =
   { button = Button.init
   , chooser = Chooser.init
   , calendar = Calendar.init
+  , fileInput = FileInput.init
   , colorPanel = ColorPanel.init
   , colorPicker = ColorPicker.init
   , documentation = { modules = [] }
@@ -74,6 +78,7 @@ components =
     , ("ext-color", ("Ext.Color", False))
     , ("ext-number", ("Ext.Number", False))
     , ("ext-date", ("Ext.Date", False))
+    , ("file-input", ("Ui.FileInput", True))
     , ("native/file-manager", ("Ui.Native.FileManager", False))
     , ("native/browser", ("Ui.Native.Browser", False))
     , ("native/dom", ("Ui.Native.Dom", False))
@@ -124,6 +129,13 @@ update action model =
         (chooser, effect) = Chooser.update act model.chooser
       in
         ({ model | chooser = chooser }, Cmd.map ChooserAction effect)
+
+    FileInputAction act ->
+      let
+        (fileInput, effect) = FileInput.update act model.fileInput
+      in
+        ({ model | fileInput = fileInput }, Cmd.map FileInputAction effect)
+
 
     List act ->
       let
@@ -217,6 +229,8 @@ view model active =
           Html.App.map ColorPanelAction (ColorPanel.render model.colorPanel)
         "color-picker" ->
           Html.App.map ColorPickerAction (ColorPicker.render model.colorPicker)
+        "file-input" ->
+          Html.App.map FileInputAction (FileInput.view model.fileInput)
         _ ->
           text ""
 
