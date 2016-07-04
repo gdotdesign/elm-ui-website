@@ -41,8 +41,8 @@ browser url =
     ]
 
 
-section : String -> String -> Html.Html msg
-section title content =
+section : String -> String -> String -> Html.Html msg
+section title content image =
   node "ui-section"
     []
     [ node "ui-section-container"
@@ -51,7 +51,7 @@ section title content =
             [ node "ui-section-title" [] [ text title ]
             , Markdown.toHtml [] content
             ]
-        , browser "/images/errors.png"
+        , img [src image] []
         ]
     ]
 
@@ -70,8 +70,11 @@ Elm-UI gives you the perfect tools so you can focus on the code instead of the e
 componentLibraryContent : String
 componentLibraryContent =
   """
-With a plantheora of components you can build a wide variaty of any single page
+With a plantheora of components you can build a wide variaty of single page
 apps.
+- They have **disabled** and **readonly** states
+- They then can be controlled by **keyboard**
+- **25+** components
 """
 
 
@@ -80,6 +83,7 @@ view navigateMsg =
   node "ui-index"
     []
     [ hero
-    , section "Development Workflow" worklfowContent
-    , section "Component Library" componentLibraryContent
+    , section "Development Workflow" worklfowContent "/images/workflow.svg"
+    , section "Component Library" componentLibraryContent "/images/components.png"
+    , section "Some Fancy Section" "" ""
     ]

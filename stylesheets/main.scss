@@ -76,16 +76,18 @@ ui-browser {
 
 ui-section {
   display: block;
-  padding: 120px 50px;
 
   ui-section-container {
-    max-width: 1160px;
+    align-items: center;
+    max-width: 1000px;
     margin: 0 auto;
+    height: 560px;
     display: flex;
   }
 
   ui-section-content {
-    flex: 1;
+    flex: 0 0 440px;
+    font-size: 18px;
 
     > div {
       color: rgba(#000, 0.55);
@@ -103,7 +105,7 @@ ui-section {
     }
 
     p, li {
-      line-height: 28px;
+      line-height: 32px;
     }
   }
 
@@ -114,7 +116,7 @@ ui-section {
   }
 
   &:nth-child(even) {
-    background: #FFF;
+    background: $input;
 
     ui-section-content {
       margin-right: 60px;
