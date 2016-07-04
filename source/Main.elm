@@ -24,7 +24,6 @@ import Ui
 import Reference
 import Documentation
 
-import Debug exposing (log)
 import Pages.Index
 
 import Docs.Types
@@ -120,15 +119,21 @@ pages =
 
 init : ( Route, Hop.Types.Location ) -> ( Model, Cmd Msg )
 init ( route, location ) =
-  ( { app = Ui.App.init "Elm-UI"
-    , page = "reference"
-    , reference = Reference.init
-    , route = route
-    , docs = Documentation.init
-    , location = location
-    }
-  , Task.perform Failed Loaded (Http.get Docs.Types.decodeDocumentation "/documentation.json")
-  )
+  let
+    (mod, effect) =
+      { app = Ui.App.init "Elm-UI"
+      , page = "reference"
+      , reference = Reference.init
+      , route = route
+      , docs = Documentation.init
+      , location = location
+      }
+      |> urlUpdate (route, location)
+  in
+    ( mod
+    , Cmd.batch [Task.perform Failed Loaded (Http.get Docs.Types.decodeDocumentation "/documentation.json")
+                , effect]
+    )
 
 
 component payload =
@@ -148,9 +153,6 @@ update action model =
 
     Navigate path ->
       let
-        _ =
-          log "a" (Hop.makeUrl routerConfig path)
-
         command =
           Hop.makeUrl routerConfig path
             |> Navigation.newUrl
@@ -181,7 +183,7 @@ update action model =
 
 
 content model =
-  case log "a" model.route of
+  case model.route of
     Home ->
       Pages.Index.view Navigate
 

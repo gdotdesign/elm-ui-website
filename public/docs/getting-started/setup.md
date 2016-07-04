@@ -1,7 +1,9 @@
 ## Installing
 Elm-UI lives on [NPM](https://www.npmjs.com/package/elm-ui) and can be installed via command line:
 
-`npm install elm-ui@alpha -g`
+```
+npm install elm-ui@alpha -g
+```
 
 ## Command line tool
 Similarly to [Ruby on Rails](http://rubyonrails.org), Elm-UI comes with a command line tool `elm-ui` that lets you:

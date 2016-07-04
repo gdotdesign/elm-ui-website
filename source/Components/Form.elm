@@ -68,9 +68,9 @@ valueOfSimple :
   -> value
 valueOfSimple name default accessor dict =
   Dict.get name dict
-  |> Maybe.map snd
-  |> Maybe.map accessor
-  |> Maybe.withDefault default
+    |> Maybe.map snd
+    |> Maybe.map accessor
+    |> Maybe.withDefault default
 
 
 valueOfCheckbox : String -> Bool -> Model -> Bool
@@ -237,6 +237,6 @@ view fields =
   in
     node "ui-form"
       []
-      [ node "ui-form-title" [] [text "Fields"]
+      [ node "ui-form-title" [] [ text "Fields" ]
       , Html.Keyed.node "ui-form-fields" [] sortedItems
       ]
