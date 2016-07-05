@@ -257,9 +257,9 @@ view model active =
         "calendar" ->
           Html.App.map CalendarAction (Calendar.view model.calendar)
         "color-panel" ->
-          Html.App.map ColorPanelAction (ColorPanel.render model.colorPanel)
+          Html.App.map ColorPanelAction (ColorPanel.view model.colorPanel)
         "color-picker" ->
-          Html.App.map ColorPickerAction (ColorPicker.render model.colorPicker)
+          Html.App.map ColorPickerAction (ColorPicker.view model.colorPicker)
         "file-input" ->
           Html.App.map FileInputAction (FileInput.view model.fileInput)
         _ ->

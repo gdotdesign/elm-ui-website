@@ -194,6 +194,7 @@ ui-docs-entity {
   ui-docs-entity-description {
     display: block;
     margin-left: 20px;
+    margin-top: 20px;
     font-size: 14px;
   }
 
@@ -211,15 +212,12 @@ ui-docs-entity {
     span {
       white-space: nowrap;
       display: inline-block;
+      margin-right: 7px;
     }
 
     div {
       &:first-child {
         color: $primary;
-      }
-
-      &:last-child span:first-child {
-        margin-right: 7px;
       }
 
       &:nth-child(2) {
