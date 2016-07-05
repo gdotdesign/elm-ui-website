@@ -1,2 +1,5 @@
 elm-stuff
 elm-package.json
+node_modules
+dist
+.publish
