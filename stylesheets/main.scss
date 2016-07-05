@@ -6,6 +6,7 @@ $title-font: Abel, Open Sans;
 
 @import 'components/ui-nav-list';
 @import 'components/ui-terminal';
+@import 'components/markdown';
 @import 'components/ui-form';
 
 @import 'parts/header.scss';
@@ -87,26 +88,6 @@ ui-section {
 
   ui-section-content {
     flex: 0 0 440px;
-    font-size: 18px;
-
-    > div {
-      color: rgba(#000, 0.55);
-    }
-
-    ul {
-      padding: 0;
-      padding-left: 30px;
-      list-style-type: circle;
-    }
-
-    b, strong {
-      color: rgba(#000, 0.7);
-      font-weight: 600;
-    }
-
-    p, li {
-      line-height: 32px;
-    }
   }
 
   ui-section-title {
@@ -189,13 +170,6 @@ ui-docs {
   padding-bottom: 150px;
   display: block;
   background: $input;
-
-  > div {
-    p, li {
-      line-height: 30px;
-      color: #777;
-    }
-  }
 }
 
 ui-docs-title {
@@ -221,11 +195,6 @@ ui-docs-entity {
     display: block;
     margin-left: 20px;
     font-size: 14px;
-
-    p, li {
-      line-height: 24px;
-      color: #777;
-    }
   }
 
   ui-docs-entity-title {
@@ -270,10 +239,15 @@ ui-documentation {
   display: flex;
   min-height: 80vh;
 
-  > div {
+  div.markdown-medium {
     background: $input;
     padding: 30px;
+    padding-bottom: 100px;
     flex: 1;
+
+    > *:first-child {
+      margin-top: 0;
+    }
   }
 }
 

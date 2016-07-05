@@ -19,15 +19,15 @@ type alias Item =
 
 
 type alias Model =
-  { items : List Item
-  , input : Ui.SearchInput.Model
+  { input : Ui.SearchInput.Model
+  , items : List Item
   , prefix : String
   }
 
 
 type Msg
-  = Navigate String
-  | Input Ui.SearchInput.Msg
+  = Input Ui.SearchInput.Msg
+  | Navigate String
 
 
 init : String -> String -> List Item -> Model

@@ -1,9 +1,10 @@
 module Pages.Index exposing (..)
 
-import Html.Attributes exposing (src)
 import Html exposing (node, text, img)
+import Html.Attributes exposing (src)
+
 import Components.Terminal as Terminal
-import Markdown
+import Components.Markdown as Markdown
 
 
 hero : Html.Html msg
@@ -49,7 +50,7 @@ section title content image =
         []
         [ node "ui-section-content" []
             [ node "ui-section-title" [] [ text title ]
-            , Markdown.toHtml [] content
+            , Markdown.view content
             ]
         , img [src image] []
         ]

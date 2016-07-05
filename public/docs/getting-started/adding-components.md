@@ -57,10 +57,10 @@ Now we can add its view below the buttons:
 view : Model -> Html.Html Msg
 view model =
   ...
-        , Ui.Button.primary "Increment" Increment
-            ]
-        , Html.App.map NumberRange (Ui.NumberRange.view model.numberRange)
-        ]
+  , Ui.Button.primary "Increment" Increment
+      ]
+  , Html.App.map NumberRange (Ui.NumberRange.view model.numberRange)
+  ]
   ...
 ```
 

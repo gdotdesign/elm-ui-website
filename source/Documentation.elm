@@ -2,11 +2,11 @@ module Documentation exposing (..)
 
 import Html.Events exposing (onClick)
 import Html exposing (node, text)
-import Markdown
 import Html.App
 import Http
 import Task
 
+import Components.Markdown as Markdown
 import Components.NavList as NavList
 
 type alias Model =
@@ -72,5 +72,5 @@ view : Model -> Html.Html Msg
 view model =
   node "ui-documentation" []
     [ Html.App.map List (NavList.view "" model.list)
-    , Markdown.toHtml [] model.contents
+    , Markdown.view model.contents
     ]

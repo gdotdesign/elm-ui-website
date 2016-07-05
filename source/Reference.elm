@@ -1,12 +1,11 @@
 module Reference exposing (..)
 
-import Html.Attributes exposing (classList, class)
 import Html exposing (div, span, strong, text, node, a)
+import Html.Attributes exposing (classList, class)
 import Html.Events exposing (onClick)
 import Html.App
 
 import List.Extra
-import Markdown
 import String
 import Regex
 import Dict
@@ -26,6 +25,7 @@ import Reference.Button as Button
 
 import Docs.Types exposing (Documentation)
 
+import Components.Markdown as Markdown
 import Components.NavList as NavList
 
 type alias Model =
@@ -153,13 +153,6 @@ subscriptions model =
 findDocumentation name docs =
   List.Extra.find (\mod -> mod.name == name) docs.modules
 
-myOptions =
-  let
-    options =
-      Markdown.defaultOptions
-  in
-    { options | defaultHighlighting = Just "elm" }
-
 processType definition =
   let
    code = String.split "," definition
@@ -176,7 +169,7 @@ renderDocumentation mod =
       String.split "#" mod.comment
       |> List.head
       |> Maybe.withDefault ""
-      |> Markdown.toHtmlWith myOptions []
+      |> Markdown.view
 
     renderDefinition def =
       String.split "->" def
@@ -193,8 +186,8 @@ renderDocumentation mod =
               ]
           ]
         , node "ui-docs-entity-description" []
-          [ Markdown.toHtmlWith myOptions [] alias.comment
-          , Markdown.toHtmlWith myOptions [] (processType alias.definition)
+          [ Markdown.viewSmall alias.comment
+          , Markdown.viewSmall (processType alias.definition)
           ]
         ]
 
@@ -207,7 +200,7 @@ renderDocumentation mod =
               ]
           ]
         , node "ui-docs-entity-description" []
-          [ Markdown.toHtmlWith myOptions [] msg.comment
+          [ Markdown.viewSmall msg.comment
           ]
         ]
 
@@ -219,7 +212,7 @@ renderDocumentation mod =
           , node "div" [] (renderDefinition function.definition)
           ]
         , node "ui-docs-entity-description" []
-          [ Markdown.toHtmlWith myOptions [] function.comment
+          [ Markdown.viewSmall function.comment
           ]
         ]
 

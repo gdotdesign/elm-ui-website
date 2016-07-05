@@ -1,4 +1,4 @@
-## Installing
+# Setup
 Elm-UI lives on [NPM](https://www.npmjs.com/package/elm-ui) and can be installed via command line:
 
 ```
@@ -43,9 +43,9 @@ This will create a directory structure like this one:
 ```
 my-awesome-app
 ├── config
-|   └── development.json
+│   └── development.json
 ├── public
-|   └── index.html
+│   └── index.html
 ├── source
 │   └── Main.elm
 ├── stylesheets
@@ -53,19 +53,15 @@ my-awesome-app
 └── elm-ui.json
 ```
 
-#### config
-This directory contains the files for the [environment variables](https://en.wikipedia.org/wiki/Environment_variable). The application have access to them and they are generally have different values for development and production.
-
-#### source
-This directory contains the source (.elm) files for the application. The **Main.elm** is the file that runs and imports all other modules.
-
-#### stylesheets
-This directory contains the styles for the application. The **main.scss** file is compiled to **CSS** and loaded in the app.
-
-#### public
-This directory contains all of other files (images, pdfs, etc..) that are needed for your application. These files are serves as is without any processing.
-
-The **index.html** in this directory is your main file that is displayed.
+* **config** - This directory contains the files for the [environment variables](https://en.wikipedia.org/wiki/Environment_variable).
+<br> The application have access to them and they are generally have different values for development and production.
+* **source** - This directory contains the source (.elm) files for the application.
+<br>The **Main.elm** is the file that runs and imports all other modules.
+* **stylesheets** - This directory contains the styles for the application.
+<br>The **main.scss** file is compiled to **CSS** and loaded in the app.
+* **public** - This directory contains all of other files (images, pdfs, etc..) that are needed for your application.
+<br>These files are serves as is without any processing.
+<br>The **index.html** in this directory is your main file that is displayed.
 
 #### elm-ui.json
 Elm-UI manages the **elm-package.json** for you in order for the app to access the Elm-UI modules. Because of this the third-party packages are need to be set in **elm-ui.json** which has the same fields and syntax as the **elm-package.json**
