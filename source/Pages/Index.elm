@@ -86,5 +86,4 @@ view navigateMsg =
     [ hero
     , section "Development Workflow" worklfowContent "/images/workflow.svg"
     , section "Component Library" componentLibraryContent "/images/components.png"
-    , section "Some Fancy Section" "" ""
     ]
