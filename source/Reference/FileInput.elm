@@ -28,6 +28,7 @@ init =
                                       , ("readonly", 0, False)
                                       ]
                          , choosers = []
+                         , colors = []
                          , inputs = []
                          , dates = []
                          }

@@ -5,7 +5,7 @@ import Components.Reference
 import Ui.Container
 import Ui.ColorPicker
 import Ui
-import String
+import Ext.Color exposing (Hsv)
 import Color
 import Html.App
 import Html
@@ -21,6 +21,9 @@ type alias Model =
   , fields : Form.Model
   }
 
+hsvColor : Hsv
+hsvColor =
+  Ext.Color.toHsv Color.yellow
 
 init : Model
 init =
@@ -28,10 +31,12 @@ init =
   , fields =
       Form.init
         { checkboxes =
-            [ ( "disabled", 1, False )
-            , ( "readonly", 0, False )
+            [ ( "disabled", 2, False )
+            , ( "readonly", 3, False )
             ]
         , choosers = []
+        , colors =
+            [ ( "value", 0, Color.yellow )]
         , inputs = []
         , dates = []
         }
@@ -55,21 +60,33 @@ update action model =
           Ui.ColorPicker.update act model.model
       in
         ( { model | model = colorPicker }, Cmd.map ColorPicker effect )
-          |> updateFields
+          |> updateForm
 
 
-updateFields : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateFields ( model, effect ) =
-  ( model, effect )
+updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+updateForm ( model, effect ) =
+  let
+    updatedForm =
+      Form.updateColor "value" (Ext.Color.hsvToRgb model.model.colorPanel.value) model.fields
+  in
+    ( { model | fields = updatedForm }, effect )
+
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
+    colorPanel =
+      model.model.colorPanel
+
+    updatedColorPanel =
+      { colorPanel | value = Form.valueOfColor "value" hsvColor model.fields }
+
     updatedButton button =
       { button
         | disabled = Form.valueOfCheckbox "disabled" False model.fields
         , readonly = Form.valueOfCheckbox "readonly" False model.fields
+        , colorPanel = updatedColorPanel
       }
   in
     ( { model | model = updatedButton model.model }, effect )
@@ -77,7 +94,10 @@ updateState ( model, effect ) =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.map ColorPicker (Ui.ColorPicker.subscriptions model.model)
+  Sub.batch
+    [ Sub.map ColorPicker (Ui.ColorPicker.subscriptions model.model)
+    , Sub.map Form (Form.subscriptions model.fields)
+    ]
 
 
 view : Model -> Html.Html Msg

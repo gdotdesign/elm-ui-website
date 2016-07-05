@@ -41,6 +41,7 @@ init =
               , ( "date", 0, now )
               ]
           , choosers = []
+          , colors = []
           , inputs = []
           }
     }

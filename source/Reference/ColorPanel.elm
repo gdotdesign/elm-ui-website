@@ -6,6 +6,7 @@ import Components.Reference
 import Ui.ColorPanel
 import Ui
 
+import Ext.Color exposing (Hsv)
 import Color
 
 import Html.App
@@ -22,6 +23,9 @@ type alias Model =
   , fields : Form.Model
   }
 
+hsvColor : Hsv
+hsvColor =
+  Ext.Color.toHsv Color.yellow
 
 init : Model
 init =
@@ -30,8 +34,10 @@ init =
       Form.init
         { checkboxes =
             [ ( "disabled", 1, False )
-            , ( "readonly", 0, False )
+            , ( "readonly", 2, False )
             ]
+        , colors =
+            [ ( "value", 0, Color.yellow) ]
         , choosers = []
         , inputs = []
         , dates = []
@@ -56,29 +62,37 @@ update action model =
           Ui.ColorPanel.update act model.model
       in
         ( { model | model = colorPanel }, Cmd.map ColorPanel effect )
-          |> updateFields
+          |> updateForm
 
 
-updateFields : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateFields ( model, effect ) =
-  ( model, effect )
+updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+updateForm ( model, effect ) =
+  let
+    updatedForm =
+      Form.updateColor "value" (Ext.Color.hsvToRgb model.model.value) model.fields
+  in
+    ( { model | fields = updatedForm }, effect )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
-    updatedButton button =
-      { button
+    updatedModel colorPanel =
+      { colorPanel
         | disabled = Form.valueOfCheckbox "disabled" False model.fields
         , readonly = Form.valueOfCheckbox "readonly" False model.fields
+        , value = Form.valueOfColor "value" hsvColor model.fields
       }
   in
-    ( { model | model = updatedButton model.model }, effect )
+    ( { model | model = updatedModel model.model }, effect )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.map ColorPanel (Ui.ColorPanel.subscriptions model.model)
+  Sub.batch
+    [ Sub.map ColorPanel (Ui.ColorPanel.subscriptions model.model)
+    , Sub.map Form (Form.subscriptions model.fields)
+    ]
 
 
 view : Model -> Html.Html Msg

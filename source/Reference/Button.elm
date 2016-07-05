@@ -51,6 +51,7 @@ init =
   , form =
       Form.init
         { dates = []
+        , colors = []
         , inputs =
             [ ( "text", 2, "Text...", "Sign Up Free" )
             ]

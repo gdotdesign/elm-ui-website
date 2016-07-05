@@ -54,6 +54,7 @@ init =
               , ( "open", 5, False )
               ]
           , choosers = []
+          , colors = []
           , dates = []
           }
     }

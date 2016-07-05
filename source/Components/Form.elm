@@ -4,9 +4,12 @@ import Html exposing (node, text)
 import Html.Keyed
 import Html.App
 
+import Ext.Color exposing (Hsv)
 import Dict exposing (Dict)
+import Color
 import Date
 
+import Ui.ColorPicker
 import Ui.DatePicker
 import Ui.Checkbox
 import Ui.Chooser
@@ -16,12 +19,14 @@ import Ui.Input
 type Msg
   = DatePickers String Ui.DatePicker.Msg
   | Checkboxes String Ui.Checkbox.Msg
+  | Colors String Ui.ColorPicker.Msg
   | Choosers String Ui.Chooser.Msg
   | Inputs String Ui.Input.Msg
 
 
 type alias Model =
   { checkboxes : Dict String ( Int, Ui.Checkbox.Model )
+  , colors : Dict String ( Int, Ui.ColorPicker.Model )
   , choosers : Dict String ( Int, Ui.Chooser.Model )
   , dates : Dict String ( Int, Ui.DatePicker.Model )
   , inputs : Dict String ( Int, Ui.Input.Model )
@@ -32,6 +37,7 @@ type alias Model =
 type alias TempModel =
   { choosers : List ( String, Int, List Ui.Chooser.Item, String, String )
   , inputs : List ( String, Int, String, String )
+  , colors : List ( String, Int, Color.Color )
   , checkboxes : List ( String, Int, Bool )
   , dates : List ( String, Int, Date.Date )
   }
@@ -40,8 +46,8 @@ type alias TempModel =
 init : TempModel -> Model
 init data =
   let
-    initDatePickers ( name, index, date ) =
-      ( name, ( index, Ui.DatePicker.init date ) )
+    initDatePickers ( name, index, value ) =
+      ( name, ( index, Ui.DatePicker.init value ) )
 
     initCheckbox ( name, index, value ) =
       ( name, ( index, Ui.Checkbox.init value ) )
@@ -51,14 +57,30 @@ init data =
 
     initInput ( name, index, placeholder, value ) =
       ( name, ( index, Ui.Input.init value placeholder ) )
+
+    initColors ( name, index, value ) =
+      ( name, ( index, Ui.ColorPicker.init value ) )
   in
     { checkboxes = Dict.fromList (List.map initCheckbox data.checkboxes)
     , choosers = Dict.fromList (List.map initChooser data.choosers)
     , dates = Dict.fromList (List.map initDatePickers data.dates)
+    , colors = Dict.fromList (List.map initColors data.colors)
     , inputs = Dict.fromList (List.map initInput data.inputs)
     , uid = Native.Uid.uid ()
     }
 
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  let
+    colorSub name colorPicker =
+      Sub.map (Colors name) (Ui.ColorPicker.subscriptions colorPicker)
+
+    colorSubs =
+      Dict.toList model.colors
+      |> List.map (\(key, (pos, colorPicker)) -> colorSub key colorPicker)
+  in
+    Sub.batch colorSubs
 
 valueOfSimple :
   String
@@ -83,6 +105,11 @@ valueOfInput name default model =
   valueOfSimple name default .value model.inputs
 
 
+valueOfColor : String -> Hsv -> Model -> Hsv
+valueOfColor name default model =
+  valueOfSimple name default (\item -> item.colorPanel.value) model.colors
+
+
 valueOfDate : String -> Date.Date -> Model -> Date.Date
 valueOfDate name default model =
   valueOfSimple name default (\item -> item.calendar.value) model.dates
@@ -96,6 +123,19 @@ valueOfChooser name default model =
 
     _ ->
       default
+
+updateColor : String -> Color.Color -> Model -> Model
+updateColor name value model =
+  let
+    updatedColor item =
+      case item of
+        Just ( index, colorPicker ) ->
+          Just ( index, Ui.ColorPicker.setValue value colorPicker )
+
+        _ ->
+          item
+  in
+    { model | colors = Dict.update name updatedColor model.colors }
 
 
 updateDate : String -> Date.Date -> Model -> Model
@@ -184,6 +224,15 @@ update action model =
         , Cmd.map (Inputs name) effect
         )
 
+    Colors name act ->
+      let
+        ( effect, updatedColors ) =
+          updateDict name act Ui.ColorPicker.update model.colors
+      in
+        ( { model | colors = updatedColors }
+        , Cmd.map (Colors name) effect
+        )
+
 
 view : Model -> Html.Html Msg
 view fields =
@@ -203,6 +252,10 @@ view fields =
     renderInput name data =
       blockField name
         (Html.App.map (Inputs name) (Ui.Input.view data))
+
+    renderColorPicker name data =
+      blockField name
+        (Html.App.map (Colors name) (Ui.ColorPicker.view data))
 
     blockField name child =
       node "ui-form-block"
@@ -226,6 +279,7 @@ view fields =
 
     items =
       ((renderMap renderCheckbox fields.checkboxes)
+        ++ (renderMap renderColorPicker fields.colors)
         ++ (renderMap renderChooser fields.choosers)
         ++ (renderMap renderDatePicker fields.dates)
         ++ (renderMap renderInput fields.inputs)
