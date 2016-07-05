@@ -17,9 +17,9 @@ body {
 }
 
 a {
-  color: $focus;
+  color: $primary;
   text-decoration: none;
-  border-bottom: 1px solid rgba($focus, 0.5);
+  border-bottom: 1px solid rgba($primary, 0.5);
 }
 
 ui-playground {
@@ -186,8 +186,26 @@ ui-reference-demo {
 
 ui-docs {
   padding: 30px;
+  padding-bottom: 150px;
   display: block;
   background: $input;
+
+  > div {
+    p, li {
+      line-height: 30px;
+      color: #777;
+    }
+  }
+}
+
+ui-docs-title {
+  border-bottom: 2px solid rgba(#000, 0.1);
+  display: block;
+  margin: 30px 0;
+  margin-top: 40px;
+  font-family: Abel;
+  font-size: 28px;
+  padding-bottom: 10px;
 }
 
 ui-docs-entity {
@@ -204,15 +222,9 @@ ui-docs-entity {
     margin-left: 20px;
     font-size: 14px;
 
-    pre {
-      padding: 20px;
-      border-radius: $border-radius;
-      border: 1px solid rgba(#000, 0.05);
-      background: #F7f7f7;
-    }
-
-    code {
-      font-family: $code-font;
+    p, li {
+      line-height: 24px;
+      color: #777;
     }
   }
 
@@ -220,6 +232,12 @@ ui-docs-entity {
     display: flex;
     font-size: 16px;
     font-family: $code-font;
+
+    strong {
+      margin-right: 10px;
+      font-weight: normal;
+      color: #df5320;
+    }
 
     span {
       white-space: nowrap;
@@ -257,15 +275,15 @@ ui-documentation {
     padding: 30px;
     flex: 1;
   }
+}
 
-  pre {
-    padding: 20px;
-    border-radius: $border-radius;
-    border: 1px solid rgba(#000, 0.05);
-    background: #F7f7f7;
-  }
+pre {
+  padding: 20px;
+  border-radius: $border-radius;
+  border: 1px solid rgba(#000, 0.05);
+  background: #F7f7f7;
+}
 
-  code {
-    font-family: $code-font;
-  }
+code {
+  font-family: $code-font;
 }

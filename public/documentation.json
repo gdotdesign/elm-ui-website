@@ -116,64 +116,6 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.DatePicker",
-    "comment": " An input component that displays a **Calendar** (in a dropdown) when\nfocused, allowing the user to manipulate the selected date.\n\n# Model\n@docs Model, Msg, init, subscribe, subscriptions, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a date picker:\n  - **calendar** - The model of a calendar\n  - **dropdownPosition** - The dropdowns position\n  - **closeOnSelect** - Whether or not to close the dropdown after selecting\n  - **format** - The format of the date to render in the input\n  - **readonly** - Whether or not the date picker is readonly\n  - **disabled** - Whether or not the date picker is disabled\n  - **open** - Whether or not the dropdown is open\n",
-        "args": [],
-        "type": "{ calendar : Ui.Calendar.Model , dropdownPosition : String , closeOnSelect : Bool , format : String , disabled : Bool , readonly : Bool , open : Bool }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a date picker can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initializes a date picker with the given date.\n\n    datePicker = Ui.DatePicker.init (Ext.Date.create 2016 5 28)\n",
-        "type": "Date.Date -> Ui.DatePicker.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a date picker.\n\n    Ui.DatePicker.render \"en_us\" model\n",
-        "type": "String -> Ui.DatePicker.Model -> Html.Html Ui.DatePicker.Msg"
-      },
-      {
-        "name": "setValue",
-        "comment": " Sets the value of a date picker\n\n    Ui.DatePicker.setValue (Ext.Date.create 2016 5 28) datePicker\n",
-        "type": "Date.Date -> Ui.DatePicker.Model -> Ui.DatePicker.Model"
-      },
-      {
-        "name": "subscribe",
-        "comment": " Subscribe to the changes of a date picker.\n\n    ...\n    subscriptions =\n      \\model ->\n        Ui.DatePicker.subscribe\n          DatePickerChanged\n          model.datePicker\n    ...\n",
-        "type": "(Time.Time -> msg) -> Ui.DatePicker.Model -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "subscriptions",
-        "comment": " Subscriptions for a date picker.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          DatePicker\n          (Ui.DatePicker.subscriptions model.datePicker)\n    ...\n",
-        "type": "Ui.DatePicker.Model -> Platform.Sub.Sub Ui.DatePicker.Msg"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a date picker.\n\n    Ui.DatePicker.update msg datePicker\n",
-        "type": "Ui.DatePicker.Msg -> Ui.DatePicker.Model -> ( Ui.DatePicker.Model, Platform.Cmd.Cmd Ui.DatePicker.Msg )"
-      },
-      {
-        "name": "view",
-        "comment": " Lazily renders a date picker.\n\n    Ui.DatePicker.view \"en_us\" model\n",
-        "type": "String -> Ui.DatePicker.Model -> Html.Html Ui.DatePicker.Msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ui.Layout",
     "comment": " Module that provides most commonly used layouts.\n\n@docs sidebar, default, centerDefault\n",
     "aliases": [],
@@ -193,92 +135,6 @@
         "name": "sidebar",
         "comment": " Layout with a sidebar on the left side.\n\n    Ui.Layout.sidebar sidebarContent mainContent\n",
         "type": "List (Html.Html msg) -> List (Html.Html msg) -> Html.Html msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.FileInput",
-    "comment": " Component for selecting a file.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs view, render\n\n# View Variations\n@docs viewDetails, renderDetails\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a file input:\n  - **readonly** - Whether or not the date picker is readonly\n  - **disabled** - Whether or not the date picker is disabled\n  - **accept** - The mime types that the file input accepts\n  - **file** - (Maybe) The selected file\n",
-        "args": [],
-        "type": "{ readonly : Bool , disabled : Bool , file : Maybe.Maybe Ui.Native.FileManager.File , accept : String }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a file input can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initializes a file input with the given accept value.\n\n    fileInput = Ui.FileInput.init \"image/*\"\n",
-        "type": "String -> Ui.FileInput.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a file input.\n\n    Ui.FileInput.render fileInput\n",
-        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
-      },
-      {
-        "name": "renderDetails",
-        "comment": " Renders a file input showing the details of the file.\n\n    Ui.FileInput.renderDetails fileInput\n",
-        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a file input.\n\n    Ui.FileInput.update msg fileInput\n",
-        "type": "Ui.FileInput.Msg -> Ui.FileInput.Model -> ( Ui.FileInput.Model, Platform.Cmd.Cmd Ui.FileInput.Msg )"
-      },
-      {
-        "name": "view",
-        "comment": " Renders a file input lazily.\n\n    Ui.FileInput.view fileInput\n",
-        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
-      },
-      {
-        "name": "viewDetails",
-        "comment": " Renders a file input lazily showing the details of the file.\n\n    Ui.FileInput.renderDetails fileInput\n",
-        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.ButtonGroup",
-    "comment": " Groups a series of buttons together.\n\n# Model\n@docs Model, init\n\n# View\n@docs view, render\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a button group:\n  - **disabled** - Whether or not the button group is disabled\n  - **readonly** - Whether or not the button group is readonly\n  - **items** - The label and action for each button\n  - **kind** - The type of the buttons\n  - **size** - The size of the buttons\n",
-        "args": [
-          "msg"
-        ],
-        "type": "{ items : List ( String, msg ) , disabled : Bool , readonly : Bool , kind : String , size : String }"
-      }
-    ],
-    "types": [],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initializes a button group with the given data.\n\n    buttonGroup = Ui.ButtonGroup.init [ (\"Download\", Download)\n                                      , (\"Export\", Export)\n                                      ]\n",
-        "type": "List ( String, msg ) -> Ui.ButtonGroup.Model msg"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a button group.\n\n    Ui.ButtonGroup.render buttonGroup\n",
-        "type": "Ui.ButtonGroup.Model msg -> Html.Html msg"
-      },
-      {
-        "name": "view",
-        "comment": " Lazily renders a button group.\n\n    Ui.ButtonGroup.view buttonGroup\n",
-        "type": "Ui.ButtonGroup.Model msg -> Html.Html msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -390,20 +246,53 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.App",
-    "comment": " Ui.App is the starting point of any Elm-UI application, it has multiple\nresponsibilities:\n  - Schedules updates for the **Ui.Time** component\n  - Sets the **viewport meta tag** to be mobile friendly\n  - Sets the **title** of the window\n\n# Model\n@docs Model, Msg, update, init, subscriptions\n\n# View\n@docs view, render\n\n# Functions\n@docs setTitle\n",
+    "name": "Ui.ButtonGroup",
+    "comment": " Groups a series of buttons together.\n\n# Model\n@docs Model, init\n\n# View\n@docs view, render\n",
     "aliases": [
       {
         "name": "Model",
-        "comment": " Representation of an application:\n  - **title** - The title of the application (and the window)\n  - **uid** - The unique identifier of the application\n",
+        "comment": " Representation of a button group:\n  - **disabled** - Whether or not the button group is disabled\n  - **readonly** - Whether or not the button group is readonly\n  - **items** - The label and action for each button\n  - **kind** - The type of the buttons\n  - **size** - The size of the buttons\n",
+        "args": [
+          "msg"
+        ],
+        "type": "{ items : List ( String, msg ) , disabled : Bool , readonly : Bool , kind : String , size : String }"
+      }
+    ],
+    "types": [],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initializes a button group with the given data.\n\n    buttonGroup = Ui.ButtonGroup.init [ (\"Download\", Download)\n                                      , (\"Export\", Export)\n                                      ]\n",
+        "type": "List ( String, msg ) -> Ui.ButtonGroup.Model msg"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a button group.\n\n    Ui.ButtonGroup.render buttonGroup\n",
+        "type": "Ui.ButtonGroup.Model msg -> Html.Html msg"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a button group.\n\n    Ui.ButtonGroup.view buttonGroup\n",
+        "type": "Ui.ButtonGroup.Model msg -> Html.Html msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.FileInput",
+    "comment": " Component for selecting a file.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs view, render\n\n# View Variations\n@docs viewDetails, renderDetails\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a file input:\n  - **readonly** - Whether or not the date picker is readonly\n  - **disabled** - Whether or not the date picker is disabled\n  - **accept** - The mime types that the file input accepts\n  - **file** - (Maybe) The selected file\n",
         "args": [],
-        "type": "{ title : String, uid : String }"
+        "type": "{ readonly : Bool , disabled : Bool , file : Maybe.Maybe Ui.Native.FileManager.File , accept : String }"
       }
     ],
     "types": [
       {
         "name": "Msg",
-        "comment": " Messages that an application can receive.\n",
+        "comment": " Messages that a file input can receive.\n",
         "args": [],
         "cases": []
       }
@@ -411,33 +300,91 @@
     "values": [
       {
         "name": "init",
-        "comment": " Initializes an application with the given title.\n\n    app = Ui.App.init \"My Application\"\n",
-        "type": "String -> Ui.App.Model"
+        "comment": " Initializes a file input with the given accept value.\n\n    fileInput = Ui.FileInput.init \"image/*\"\n",
+        "type": "String -> Ui.FileInput.Model"
       },
       {
         "name": "render",
-        "comment": " Renders an application.\n\n    Ui.App.render App app [text \"Hello there!\"]\n",
-        "type": "(Ui.App.Msg -> msg) -> Ui.App.Model -> List (Html.Html msg) -> Html.Html msg"
+        "comment": " Renders a file input.\n\n    Ui.FileInput.render fileInput\n",
+        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
       },
       {
-        "name": "setTitle",
-        "comment": " Sets the title of the application\n\n    Ui.App.setTitle \"New Title\" model.app\n",
-        "type": "String -> Ui.App.Model -> Ui.App.Model"
-      },
-      {
-        "name": "subscriptions",
-        "comment": " Subscriptions for an application.\n\n    Sub.map App Ui.App.subscriptions\n",
-        "type": "Platform.Sub.Sub Ui.App.Msg"
+        "name": "renderDetails",
+        "comment": " Renders a file input showing the details of the file.\n\n    Ui.FileInput.renderDetails fileInput\n",
+        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
       },
       {
         "name": "update",
-        "comment": " Updates an application.\n\n    Ui.App.update msg app\n",
-        "type": "Ui.App.Msg -> Ui.App.Model -> ( Ui.App.Model, Platform.Cmd.Cmd Ui.App.Msg )"
+        "comment": " Updates a file input.\n\n    Ui.FileInput.update msg fileInput\n",
+        "type": "Ui.FileInput.Msg -> Ui.FileInput.Model -> ( Ui.FileInput.Model, Platform.Cmd.Cmd Ui.FileInput.Msg )"
       },
       {
         "name": "view",
-        "comment": " Lazily renders an application.\n\n    Ui.App.view App app [text \"Hello there!\"]\n",
-        "type": "(Ui.App.Msg -> msg) -> Ui.App.Model -> List (Html.Html msg) -> Html.Html msg"
+        "comment": " Renders a file input lazily.\n\n    Ui.FileInput.view fileInput\n",
+        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
+      },
+      {
+        "name": "viewDetails",
+        "comment": " Renders a file input lazily showing the details of the file.\n\n    Ui.FileInput.renderDetails fileInput\n",
+        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.DatePicker",
+    "comment": " An input component that displays a **Calendar** (in a dropdown) when\nfocused, allowing the user to manipulate the selected date.\n\n# Model\n@docs Model, Msg, init, subscribe, subscriptions, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a date picker:\n  - **calendar** - The model of a calendar\n  - **dropdownPosition** - The dropdowns position\n  - **closeOnSelect** - Whether or not to close the dropdown after selecting\n  - **format** - The format of the date to render in the input\n  - **readonly** - Whether or not the date picker is readonly\n  - **disabled** - Whether or not the date picker is disabled\n  - **open** - Whether or not the dropdown is open\n",
+        "args": [],
+        "type": "{ calendar : Ui.Calendar.Model , dropdownPosition : String , closeOnSelect : Bool , format : String , disabled : Bool , readonly : Bool , open : Bool }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a date picker can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initializes a date picker with the given date.\n\n    datePicker = Ui.DatePicker.init (Ext.Date.create 2016 5 28)\n",
+        "type": "Date.Date -> Ui.DatePicker.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a date picker.\n\n    Ui.DatePicker.render \"en_us\" model\n",
+        "type": "String -> Ui.DatePicker.Model -> Html.Html Ui.DatePicker.Msg"
+      },
+      {
+        "name": "setValue",
+        "comment": " Sets the value of a date picker\n\n    Ui.DatePicker.setValue (Ext.Date.create 2016 5 28) datePicker\n",
+        "type": "Date.Date -> Ui.DatePicker.Model -> Ui.DatePicker.Model"
+      },
+      {
+        "name": "subscribe",
+        "comment": " Subscribe to the changes of a date picker.\n\n    ...\n    subscriptions =\n      \\model ->\n        Ui.DatePicker.subscribe\n          DatePickerChanged\n          model.datePicker\n    ...\n",
+        "type": "(Time.Time -> msg) -> Ui.DatePicker.Model -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "subscriptions",
+        "comment": " Subscriptions for a date picker.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          DatePicker\n          (Ui.DatePicker.subscriptions model.datePicker)\n    ...\n",
+        "type": "Ui.DatePicker.Model -> Platform.Sub.Sub Ui.DatePicker.Msg"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a date picker.\n\n    Ui.DatePicker.update msg datePicker\n",
+        "type": "Ui.DatePicker.Msg -> Ui.DatePicker.Model -> ( Ui.DatePicker.Model, Platform.Cmd.Cmd Ui.DatePicker.Msg )"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a date picker.\n\n    Ui.DatePicker.view \"en_us\" model\n",
+        "type": "String -> Ui.DatePicker.Model -> Html.Html Ui.DatePicker.Msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -496,6 +443,64 @@
         "name": "view",
         "comment": " Lazily renders a slider.\n\n    Ui.Slider.view slider\n",
         "type": "Ui.Slider.Model -> Html.Html Ui.Slider.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.ColorPanel",
+    "comment": " Color panel component for selecting a colors **hue**, **saturation**,\n**value** and **alpha** components with draggable interfaces.\n\n# Model\n@docs Model, Msg, init, update, subscribe, subscriptions\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a color panel:\n  - **alphaDrag** - The drag model of the alpha slider\n  - **hueDrag** - The drag model of the hue slider\n  - **drag** - The drag model of the value / saturation rectangle\n  - **disabled** - Whether or not the color panel is disabled\n  - **readonly** - Whether or not the color panel is editable\n  - **uid** - The unique identifier of the color panel\n  - **value** - The current HSV color\n",
+        "args": [],
+        "type": "{ alphaDrag : Ui.Helpers.Drag.Model , hueDrag : Ui.Helpers.Drag.Model , drag : Ui.Helpers.Drag.Model , disabled : Bool , readonly : Bool , uid : String , value : Ext.Color.Hsv }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a color panel can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initializes a color panel with the given Elm color.\n\n    colorPanel = Ui.ColorPanel.init Color.blue\n",
+        "type": "Color.Color -> Ui.ColorPanel.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a color panel.\n\n    Ui.ColorPanel.render colorPanel\n",
+        "type": "Ui.ColorPanel.Model -> Html.Html Ui.ColorPanel.Msg"
+      },
+      {
+        "name": "setValue",
+        "comment": " Sets the vale of a color panel.\n\n    Ui.ColorPanel.setValue Color.black colorPanel\n",
+        "type": "Color.Color -> Ui.ColorPanel.Model -> Ui.ColorPanel.Model"
+      },
+      {
+        "name": "subscribe",
+        "comment": " Subscribe for the changes of a color panel.\n\n    ...\n    subscriptions =\n      \\model ->\n        Ui.ColorPanel.subscribe\n          ColorPanelChanged\n          model.colorPanel\n    ...\n",
+        "type": "(Ext.Color.Hsv -> msg) -> Ui.ColorPanel.Model -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "subscriptions",
+        "comment": " Subscriptions for a color panel.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          ColorPanel\n          (Ui.ColorPanel.subscriptions model.colorPanel)\n    ...\n",
+        "type": "Ui.ColorPanel.Model -> Platform.Sub.Sub Ui.ColorPanel.Msg"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a color panel.\n\n    Ui.ColorPanel.update msg colorPanel\n",
+        "type": "Ui.ColorPanel.Msg -> Ui.ColorPanel.Model -> ( Ui.ColorPanel.Model, Platform.Cmd.Cmd Ui.ColorPanel.Msg )"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a color panel.\n\n    Ui.ColorPanel.view colorPanel\n",
+        "type": "Ui.ColorPanel.Model -> Html.Html Ui.ColorPanel.Msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -564,64 +569,6 @@
         "name": "view",
         "comment": " Lazily renders a number range.\n\n    Ui.NumberRange.view numberRange\n",
         "type": "Ui.NumberRange.Model -> Html.Html Ui.NumberRange.Msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.ColorPanel",
-    "comment": " Color panel component for selecting a colors **hue**, **saturation**,\n**value** and **alpha** components with draggable interfaces.\n\n# Model\n@docs Model, Msg, init, update, subscribe, subscriptions\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a color panel:\n  - **alphaDrag** - The drag model of the alpha slider\n  - **hueDrag** - The drag model of the hue slider\n  - **drag** - The drag model of the value / saturation rectangle\n  - **disabled** - Whether or not the color panel is disabled\n  - **readonly** - Whether or not the color panel is editable\n  - **uid** - The unique identifier of the color panel\n  - **value** - The current HSV color\n",
-        "args": [],
-        "type": "{ alphaDrag : Ui.Helpers.Drag.Model , hueDrag : Ui.Helpers.Drag.Model , drag : Ui.Helpers.Drag.Model , disabled : Bool , readonly : Bool , uid : String , value : Ext.Color.Hsv }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a color panel can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initializes a color panel with the given Elm color.\n\n    colorPanel = Ui.ColorPanel.init Color.blue\n",
-        "type": "Color.Color -> Ui.ColorPanel.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a color panel.\n\n    Ui.ColorPanel.render colorPanel\n",
-        "type": "Ui.ColorPanel.Model -> Html.Html Ui.ColorPanel.Msg"
-      },
-      {
-        "name": "setValue",
-        "comment": " Sets the vale of a color panel.\n\n    Ui.ColorPanel.setValue Color.black colorPanel\n",
-        "type": "Color.Color -> Ui.ColorPanel.Model -> Ui.ColorPanel.Model"
-      },
-      {
-        "name": "subscribe",
-        "comment": " Subscribe for the changes of a color panel.\n\n    ...\n    subscriptions =\n      \\model ->\n        Ui.ColorPanel.subscribe\n          ColorPanelChanged\n          model.colorPanel\n    ...\n",
-        "type": "(Ext.Color.Hsv -> msg) -> Ui.ColorPanel.Model -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "subscriptions",
-        "comment": " Subscriptions for a color panel.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          ColorPanel\n          (Ui.ColorPanel.subscriptions model.colorPanel)\n    ...\n",
-        "type": "Ui.ColorPanel.Model -> Platform.Sub.Sub Ui.ColorPanel.Msg"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a color panel.\n\n    Ui.ColorPanel.update msg colorPanel\n",
-        "type": "Ui.ColorPanel.Msg -> Ui.ColorPanel.Model -> ( Ui.ColorPanel.Model, Platform.Cmd.Cmd Ui.ColorPanel.Msg )"
-      },
-      {
-        "name": "view",
-        "comment": " Lazily renders a color panel.\n\n    Ui.ColorPanel.view colorPanel\n",
-        "type": "Ui.ColorPanel.Model -> Html.Html Ui.ColorPanel.Msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -706,6 +653,64 @@
         "name": "view",
         "comment": " Lazily renders a chooser.\n\n    Ui.Chooser.view model\n",
         "type": "Ui.Chooser.Model -> Html.Html Ui.Chooser.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Ratings",
+    "comment": " A simple star rating component.\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue, valueAsStars\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a ratings component:\n  - **hoverValue** - The transient value of the component\n  - **clearable** - Whether or not the component is clearable\n  - **disabled** - Whether or not the component is disabled\n  - **readonly** - Whether or not the component is readonly\n  - **value** - The current value of the component (0..1)\n  - **uid** - The unique identifier of the input\n  - **size** - The number of starts to display\n",
+        "args": [],
+        "type": "{ hoverValue : Float , clearable : Bool , disabled : Bool , readonly : Bool , value : Float , uid : String , size : Int }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a ratings component can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initializes a ratings component with the given number of stars and initial\nvalue.\n\n    -- 1 out of 10 star rating\n    ratings = Ui.Ratings.init 10 0.1\n",
+        "type": "Int -> Float -> Ui.Ratings.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a ratings component.\n\n    Ui.Ratings.render ratings\n",
+        "type": "Ui.Ratings.Model -> Html.Html Ui.Ratings.Msg"
+      },
+      {
+        "name": "setValue",
+        "comment": " Sets the value of a ratings component.\n\n    Ui.Ratings.setValue 8 ratings\n",
+        "type": "Float -> Ui.Ratings.Model -> Ui.Ratings.Model"
+      },
+      {
+        "name": "subscribe",
+        "comment": " Subscribe to the changes of a ratings components.\n\n    ...\n    subscriptions =\n      \\model -> Ui.Ratings.subscribe RatingsChanged model.ratings\n    ...\n",
+        "type": "(Float -> msg) -> Ui.Ratings.Model -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a ratings component.\n",
+        "type": "Ui.Ratings.Msg -> Ui.Ratings.Model -> ( Ui.Ratings.Model, Platform.Cmd.Cmd Ui.Ratings.Msg )"
+      },
+      {
+        "name": "valueAsStars",
+        "comment": " Returns the value of a ratings component as number of stars.\n\n    Ui.NumberRange.valueAsStars 10 ratings\n",
+        "type": "Float -> Ui.Ratings.Model -> Int"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a ratings component.\n\n    Ui.Ratings.view ratings\n",
+        "type": "Ui.Ratings.Model -> Html.Html Ui.Ratings.Msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -860,6 +865,67 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
+    "name": "Ui.Modal",
+    "comment": " Modal dialog.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs ViewModel, view, render\n\n# Functions\n@docs open, close\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a modal:\n  - **closeable** - Whether or not the modal is closeable by clicking on the\n    backdrop or the close button.\n  - **backdrop** - Whether or not to show a backdrop\n  - **open** - Whether or not the modal is open\n",
+        "args": [],
+        "type": "{ closeable : Bool, backdrop : Bool, open : Bool }"
+      },
+      {
+        "name": "ViewModel",
+        "comment": " Representation of the view model for a view:\n  - **content** - The elements to display in the body\n  - **footer** - The elements to display in the footer\n  - **title** - The title of the modal\n",
+        "args": [
+          "msg"
+        ],
+        "type": "{ content : List (Html.Html msg) , footer : List (Html.Html msg) , title : String }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a modal can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "close",
+        "comment": " Closes a modal window.\n\n    Ui.Modal.close modal\n",
+        "type": "Ui.Modal.Model -> Ui.Modal.Model"
+      },
+      {
+        "name": "init",
+        "comment": " Initializes the a modal.\n\n    model = Ui.Modal.init\n",
+        "type": "Ui.Modal.Model"
+      },
+      {
+        "name": "open",
+        "comment": " Opens a modal window.\n\n    Ui.Modal.open modal\n",
+        "type": "Ui.Modal.Model -> Ui.Modal.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a modal with the given view model.\n\n    Ui.Modal.render Modal viewModel modal\n",
+        "type": "(Ui.Modal.Msg -> msg) -> Ui.Modal.ViewModel msg -> Ui.Modal.Model -> Html.Html msg"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a modal window.\n\n    Ui.Modal.update msg modal\n",
+        "type": "Ui.Modal.Msg -> Ui.Modal.Model -> Ui.Modal.Model"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a modal with the given view model.\n\n    Ui.Modal.view Modal viewModel modal\n",
+        "type": "(Ui.Modal.Msg -> msg) -> Ui.Modal.ViewModel msg -> Ui.Modal.Model -> Html.Html msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
     "name": "Ui.NumberPad",
     "comment": " A component for displaying a type of [numeric keypad](https://en.wikipedia.org/wiki/Numeric_keypad),\nthat is mainly used for asking the user for a passcode or other forms of\nnumberic data.\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# View\n@docs ViewModel, view, render\n\n# Functions\n@docs setValue\n",
     "aliases": [
@@ -921,69 +987,6 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Calendar",
-    "comment": " Calendar component with which the user can:\n  - Select a date by clicking on it\n  - Change the month with arrows\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue, nextDay, previousDay\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a calendar component:\n  - **selectable** - Whether or not the user can select a date by clicking\n  - **readonly** - Whether or not the calendar is interactive\n  - **disabled** - Whether or not the calendar is disabled\n  - **value** - The current selected date\n  - **date** - The month in which this date is will be displayed\n  - **uid** - The unique identifier of the calendar\n",
-        "args": [],
-        "type": "{ selectable : Bool , value : Date.Date , date : Date.Date , disabled : Bool , readonly : Bool , uid : String }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a calendar can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initializes a calendar with the given selected date.\n\n    calendar = Ui.Calendar.init (Ext.Date.create 2016 5 28)\n",
-        "type": "Date.Date -> Ui.Calendar.Model"
-      },
-      {
-        "name": "nextDay",
-        "comment": " Steps the selected value to the next day.\n",
-        "type": "Ui.Calendar.Model -> Ui.Calendar.Model"
-      },
-      {
-        "name": "previousDay",
-        "comment": " Steps the selected value to the previous day.\n",
-        "type": "Ui.Calendar.Model -> Ui.Calendar.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a calendar.\n\n    Ui.Calendar.render \"en_us\" calendar\n",
-        "type": "String -> Ui.Calendar.Model -> Html.Html Ui.Calendar.Msg"
-      },
-      {
-        "name": "setValue",
-        "comment": " Sets the value of a calendar.\n\n    Ui.Calendar.setValue (Ext.Date.createDate 2016 5 28) calendar\n",
-        "type": "Date.Date -> Ui.Calendar.Model -> Ui.Calendar.Model"
-      },
-      {
-        "name": "subscribe",
-        "comment": " Subscribe to the changes of a calendar.\n\n    Ui.Calendar.subscribe CalendarChanged calendar\n",
-        "type": "(Time.Time -> msg) -> Ui.Calendar.Model -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a calendar.\n\n    Ui.Calendar.update msg calendar\n",
-        "type": "Ui.Calendar.Msg -> Ui.Calendar.Model -> ( Ui.Calendar.Model, Platform.Cmd.Cmd Ui.Calendar.Msg )"
-      },
-      {
-        "name": "view",
-        "comment": " Lazily renders a calendar.\n\n    Ui.Calendar.view \"en_us\" calendar\n",
-        "type": "String -> Ui.Calendar.Model -> Html.Html Ui.Calendar.Msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ui.Header",
     "comment": " Static elements for creating application headers.\n\n# View\n@docs view\n\n# Elements\n@docs icon, title, separator\n\n# Navigation Items\n@docs item, iconItem\n",
     "aliases": [],
@@ -1018,67 +1021,6 @@
         "name": "view",
         "comment": " Renders a header element.\n\n    Ui.Header.view [] [ text \"Hello\" ]\n",
         "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.Modal",
-    "comment": " Modal dialog.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs ViewModel, view, render\n\n# Functions\n@docs open, close\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a modal:\n  - **closeable** - Whether or not the modal is closeable by clicking on the\n    backdrop or the close button.\n  - **backdrop** - Whether or not to show a backdrop\n  - **open** - Whether or not the modal is open\n",
-        "args": [],
-        "type": "{ closeable : Bool, backdrop : Bool, open : Bool }"
-      },
-      {
-        "name": "ViewModel",
-        "comment": " Representation of the view model for a view:\n  - **content** - The elements to display in the body\n  - **footer** - The elements to display in the footer\n  - **title** - The title of the modal\n",
-        "args": [
-          "msg"
-        ],
-        "type": "{ content : List (Html.Html msg) , footer : List (Html.Html msg) , title : String }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a modal can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "close",
-        "comment": " Closes a modal window.\n\n    Ui.Modal.close modal\n",
-        "type": "Ui.Modal.Model -> Ui.Modal.Model"
-      },
-      {
-        "name": "init",
-        "comment": " Initializes the a modal.\n\n    model = Ui.Modal.init\n",
-        "type": "Ui.Modal.Model"
-      },
-      {
-        "name": "open",
-        "comment": " Opens a modal window.\n\n    Ui.Modal.open modal\n",
-        "type": "Ui.Modal.Model -> Ui.Modal.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a modal with the given view model.\n\n    Ui.Modal.render Modal viewModel modal\n",
-        "type": "(Ui.Modal.Msg -> msg) -> Ui.Modal.ViewModel msg -> Ui.Modal.Model -> Html.Html msg"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a modal window.\n\n    Ui.Modal.update msg modal\n",
-        "type": "Ui.Modal.Msg -> Ui.Modal.Model -> Ui.Modal.Model"
-      },
-      {
-        "name": "view",
-        "comment": " Lazily renders a modal with the given view model.\n\n    Ui.Modal.view Modal viewModel modal\n",
-        "type": "(Ui.Modal.Msg -> msg) -> Ui.Modal.ViewModel msg -> Ui.Modal.Model -> Html.Html msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -1195,64 +1137,6 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Ratings",
-    "comment": " A simple star rating component.\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue, valueAsStars\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a ratings component:\n  - **hoverValue** - The transient value of the component\n  - **clearable** - Whether or not the component is clearable\n  - **disabled** - Whether or not the component is disabled\n  - **readonly** - Whether or not the component is readonly\n  - **value** - The current value of the component (0..1)\n  - **uid** - The unique identifier of the input\n  - **size** - The number of starts to display\n",
-        "args": [],
-        "type": "{ hoverValue : Float , clearable : Bool , disabled : Bool , readonly : Bool , value : Float , uid : String , size : Int }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a ratings component can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initializes a ratings component with the given number of stars and initial\nvalue.\n\n    -- 1 out of 10 star rating\n    ratings = Ui.Ratings.init 10 0.1\n",
-        "type": "Int -> Float -> Ui.Ratings.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a ratings component.\n\n    Ui.Ratings.render ratings\n",
-        "type": "Ui.Ratings.Model -> Html.Html Ui.Ratings.Msg"
-      },
-      {
-        "name": "setValue",
-        "comment": " Sets the value of a ratings component.\n\n    Ui.Ratings.setValue 8 ratings\n",
-        "type": "Float -> Ui.Ratings.Model -> Ui.Ratings.Model"
-      },
-      {
-        "name": "subscribe",
-        "comment": " Subscribe to the changes of a ratings components.\n\n    ...\n    subscriptions =\n      \\model -> Ui.Ratings.subscribe RatingsChanged model.ratings\n    ...\n",
-        "type": "(Float -> msg) -> Ui.Ratings.Model -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a ratings component.\n",
-        "type": "Ui.Ratings.Msg -> Ui.Ratings.Model -> ( Ui.Ratings.Model, Platform.Cmd.Cmd Ui.Ratings.Msg )"
-      },
-      {
-        "name": "valueAsStars",
-        "comment": " Returns the value of a ratings component as number of stars.\n\n    Ui.NumberRange.valueAsStars 10 ratings\n",
-        "type": "Float -> Ui.Ratings.Model -> Int"
-      },
-      {
-        "name": "view",
-        "comment": " Lazily renders a ratings component.\n\n    Ui.Ratings.view ratings\n",
-        "type": "Ui.Ratings.Model -> Html.Html Ui.Ratings.Msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ui.Checkbox",
     "comment": " Checkbox component with three different views.\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# Views\n@docs view, render\n\n# View Variations\n@docs viewRadio, viewToggle, renderRadio, renderToggle\n\n# Functions\n@docs setValue\n",
     "aliases": [
@@ -1326,20 +1210,20 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Time",
-    "comment": " A component that displays time with a formatting function (defaults to\nrelative time like: 10 minutes ago).\n\n# Model\n@docs Model, Msg, init, subscriptions, update\n\n# View\n@docs view, render\n\n# Functions\n@docs updateTime\n",
+    "name": "Ui.Calendar",
+    "comment": " Calendar component with which the user can:\n  - Select a date by clicking on it\n  - Change the month with arrows\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue, nextDay, previousDay\n",
     "aliases": [
       {
         "name": "Model",
-        "comment": " Representation of a time component:\n  - **format** - The function to format the date\n  - **tooltipFormat** - The format of the tooltip (title)\n  - **date** - The date to display\n  - **now** - The date to calculate from\n  - **locale** - The locale to use\n",
+        "comment": " Representation of a calendar component:\n  - **selectable** - Whether or not the user can select a date by clicking\n  - **readonly** - Whether or not the calendar is interactive\n  - **disabled** - Whether or not the calendar is disabled\n  - **value** - The current selected date\n  - **date** - The month in which this date is will be displayed\n  - **uid** - The unique identifier of the calendar\n",
         "args": [],
-        "type": "{ format : Date.Date -> Date.Date -> String , tooltipFormat : String , date : Date.Date , now : Date.Date , locale : String }"
+        "type": "{ selectable : Bool , value : Date.Date , date : Date.Date , disabled : Bool , readonly : Bool , uid : String }"
       }
     ],
     "types": [
       {
         "name": "Msg",
-        "comment": " Messages that a time component can receive.\n",
+        "comment": " Messages that a calendar can receive.\n",
         "args": [],
         "cases": []
       }
@@ -1347,33 +1231,96 @@
     "values": [
       {
         "name": "init",
-        "comment": " Initializes a time component.\n\n    time = Ui.Time.init (Date.fromString '2016-05-28')\n",
-        "type": "Date.Date -> Ui.Time.Model"
+        "comment": " Initializes a calendar with the given selected date.\n\n    calendar = Ui.Calendar.init (Ext.Date.create 2016 5 28)\n",
+        "type": "Date.Date -> Ui.Calendar.Model"
+      },
+      {
+        "name": "nextDay",
+        "comment": " Steps the selected value to the next day.\n",
+        "type": "Ui.Calendar.Model -> Ui.Calendar.Model"
+      },
+      {
+        "name": "previousDay",
+        "comment": " Steps the selected value to the previous day.\n",
+        "type": "Ui.Calendar.Model -> Ui.Calendar.Model"
       },
       {
         "name": "render",
-        "comment": " Renders a time component.\n\n    Ui.Time.render time\n",
-        "type": "Ui.Time.Model -> Html.Html msg"
+        "comment": " Renders a calendar.\n\n    Ui.Calendar.render \"en_us\" calendar\n",
+        "type": "String -> Ui.Calendar.Model -> Html.Html Ui.Calendar.Msg"
       },
       {
-        "name": "subscriptions",
-        "comment": " Subscriptions for a time component.\n\n    ...\n    subscriptions = \\model-> Sub.map Time Ui.Time.subscriptions\n    ...\n",
-        "type": "Platform.Sub.Sub Ui.Time.Msg"
+        "name": "setValue",
+        "comment": " Sets the value of a calendar.\n\n    Ui.Calendar.setValue (Ext.Date.createDate 2016 5 28) calendar\n",
+        "type": "Date.Date -> Ui.Calendar.Model -> Ui.Calendar.Model"
+      },
+      {
+        "name": "subscribe",
+        "comment": " Subscribe to the changes of a calendar.\n\n    Ui.Calendar.subscribe CalendarChanged calendar\n",
+        "type": "(Time.Time -> msg) -> Ui.Calendar.Model -> Platform.Sub.Sub msg"
       },
       {
         "name": "update",
-        "comment": " Updates a time component.\n\n    Ui.Time.update msg time\n",
-        "type": "Ui.Time.Msg -> Ui.Time.Model -> ( Ui.Time.Model, Platform.Cmd.Cmd Ui.Time.Msg )"
-      },
-      {
-        "name": "updateTime",
-        "comment": " Returns a command with the given time to send to all of the subscribers as\nthe **now** value.\n\n    cmd = Ui.Time.updateTime now\n",
-        "type": "Time.Time -> Platform.Cmd.Cmd msg"
+        "comment": " Updates a calendar.\n\n    Ui.Calendar.update msg calendar\n",
+        "type": "Ui.Calendar.Msg -> Ui.Calendar.Model -> ( Ui.Calendar.Model, Platform.Cmd.Cmd Ui.Calendar.Msg )"
       },
       {
         "name": "view",
-        "comment": " Lazily renders a time component.\n\n    Ui.Time.view time\n",
-        "type": "Ui.Time.Model -> Html.Html msg"
+        "comment": " Lazily renders a calendar.\n\n    Ui.Calendar.view \"en_us\" calendar\n",
+        "type": "String -> Ui.Calendar.Model -> Html.Html Ui.Calendar.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.App",
+    "comment": " Ui.App is the starting point of any Elm-UI application, it has multiple\nresponsibilities:\n  - Schedules updates for the **Ui.Time** component\n  - Sets the **viewport meta tag** to be mobile friendly\n  - Sets the **title** of the window\n\n# Model\n@docs Model, Msg, update, init, subscriptions\n\n# View\n@docs view, render\n\n# Functions\n@docs setTitle\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of an application:\n  - **title** - The title of the application (and the window)\n  - **uid** - The unique identifier of the application\n",
+        "args": [],
+        "type": "{ title : String, uid : String }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that an application can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initializes an application with the given title.\n\n    app = Ui.App.init \"My Application\"\n",
+        "type": "String -> Ui.App.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders an application.\n\n    Ui.App.render App app [text \"Hello there!\"]\n",
+        "type": "(Ui.App.Msg -> msg) -> Ui.App.Model -> List (Html.Html msg) -> Html.Html msg"
+      },
+      {
+        "name": "setTitle",
+        "comment": " Sets the title of the application\n\n    Ui.App.setTitle \"New Title\" model.app\n",
+        "type": "String -> Ui.App.Model -> Ui.App.Model"
+      },
+      {
+        "name": "subscriptions",
+        "comment": " Subscriptions for an application.\n\n    Sub.map App Ui.App.subscriptions\n",
+        "type": "Platform.Sub.Sub Ui.App.Msg"
+      },
+      {
+        "name": "update",
+        "comment": " Updates an application.\n\n    Ui.App.update msg app\n",
+        "type": "Ui.App.Msg -> Ui.App.Model -> ( Ui.App.Model, Platform.Cmd.Cmd Ui.App.Msg )"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders an application.\n\n    Ui.App.view App app [text \"Hello there!\"]\n",
+        "type": "(Ui.App.Msg -> msg) -> Ui.App.Model -> List (Html.Html msg) -> Html.Html msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -1431,70 +1378,6 @@
         "name": "subscriptions",
         "comment": " Creates subscriptions for a drag with the message for mouse move and\nmouse click.\n",
         "type": "(( Float, Float ) -> msg) -> (Bool -> msg) -> Bool -> Platform.Sub.Sub msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.DropdownMenu",
-    "comment": " Dropdown menu that is always visible on the screen.\n\n# Model\n@docs Model, Msg, init, subscriptions, update\n\n# Dimensions\n@docs Dimensions, openHandler\n\n# View\n@docs view, item\n\n# Functions\n@docs close\n",
-    "aliases": [
-      {
-        "name": "Dimensions",
-        "comment": " Representation of dimensions for a dropdown menu.\n",
-        "args": [],
-        "type": "{ dropdown : Html.Events.Geometry.ElementDimensions , parent : Html.Events.Geometry.ElementDimensions , window : Html.Events.Geometry.WindowSize }"
-      },
-      {
-        "name": "Model",
-        "comment": " Representation of a dropdown menu:\n  - **offsetLeft** - The x-axis offset for the dropdown\n  - **offsetTop** - The y-axis offset for the dropdown\n  - **left** - The left position of the dropdown\n  - **top** - The top position of the dropdown\n  - **open** - Whether or not the dropdown is open\n  - **favoredSides** - The sides to open the dropdown when there is space\n    - **horizontal** - Either \"left\" or \"right\"\n    - **vertical** - Either \"top\" or \"bottom\"\n",
-        "args": [],
-        "type": "{ offsetLeft : Float , offsetTop : Float , left : Float , top : Float , open : Bool , favoredSides : { horizontal : String, vertical : String } }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a dropdown menu can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "close",
-        "comment": " Closes a dropdown menu.\n\n    Ui.DropdownMenu.close dropdownMenu\n",
-        "type": "Ui.DropdownMenu.Model -> Ui.DropdownMenu.Model"
-      },
-      {
-        "name": "init",
-        "comment": " Initializes a dropdown menu.\n\n    dropdownMenu = Ui.DropdownMenu.init\n",
-        "type": "Ui.DropdownMenu.Model"
-      },
-      {
-        "name": "item",
-        "comment": " Renders a dropdown item.\n\n    Ui.DopdownMenu.item attributes children\n",
-        "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
-      },
-      {
-        "name": "openHandler",
-        "comment": " Open event handler.\n",
-        "type": "String -> String -> String -> (Ui.DropdownMenu.Dimensions -> msg) -> Html.Attribute msg"
-      },
-      {
-        "name": "subscriptions",
-        "comment": " Subscriptions for a dropdown menu.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          DropdownMenu\n          (Ui.DropdownMenu.subscriptions model.dropdownMenu)\n    ...\n",
-        "type": "Ui.DropdownMenu.Model -> Platform.Sub.Sub Ui.DropdownMenu.Msg"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a dropdown menu.\n\n    Ui.DropdownMenu.update msg dropdownMenu\n",
-        "type": "Ui.DropdownMenu.Msg -> Ui.DropdownMenu.Model -> Ui.DropdownMenu.Model"
-      },
-      {
-        "name": "view",
-        "comment": " Renders a dropdown menu.\n\n    Ui.DropdownMenu.view\n      address\n      { element: triggerElement, items: items }\n      dropdownMenu\n",
-        "type": "Ui.DropdownMenu.ViewModel msg -> (Ui.DropdownMenu.Msg -> msg) -> Ui.DropdownMenu.Model -> Html.Html msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -1569,44 +1452,65 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Image",
-    "comment": " Image component that fades when loaded.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs render, view\n",
+    "name": "Ui.DropdownMenu",
+    "comment": " Dropdown menu that is always visible on the screen.\n\n# Model\n@docs Model, Msg, init, subscriptions, update\n\n# Dimensions\n@docs Dimensions, openHandler\n\n# View\n@docs view, item\n\n# Functions\n@docs close\n",
     "aliases": [
       {
-        "name": "Model",
-        "comment": " Representation of an image:\n  - **loaded** - Whether or not the image is loaded\n  - **src** - The url for the image\n",
+        "name": "Dimensions",
+        "comment": " Representation of dimensions for a dropdown menu.\n",
         "args": [],
-        "type": "{ loaded : Bool, src : String }"
+        "type": "{ dropdown : Html.Events.Geometry.ElementDimensions , parent : Html.Events.Geometry.ElementDimensions , window : Html.Events.Geometry.WindowSize }"
+      },
+      {
+        "name": "Model",
+        "comment": " Representation of a dropdown menu:\n  - **offsetLeft** - The x-axis offset for the dropdown\n  - **offsetTop** - The y-axis offset for the dropdown\n  - **left** - The left position of the dropdown\n  - **top** - The top position of the dropdown\n  - **open** - Whether or not the dropdown is open\n  - **favoredSides** - The sides to open the dropdown when there is space\n    - **horizontal** - Either \"left\" or \"right\"\n    - **vertical** - Either \"top\" or \"bottom\"\n",
+        "args": [],
+        "type": "{ offsetLeft : Float , offsetTop : Float , left : Float , top : Float , open : Bool , favoredSides : { horizontal : String, vertical : String } }"
       }
     ],
     "types": [
       {
         "name": "Msg",
-        "comment": " Messages that an image can receive.\n",
+        "comment": " Messages that a dropdown menu can receive.\n",
         "args": [],
         "cases": []
       }
     ],
     "values": [
       {
-        "name": "init",
-        "comment": " Initializes an image from an URL.\n\n    image = Ui.Image.init \"http://some.url/image.png\"\n",
-        "type": "String -> Ui.Image.Model"
+        "name": "close",
+        "comment": " Closes a dropdown menu.\n\n    Ui.DropdownMenu.close dropdownMenu\n",
+        "type": "Ui.DropdownMenu.Model -> Ui.DropdownMenu.Model"
       },
       {
-        "name": "render",
-        "comment": " Renders an image.\n\n    Ui.Image.render model\n",
-        "type": "Ui.Image.Model -> Html.Html Ui.Image.Msg"
+        "name": "init",
+        "comment": " Initializes a dropdown menu.\n\n    dropdownMenu = Ui.DropdownMenu.init\n",
+        "type": "Ui.DropdownMenu.Model"
+      },
+      {
+        "name": "item",
+        "comment": " Renders a dropdown item.\n\n    Ui.DopdownMenu.item attributes children\n",
+        "type": "List (Html.Attribute msg) -> List (Html.Html msg) -> Html.Html msg"
+      },
+      {
+        "name": "openHandler",
+        "comment": " Open event handler.\n",
+        "type": "String -> String -> String -> (Ui.DropdownMenu.Dimensions -> msg) -> Html.Attribute msg"
+      },
+      {
+        "name": "subscriptions",
+        "comment": " Subscriptions for a dropdown menu.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          DropdownMenu\n          (Ui.DropdownMenu.subscriptions model.dropdownMenu)\n    ...\n",
+        "type": "Ui.DropdownMenu.Model -> Platform.Sub.Sub Ui.DropdownMenu.Msg"
       },
       {
         "name": "update",
-        "comment": " Updates an image.\n\n    Ui.Image.update image\n",
-        "type": "Ui.Image.Msg -> Ui.Image.Model -> Ui.Image.Model"
+        "comment": " Updates a dropdown menu.\n\n    Ui.DropdownMenu.update msg dropdownMenu\n",
+        "type": "Ui.DropdownMenu.Msg -> Ui.DropdownMenu.Model -> Ui.DropdownMenu.Model"
       },
       {
         "name": "view",
-        "comment": " Lazily renders an image.\n\n    Ui.Image.view model\n",
-        "type": "Ui.Image.Model -> Html.Html Ui.Image.Msg"
+        "comment": " Renders a dropdown menu.\n\n    Ui.DropdownMenu.view\n      address\n      { element: triggerElement, items: items }\n      dropdownMenu\n",
+        "type": "Ui.DropdownMenu.ViewModel msg -> (Ui.DropdownMenu.Msg -> msg) -> Ui.DropdownMenu.Model -> Html.Html msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -1739,6 +1643,102 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
+    "name": "Ui.Image",
+    "comment": " Image component that fades when loaded.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs render, view\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of an image:\n  - **loaded** - Whether or not the image is loaded\n  - **src** - The url for the image\n",
+        "args": [],
+        "type": "{ loaded : Bool, src : String }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that an image can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initializes an image from an URL.\n\n    image = Ui.Image.init \"http://some.url/image.png\"\n",
+        "type": "String -> Ui.Image.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders an image.\n\n    Ui.Image.render model\n",
+        "type": "Ui.Image.Model -> Html.Html Ui.Image.Msg"
+      },
+      {
+        "name": "update",
+        "comment": " Updates an image.\n\n    Ui.Image.update image\n",
+        "type": "Ui.Image.Msg -> Ui.Image.Model -> Ui.Image.Model"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders an image.\n\n    Ui.Image.view model\n",
+        "type": "Ui.Image.Model -> Html.Html Ui.Image.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Time",
+    "comment": " A component that displays time with a formatting function (defaults to\nrelative time like: 10 minutes ago).\n\n# Model\n@docs Model, Msg, init, subscriptions, update\n\n# View\n@docs view, render\n\n# Functions\n@docs updateTime\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a time component:\n  - **format** - The function to format the date\n  - **tooltipFormat** - The format of the tooltip (title)\n  - **date** - The date to display\n  - **now** - The date to calculate from\n  - **locale** - The locale to use\n",
+        "args": [],
+        "type": "{ format : Date.Date -> Date.Date -> String , tooltipFormat : String , date : Date.Date , now : Date.Date , locale : String }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a time component can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initializes a time component.\n\n    time = Ui.Time.init (Date.fromString '2016-05-28')\n",
+        "type": "Date.Date -> Ui.Time.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a time component.\n\n    Ui.Time.render time\n",
+        "type": "Ui.Time.Model -> Html.Html msg"
+      },
+      {
+        "name": "subscriptions",
+        "comment": " Subscriptions for a time component.\n\n    ...\n    subscriptions = \\model-> Sub.map Time Ui.Time.subscriptions\n    ...\n",
+        "type": "Platform.Sub.Sub Ui.Time.Msg"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a time component.\n\n    Ui.Time.update msg time\n",
+        "type": "Ui.Time.Msg -> Ui.Time.Model -> ( Ui.Time.Model, Platform.Cmd.Cmd Ui.Time.Msg )"
+      },
+      {
+        "name": "updateTime",
+        "comment": " Returns a command with the given time to send to all of the subscribers as\nthe **now** value.\n\n    cmd = Ui.Time.updateTime now\n",
+        "type": "Time.Time -> Platform.Cmd.Cmd msg"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a time component.\n\n    Ui.Time.view time\n",
+        "type": "Ui.Time.Model -> Html.Html msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
     "name": "Html.Events.Geometry",
     "comment": " Helper models, decoders and event handlers for extracting HTMLElement\ndimensions, mouse position and window size from events.\n\n# Models\n@docs ElementDimensions, MousePosition, WindowSize, Dimensions\n\n# Decoders\n@docs decodeElementDimensions, decodeMousePosition, decodeWindowSize\n\n# EventHandlers\n@docs onWithDimensions\n",
     "aliases": [
@@ -1805,7 +1805,7 @@
       },
       {
         "name": "keysDecoder",
-        "comment": " A decoder which succeeds when a specific key is pressed from the given list.\n\n    on \"keydown\" [(13, Enter)]\n",
+        "comment": " A decoder which succeeds when a specific key is pressed from the given list.\n\n    on \"keydown\" [ ( 13, Enter ) ]\n",
         "type": "List ( Int, msg ) -> Json.Decode.Decoder msg"
       },
       {
@@ -1825,7 +1825,7 @@
       },
       {
         "name": "onKeys",
-        "comment": " Capture [keydown](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)\nevents that will call the given action when a specific key\nis pressed from the give list\n\n    onKeys [ (13, Enter)\n           , (27, Esc)\n           ]\n",
+        "comment": " Capture [keydown](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)\nevents that will call the given action when a specific key\nis pressed from the give list.\n\n    onKeys [ ( 13, Enter )\n           , ( 27, Esc )\n           ]\n",
         "type": "List ( Int, msg ) -> Html.Attribute msg"
       },
       {
@@ -1857,30 +1857,6 @@
         "name": "onWheel",
         "comment": " Capture [wheel](https://developer.mozilla.org/en-US/docs/Web/Events/wheel)\nevents.\n",
         "type": "Json.Decode.Decoder data -> (data -> msg) -> Html.Attribute msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Html.Events.Options",
-    "comment": " Extra options for event handlers.\n\n# Options\n@docs preventDefaultOptions, stopPropagationOptions, stopOptions\n",
-    "aliases": [],
-    "types": [],
-    "values": [
-      {
-        "name": "preventDefaultOptions",
-        "comment": " Prevent default options.\n",
-        "type": "Html.Events.Options"
-      },
-      {
-        "name": "stopOptions",
-        "comment": " Options for completely stopping an event and\npreventing it's default behavior.\n",
-        "type": "Html.Events.Options"
-      },
-      {
-        "name": "stopPropagationOptions",
-        "comment": " Stop propagation options.\n",
-        "type": "Html.Events.Options"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -1939,64 +1915,140 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Loader",
-    "comment": " Loading component, it has a waiting period before showing itself.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs view, render\n\n# View Variations\n@docs overlayView, barView\n\n# Functions\n@docs start, finish\n",
+    "name": "Ext.Color",
+    "comment": " Utility functions for colors.\n\n# Representations\n@docs Hsv\n\n# Converting\n@docs hsvToRgb\n\n# Rendering\n@docs toCSSRgba\n\n# Extracting\n@docs toHsv\n\n# Decoding / Encoding\n@docs decodeHsv, encodeHsv\n",
     "aliases": [
       {
-        "name": "Model",
-        "comment": " Representation of a loader:\n  - **timeout** - The waiting perid in milliseconds\n  - **loading** - Whether or not the loading is started\n  - **shown** - Whether or not the loader is shown\n",
+        "name": "Hsv",
+        "comment": " Hsv color type.\n",
         "args": [],
-        "type": "{ timeout : Float, loading : Bool, shown : Bool }"
+        "type": "{ saturation : Float, value : Float, alpha : Float, hue : Float }"
       }
     ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a loader can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
+    "types": [],
     "values": [
       {
-        "name": "barView",
-        "comment": " Lazily renders a loader as a bar.\n\n    Ui.Loader.barView loader\n",
-        "type": "Ui.Loader.Model -> Html.Html msg"
+        "name": "decodeHsv",
+        "comment": " Decodes a HSV color type from a four element tuple.\n",
+        "type": "Json.Decode.Decoder Ext.Color.Hsv"
       },
       {
-        "name": "finish",
-        "comment": " Finishes the loading process.\n\n    Ui.Loader.finish loader\n",
-        "type": "Ui.Loader.Model -> Ui.Loader.Model"
+        "name": "encodeHsv",
+        "comment": " Encodes a HSV color type to a four element tuple.\n",
+        "type": "Ext.Color.Hsv -> Json.Encode.Value"
       },
       {
-        "name": "init",
-        "comment": " Initializes a loader with the given timeout.\n\n    loader = Ui.Loader.init 200\n",
-        "type": "Float -> Ui.Loader.Model"
+        "name": "hsvToRgb",
+        "comment": " Converts the given HSV color into Elm's color type.\n",
+        "type": "Ext.Color.Hsv -> Color.Color"
       },
       {
-        "name": "overlayView",
-        "comment": " Lazily renders a loader as an overlay.\n\n    Ui.Loader.overlayView loader\n",
-        "type": "Ui.Loader.Model -> Html.Html msg"
+        "name": "toCSSRgba",
+        "comment": " Renders the given HSV color to CSS rgba string.\n\n    Ext.Color.toCSSRgba blackHsv -- \"rgba(0,0,0,1)\"\n",
+        "type": "Ext.Color.Hsv -> String"
       },
       {
-        "name": "render",
-        "comment": " Rendes a loader.\n\n    Ui.Loader.render kind contents loader\n",
-        "type": "String -> List (Html.Html msg) -> Ui.Loader.Model -> Html.Html msg"
+        "name": "toHsv",
+        "comment": " Extract the components of a color in the HSV format.\n",
+        "type": "Color.Color -> Ext.Color.Hsv"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ext.Date",
+    "comment": " Utility functions for dates.\n\n# Create\n@docs now, nowTime, createDate\n\n# Querying\n@docs month, daysInMonth, datesInMonth\n\n# Manipulation\n@docs previousDay, nextDay, previousMonth, nextMonth, begginingOfMonth\n@docs endOfMonth\n\n# Testing\n@docs isSameMonth, isSameDate\n\n# Formatting\n@docs ago\n",
+    "aliases": [],
+    "types": [],
+    "values": [
+      {
+        "name": "ago",
+        "comment": " Returns the date in relative format.\n",
+        "type": "Date.Date -> Date.Date -> String"
       },
       {
-        "name": "start",
-        "comment": " Starts the loading process.\n\n    Ui.Loader.start loader\n",
-        "type": "Ui.Loader.Model -> ( Ui.Loader.Model, Platform.Cmd.Cmd Ui.Loader.Msg )"
+        "name": "begginingOfMonth",
+        "comment": " Returns the first date in of the month of the given date.\n\n    begginingOfMonth (createDate 2015 1 5) -- 2015-01-01\n",
+        "type": "Date.Date -> Date.Date"
       },
       {
-        "name": "update",
-        "comment": " Updates a loader.\n\n    Ui.Loader.update msg loader\n",
-        "type": "Ui.Loader.Msg -> Ui.Loader.Model -> ( Ui.Loader.Model, Platform.Cmd.Cmd Ui.Loader.Msg )"
+        "name": "createDate",
+        "comment": " Creates a date from the given year, month and day.\n\n    createDate 2015 1 1\n",
+        "type": "Int -> Int -> Int -> Date.Date"
       },
       {
-        "name": "view",
-        "comment": " Lazily renders a loader.\n\n    Ui.Loader.view loader\n",
-        "type": "String -> List (Html.Html msg) -> Ui.Loader.Model -> Html.Html msg"
+        "name": "datesInMonth",
+        "comment": " Return the dates in the month of the given date.\n\n    datesInMonth (createDate 2015 1 1) -- [ 2015-01-01, 2015-02-02, ... ]\n",
+        "type": "Date.Date -> List Date.Date"
+      },
+      {
+        "name": "daysInMonth",
+        "comment": " Returns how many days are in the month of the given date.\n\n    daysInMonth (createDate 2015 1 1) -- 31\n",
+        "type": "Date.Date -> Int"
+      },
+      {
+        "name": "endOfMonth",
+        "comment": " Returns the last date in of the month of the given date.\n\n    endOfMonth (createDate 2015 1 5) -- 2015-01-31\n",
+        "type": "Date.Date -> Date.Date"
+      },
+      {
+        "name": "isSameDate",
+        "comment": " Tests if the given dates are in the same.\n",
+        "type": "Date.Date -> Date.Date -> Bool"
+      },
+      {
+        "name": "isSameMonth",
+        "comment": " Tests if the given dates are in the same month.\n",
+        "type": "Date.Date -> Date.Date -> Bool"
+      },
+      {
+        "name": "month",
+        "comment": " Returns the month from the given date.\n\n    month (createDate 2015 1 1) -- 1\n",
+        "type": "Date.Date -> Int"
+      },
+      {
+        "name": "nextDay",
+        "comment": " Returns the next days date in relation to the given date.\n\n    nextDay (createDate 2015 1 1) -- 2015-01-02\n",
+        "type": "Date.Date -> Date.Date"
+      },
+      {
+        "name": "nextMonth",
+        "comment": " Returns the next month date in relation to the given date.\n\n    nextMonth (createDate 2015 1 5) -- 2015-02-05\n",
+        "type": "Date.Date -> Date.Date"
+      },
+      {
+        "name": "now",
+        "comment": " Returns the current date.\n",
+        "type": "a -> Date.Date"
+      },
+      {
+        "name": "nowTime",
+        "comment": " Returns the current date as time.\n",
+        "type": "a -> Time.Time"
+      },
+      {
+        "name": "previousDay",
+        "comment": " Returns the previous days date in relation to the given date.\n\n    previousDay (createDate 2015 1 1) -- 2014-12-31\n",
+        "type": "Date.Date -> Date.Date"
+      },
+      {
+        "name": "previousMonth",
+        "comment": " Returns the previous month date in relation to the given date.\n\n    previousMonth (createDate 2015 1 5) -- 2014-12-05\n",
+        "type": "Date.Date -> Date.Date"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Native.Scrolls",
+    "comment": " This library lets you listen to global scroll events.\n\n# Subscriptions\n@docs scrolls\n",
+    "aliases": [],
+    "types": [],
+    "values": [
+      {
+        "name": "scrolls",
+        "comment": " Subscribe to scrolls anywhere on screen.\n",
+        "type": "msg -> Platform.Sub.Sub msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -2068,192 +2120,71 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Native.Scrolls",
-    "comment": " This library lets you listen to global scroll events.\n\n# Subscriptions\n@docs scrolls\n",
+    "name": "Html.Events.Options",
+    "comment": " Extra options for event handlers.\n\n# Options\n@docs preventDefaultOptions, stopPropagationOptions, stopOptions\n",
     "aliases": [],
     "types": [],
     "values": [
       {
-        "name": "scrolls",
-        "comment": " Subscribe to scrolls anywhere on screen.\n",
-        "type": "msg -> Platform.Sub.Sub msg"
+        "name": "preventDefaultOptions",
+        "comment": " Prevent default options.\n",
+        "type": "Html.Events.Options"
+      },
+      {
+        "name": "stopOptions",
+        "comment": " Options for completely stopping an event and\npreventing it's default behavior.\n",
+        "type": "Html.Events.Options"
+      },
+      {
+        "name": "stopPropagationOptions",
+        "comment": " Stop propagation options.\n",
+        "type": "Html.Events.Options"
       }
     ],
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ext.Date",
-    "comment": " Utility functions for dates.\n\n# Create\n@docs now, nowTime, createDate\n\n# Querying\n@docs month, daysInMonth, datesInMonth\n\n# Manipulation\n@docs previousDay, nextDay, previousMonth, nextMonth, begginingOfMonth\n@docs endOfMonth\n\n# Testing\n@docs isSameMonth, isSameDate\n\n# Formatting\n@docs ago\n",
-    "aliases": [],
-    "types": [],
-    "values": [
+    "name": "Ui.Native.FileManager",
+    "comment": " Low level functions for managing [Files](https://developer.mozilla.org/en/docs/Web/API/File).\n\n# Types\n@docs File\n\n# Reading\n@docs readAsString, readAsDataURL\n\n# For Http\n@docs toFormData\n\n# Open / Download\n@docs openSingle, openMultiple, download\n",
+    "aliases": [
       {
-        "name": "ago",
-        "comment": " Returns the date in relative format.\n",
-        "type": "Date.Date -> Date.Date -> String"
-      },
-      {
-        "name": "begginingOfMonth",
-        "comment": " Returns the first date in of the month of the given date.\n\n    begginingOfMonth (createDate 2015 1 5) -- 2015-01-01\n",
-        "type": "Date.Date -> Date.Date"
-      },
-      {
-        "name": "createDate",
-        "comment": " Creates a date from the given year, month and day.\n\n    createDate 2015 1 1\n",
-        "type": "Int -> Int -> Int -> Date.Date"
-      },
-      {
-        "name": "datesInMonth",
-        "comment": " Return the dates in the month of the given date.\n\n    datesInMonth (createDate 2015 1 1) -- [2015-01-01,2015-02-02,...]\n",
-        "type": "Date.Date -> List Date.Date"
-      },
-      {
-        "name": "daysInMonth",
-        "comment": " Returns how many days are in the month of the given date.\n\n    daysInMonth (createDate 2015 1 1) -- 31\n",
-        "type": "Date.Date -> Int"
-      },
-      {
-        "name": "endOfMonth",
-        "comment": " Returns the last date in of the month of the given date.\n\n    endOfMonth (createDate 2015 1 5) -- 2015-01-31\n",
-        "type": "Date.Date -> Date.Date"
-      },
-      {
-        "name": "isSameDate",
-        "comment": " Tests if the given dates are in the same.\n",
-        "type": "Date.Date -> Date.Date -> Bool"
-      },
-      {
-        "name": "isSameMonth",
-        "comment": " Tests if the given dates are in the same month.\n",
-        "type": "Date.Date -> Date.Date -> Bool"
-      },
-      {
-        "name": "month",
-        "comment": " Returns the month from the given date.\n\n    month (createDate 2015 1 1) -- 1\n",
-        "type": "Date.Date -> Int"
-      },
-      {
-        "name": "nextDay",
-        "comment": " Returns the next days date in relation to the given date.\n\n    nextDay (createDate 2015 1 1) -- 2015-01-02\n",
-        "type": "Date.Date -> Date.Date"
-      },
-      {
-        "name": "nextMonth",
-        "comment": " Returns the next month date in relation to the given date.\n\n    nextMonth (createDate 2015 1 5) -- 2015-02-05\n",
-        "type": "Date.Date -> Date.Date"
-      },
-      {
-        "name": "now",
-        "comment": " Returns the current date.\n",
-        "type": "a -> Date.Date"
-      },
-      {
-        "name": "nowTime",
-        "comment": " Returns the current date as time.\n",
-        "type": "a -> Time.Time"
-      },
-      {
-        "name": "previousDay",
-        "comment": " Returns the previous days date in relation to the given date.\n\n    previousDay (createDate 2015 1 1) -- 2014-12-31\n",
-        "type": "Date.Date -> Date.Date"
-      },
-      {
-        "name": "previousMonth",
-        "comment": " Returns the previous month date in relation to the given date.\n\n    previousMonth (createDate 2015 1 5) -- 2014-12-05\n",
-        "type": "Date.Date -> Date.Date"
+        "name": "File",
+        "comment": " Representation of a file:\n  - **data** - The file data (native File object)\n  - **mimeType** - The mime type of the file\n  - **name** - The name of the file\n  - **size** - The size of the file\n",
+        "args": [],
+        "type": "{ mimeType : String , name : String , size : Float , data : Ui.Native.FileManager.Data }"
       }
     ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.Helpers.Intendable",
-    "comment": " Helper functions for intending list items.\n\n@docs first, index, select, next, nextItem, previous, previousItem\n",
-    "aliases": [],
     "types": [],
     "values": [
       {
-        "name": "first",
-        "comment": " Returns the first item of a list.\n",
-        "type": "List String -> Maybe.Maybe String"
+        "name": "download",
+        "comment": " Downloads the given data with the given name and mime type.\n\n    task = FileManager.download \"test.txt\" \"text/plain\" \"Hello World!\"\n",
+        "type": "String -> String -> String -> Task.Task Basics.Never String"
       },
       {
-        "name": "index",
-        "comment": " Returns the index of the given value in a list.\n",
-        "type": "String -> List String -> Int"
+        "name": "openMultiple",
+        "comment": " Opens a file browser for selecting multiple files.\n\n    task = FileManager.openMultiple \"image/*\"\n",
+        "type": "String -> Task.Task Basics.Never (List Ui.Native.FileManager.File)"
       },
       {
-        "name": "next",
-        "comment": " Return the next selectable item in a list.\n",
-        "type": "String -> List String -> String"
+        "name": "openSingle",
+        "comment": " Opens a file browser for selecting a single file.\n\n    task = FileManager.openSingle \"image/*\"\n",
+        "type": "String -> Task.Task Basics.Never Ui.Native.FileManager.File"
       },
       {
-        "name": "nextItem",
-        "comment": " Return the next selectable item in separated list with a fallback.\n",
-        "type": "( List String, List String ) -> Maybe.Maybe String -> String"
+        "name": "readAsDataURL",
+        "comment": " Reads a file as a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme)\n\n    task = FileManager.readAsDataURL file\n",
+        "type": "Ui.Native.FileManager.File -> Task.Task Basics.Never String"
       },
       {
-        "name": "previous",
-        "comment": " Return the previous selectable item in a list.\n",
-        "type": "String -> List String -> String"
+        "name": "readAsString",
+        "comment": " Reads a file as a string.\n\n    task = FileManager.readAsString file\n",
+        "type": "Ui.Native.FileManager.File -> Task.Task Basics.Never String"
       },
       {
-        "name": "previousItem",
-        "comment": " Return the previous selectable item in separated list with a fallback.\n",
-        "type": "( List String, List String ) -> Maybe.Maybe String -> String"
-      },
-      {
-        "name": "select",
-        "comment": " Return an item with a fallback value.\n",
-        "type": "Maybe.Maybe String -> Maybe.Maybe String -> String"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.Native.Dom",
-    "comment": " Helper functions and tasks for DOM related activities.\n\n# Focusing / Bluring\n@docs focusSelector, focusComponent, blur\n\n# Decoder Queries\n@docs decodeElementFunction, withBoundingClientRect, withClosest, withSelector\n@docs withNearest\n",
-    "aliases": [],
-    "types": [],
-    "values": [
-      {
-        "name": "blur",
-        "comment": " Blurs the active element in the DOM.\n\n    Ui.Native.Dom.blur NoOp\n",
-        "type": "msg -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "decodeElementFunction",
-        "comment": " This function allows decoders to call JavaScript functions on objects\nand Elements (with one parameter).\n\n    -- This will call toString() and try to decode it as String\n    decodeElementFunction \"toString\" param Json.Decoder.string\n",
-        "type": "String -> String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
-      },
-      {
-        "name": "focusComponent",
-        "comment": " Focuses a UI component that have a uid field.\n\n    Ui.Native.Dom.focusUid NoOp 'xxxx-xxx-xxx-xxxx'\n",
-        "type": "msg -> { a | uid : String } -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "focusSelector",
-        "comment": " Focuses a DOM element with the given selector.\n\n    Ui.Native.Dom.focusSelector 'input#comments'\n",
-        "type": "msg -> String -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "withBoundingClientRect",
-        "comment": " Decodes the ClientRect object from an Element.\n",
-        "type": "Json.Decode.Decoder a -> Json.Decode.Decoder a"
-      },
-      {
-        "name": "withClosest",
-        "comment": " Finds the closest Element with the given selector of the decoded Elmenet.\n",
-        "type": "String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
-      },
-      {
-        "name": "withNearest",
-        "comment": " Finds the nearest (closest parent or child) Element with the given\nselector of the decoded Element.\n",
-        "type": "String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
-      },
-      {
-        "name": "withSelector",
-        "comment": " Finds the child Element with the given selector of the decoded Element.\n",
-        "type": "String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
+        "name": "toFormData",
+        "comment": " Converts a files data to Http.Data\n\n    data = FileManager.toFormData file\n",
+        "type": "String -> Ui.Native.FileManager.File -> Http.Data"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -2301,7 +2232,7 @@
     "values": [
       {
         "name": "alert",
-        "comment": " Shows an alert dialog with the given text and returns the given value.\n\n    Ui.Native.Browser.alert 'Hey there!' value\n",
+        "comment": " Shows an alert dialog with the given text and returns the given value.\n\n    Ui.Native.Browser.alert \"Hey there!\"\" value\n",
         "type": "String -> value -> value"
       },
       {
@@ -2311,66 +2242,98 @@
       },
       {
         "name": "openWindow",
-        "comment": " Opens a new window with the given URL and return the given value.\n\n    Ui.Native.Browser.openWindow 'asd' value\n",
+        "comment": " Opens a new window with the given URL and return the given value.\n\n    Ui.Native.Browser.openWindow \"url\" value\n",
         "type": "String -> value -> value"
       },
       {
         "name": "prefix",
-        "comment": " The detected vendor prefix.\n\n    ```elm\n    displayValue : String\n    displayValue =\n        if Vendor.prefix == Vendor.Webkit\n        then \"-webkit-flex\"\n        else \"flex\"\n    ```\n",
+        "comment": " The detected vendor prefix.\n\n    ```elm\n    displayValue : String\n    displayValue =\n        if Ui.Browser.prefix == Ui.Browser.Webkit\n        then \"-webkit-flex\"\n        else \"flex\"\n    ```\n",
         "type": "Ui.Native.Browser.Prefix"
       },
       {
         "name": "redirect",
-        "comment": " Replace the current page with the given URL and return the given value.\n\n    Ui.Native.Browser.redirect 'http://elm-lang.org' value\n",
+        "comment": " Replace the current page with the given URL and return the given value.\n\n    Ui.Native.Browser.redirect \"http://elm-lang.org\" value\n",
         "type": "String -> value -> value"
       }
     ],
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ext.Color",
-    "comment": " Utility functions for colors.\n\n# Representations\n@docs Hsv\n\n# Converting\n@docs hsvToRgb\n\n# Rendering\n@docs toCSSRgba\n\n# Extracting\n@docs toHsv\n\n# Decoding / Encoding\n@docs decodeHsv, encodeHsv\n",
-    "aliases": [
-      {
-        "name": "Hsv",
-        "comment": " Hsv color type.\n",
-        "args": [],
-        "type": "{ saturation : Float, value : Float, alpha : Float, hue : Float }"
-      }
-    ],
+    "name": "Ui.Native.Dom",
+    "comment": " Helper functions and tasks for DOM related activities.\n\n# Focusing / Bluring\n@docs focusSelector, focusComponent, blur\n\n# Decoder Queries\n@docs decodeElementFunction, withBoundingClientRect, withClosest, withSelector\n@docs withNearest\n",
+    "aliases": [],
     "types": [],
     "values": [
       {
-        "name": "decodeHsv",
-        "comment": " Decodes a HSV color type from a four element tuple.\n",
-        "type": "Json.Decode.Decoder Ext.Color.Hsv"
+        "name": "blur",
+        "comment": " Blurs the active element in the DOM.\n\n    cmd = Ui.Native.Dom.blur NoOp\n",
+        "type": "msg -> Platform.Cmd.Cmd msg"
       },
       {
-        "name": "encodeHsv",
-        "comment": " Encodes a HSV color type to a four element tuple.\n",
-        "type": "Ext.Color.Hsv -> Json.Encode.Value"
+        "name": "decodeElementFunction",
+        "comment": " This function allows decoders to call JavaScript functions on objects\nand Elements (with one parameter).\n\n    -- This will call toString() and try to decode it as String\n    decodeElementFunction \"toString\" param Json.Decoder.string\n",
+        "type": "String -> String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
       },
       {
-        "name": "hsvToRgb",
-        "comment": " Converts the given HSV color into Elm's color type.\n",
-        "type": "Ext.Color.Hsv -> Color.Color"
+        "name": "focusComponent",
+        "comment": " Focuses a UI component that have a uid field.\n\n    cmd = Ui.Native.Dom.focusUid NoOp \"xxxx-xxx-xxx-xxxx\"\n",
+        "type": "msg -> { a | uid : String } -> Platform.Cmd.Cmd msg"
       },
       {
-        "name": "toCSSRgba",
-        "comment": " Renders the given HSV color to CSS rgba string.\n\n    Ext.Color.toCSSRgba blackHsv -- \"rgba(0,0,0,1)\"\n",
-        "type": "Ext.Color.Hsv -> String"
+        "name": "focusSelector",
+        "comment": " Focuses a DOM element with the given selector.\n\n    cmd = Ui.Native.Dom.focusSelector \"input#comments\"\n",
+        "type": "msg -> String -> Platform.Cmd.Cmd msg"
       },
       {
-        "name": "toHsv",
-        "comment": " Extract the components of a color in the HSV format.\n",
-        "type": "Color.Color -> Ext.Color.Hsv"
+        "name": "withBoundingClientRect",
+        "comment": " Decodes the ClientRect object from an Element.\n",
+        "type": "Json.Decode.Decoder a -> Json.Decode.Decoder a"
+      },
+      {
+        "name": "withClosest",
+        "comment": " Finds the closest Element with the given selector of the decoded Elmenet.\n",
+        "type": "String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
+      },
+      {
+        "name": "withNearest",
+        "comment": " Finds the nearest (closest parent or child) Element with the given\nselector of the decoded Element.\n",
+        "type": "String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
+      },
+      {
+        "name": "withSelector",
+        "comment": " Finds the child Element with the given selector of the decoded Element.\n",
+        "type": "String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Native.LocalStorage",
+    "comment": " Native bindings for the `localStorage` interface using tasks.\n\n# Functions\n@docs getItem, setItem, removeItem\n",
+    "aliases": [],
+    "types": [],
+    "values": [
+      {
+        "name": "getItem",
+        "comment": " Gets the value of the item from the given key.\n\n    task = Ui.Native.LocalStorage.getItem \"key\"\n",
+        "type": "String -> Task.Task String String"
+      },
+      {
+        "name": "removeItem",
+        "comment": " Removes the item with the given key.\n\n    task = Ui.Native.LocalStorage.remove \"key\"\n",
+        "type": "String -> Task.Task String String"
+      },
+      {
+        "name": "setItem",
+        "comment": " Sets the value of the item from given key to the given value.\n\n    task = Ui.Native.LocalStorage.setItem \"key\" \"value\"\n",
+        "type": "String -> String -> Task.Task String String"
       }
     ],
     "generated-with-elm-version": "0.17.1"
   },
   {
     "name": "Ui.Helpers.Env",
-    "comment": " Module for interacting with the environment variables.\n\n@docs get, getString\n",
+    "comment": " Module for interacting with the environment variables.\n\n# Functions\n@docs get, getString\n",
     "aliases": [],
     "types": [],
     "values": [
@@ -2383,6 +2346,113 @@
         "name": "getString",
         "comment": " Gets a string value of the given environment varaible.\n\n    case Ui.Helpers.Env.getString \"token\" of\n      Ok value -> value\n      Err msg -> msg\n",
         "type": "String -> Result.Result String String"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Helpers.Intendable",
+    "comment": " Helper functions for intending list items.\n\n# Functions\n@docs first, index, select, next, nextItem, previous, previousItem\n",
+    "aliases": [],
+    "types": [],
+    "values": [
+      {
+        "name": "first",
+        "comment": " Returns the first item of a list.\n",
+        "type": "List String -> Maybe.Maybe String"
+      },
+      {
+        "name": "index",
+        "comment": " Returns the index of the given value in a list.\n",
+        "type": "String -> List String -> Int"
+      },
+      {
+        "name": "next",
+        "comment": " Return the next selectable item in a list.\n",
+        "type": "String -> List String -> String"
+      },
+      {
+        "name": "nextItem",
+        "comment": " Return the next selectable item in separated list with a fallback.\n",
+        "type": "( List String, List String ) -> Maybe.Maybe String -> String"
+      },
+      {
+        "name": "previous",
+        "comment": " Return the previous selectable item in a list.\n",
+        "type": "String -> List String -> String"
+      },
+      {
+        "name": "previousItem",
+        "comment": " Return the previous selectable item in separated list with a fallback.\n",
+        "type": "( List String, List String ) -> Maybe.Maybe String -> String"
+      },
+      {
+        "name": "select",
+        "comment": " Return an item with a fallback value.\n",
+        "type": "Maybe.Maybe String -> Maybe.Maybe String -> String"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Loader",
+    "comment": " Loading component, it has a waiting period before showing itself.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs view, render\n\n# View Variations\n@docs overlayView, barView\n\n# Functions\n@docs start, finish\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a loader:\n  - **timeout** - The waiting perid in milliseconds\n  - **loading** - Whether or not the loading is started\n  - **shown** - Whether or not the loader is shown\n",
+        "args": [],
+        "type": "{ timeout : Float, loading : Bool, shown : Bool }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a loader can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "barView",
+        "comment": " Lazily renders a loader as a bar.\n\n    Ui.Loader.barView loader\n",
+        "type": "Ui.Loader.Model -> Html.Html msg"
+      },
+      {
+        "name": "finish",
+        "comment": " Finishes the loading process.\n\n    Ui.Loader.finish loader\n",
+        "type": "Ui.Loader.Model -> Ui.Loader.Model"
+      },
+      {
+        "name": "init",
+        "comment": " Initializes a loader with the given timeout.\n\n    loader = Ui.Loader.init 200\n",
+        "type": "Float -> Ui.Loader.Model"
+      },
+      {
+        "name": "overlayView",
+        "comment": " Lazily renders a loader as an overlay.\n\n    Ui.Loader.overlayView loader\n",
+        "type": "Ui.Loader.Model -> Html.Html msg"
+      },
+      {
+        "name": "render",
+        "comment": " Rendes a loader.\n\n    Ui.Loader.render kind contents loader\n",
+        "type": "String -> List (Html.Html msg) -> Ui.Loader.Model -> Html.Html msg"
+      },
+      {
+        "name": "start",
+        "comment": " Starts the loading process.\n\n    Ui.Loader.start loader\n",
+        "type": "Ui.Loader.Model -> ( Ui.Loader.Model, Platform.Cmd.Cmd Ui.Loader.Msg )"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a loader.\n\n    Ui.Loader.update msg loader\n",
+        "type": "Ui.Loader.Msg -> Ui.Loader.Model -> ( Ui.Loader.Model, Platform.Cmd.Cmd Ui.Loader.Msg )"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a loader.\n\n    Ui.Loader.view loader\n",
+        "type": "String -> List (Html.Html msg) -> Ui.Loader.Model -> Html.Html msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -2462,32 +2532,8 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Native.LocalStorage",
-    "comment": " Native bindings for the localStorage interface using tasks.\n\n# Functions\n@docs getItem, setItem, removeItem\n",
-    "aliases": [],
-    "types": [],
-    "values": [
-      {
-        "name": "getItem",
-        "comment": " Gets the value of the item from the given key.\n\n    Task.perform\n      Failed\n      Succeeded\n      (Ui.Native.LocalStorage.getItem \"key\")\n",
-        "type": "String -> Task.Task String String"
-      },
-      {
-        "name": "removeItem",
-        "comment": " Removes the item with the given key.\n\n    Task.perform\n      Failed\n      Succeeded\n      (Ui.Native.LocalStorage.remove \"key\")\n",
-        "type": "String -> Task.Task String String"
-      },
-      {
-        "name": "setItem",
-        "comment": " Sets the value of the item from given key to the given value.\n\n    Task.perform\n      Failed\n      Succeeded\n      (Ui.Native.LocalStorage.setItem \"key\" \"value\")\n",
-        "type": "String -> String -> Task.Task String String"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ext.Number",
-    "comment": " Utility functions for numbers.\n\n@docs toFixed, remFloat, roundTo\n",
+    "comment": " Utility functions for numbers.\n\n# Functions\n@docs toFixed, remFloat, roundTo\n",
     "aliases": [],
     "types": [],
     "values": [

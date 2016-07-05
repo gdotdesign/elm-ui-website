@@ -70,7 +70,8 @@ navItems =
 
 components =
   Dict.fromList
-    [ ("button", ("Ui.Button", True))
+    [ ("app", ("Ui.App", False))
+    , ("button", ("Ui.Button", True))
     , ("chooser", ("Ui.Chooser", True))
     , ("calendar", ("Ui.Calendar", True))
     , ("color-panel", ("Ui.ColorPanel", True))
@@ -171,6 +172,12 @@ processType definition =
 
 renderDocumentation mod =
   let
+    description =
+      String.split "#" mod.comment
+      |> List.head
+      |> Maybe.withDefault ""
+      |> Markdown.toHtmlWith myOptions []
+
     renderDefinition def =
       String.split "->" def
       |> List.map String.trim
@@ -180,11 +187,27 @@ renderDocumentation mod =
     renderAlias alias =
       node "ui-docs-entity" []
         [ node "ui-docs-entity-title" []
-          [ node "div" [] [text ("type alias " ++ alias.name)]
+          [ node "div" []
+              [ node "strong" [] [text "type alias"]
+              , text alias.name
+              ]
           ]
         , node "ui-docs-entity-description" []
           [ Markdown.toHtmlWith myOptions [] alias.comment
           , Markdown.toHtmlWith myOptions [] (processType alias.definition)
+          ]
+        ]
+
+    renderType msg =
+      node "ui-docs-entity" []
+        [ node "ui-docs-entity-title" []
+          [ node "div" []
+              [ node "strong" [] [text "type"]
+              , text msg.name
+              ]
+          ]
+        , node "ui-docs-entity-description" []
+          [ Markdown.toHtmlWith myOptions [] msg.comment
           ]
         ]
 
@@ -200,14 +223,29 @@ renderDocumentation mod =
           ]
         ]
 
+    types =
+      case mod.types of
+        [] -> []
+        _ ->
+          [title "Types"] ++ List.map renderType mod.types
+
     aliases =
-      List.map renderAlias mod.aliases
+      case mod.aliases of
+        [] -> []
+        _ ->
+          [title "Aliases"] ++ List.map renderAlias mod.aliases
 
     functions =
-      List.map renderFunction mod.functions
+      case mod.functions of
+        [] -> []
+        _ ->
+          [title "Functions"] ++ List.map renderFunction mod.functions
+
+    title value =
+      node "ui-docs-title" [] [text value]
   in
     node "ui-docs" []
-      (aliases ++ functions)
+      ([description] ++ aliases ++ types ++ functions)
 
 documentation docs name =
   findDocumentation name docs

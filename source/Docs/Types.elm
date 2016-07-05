@@ -1,7 +1,7 @@
 module Docs.Types exposing (..)
 
-import Json.Decode exposing (string, list, Decoder)
 import Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)
+import Json.Decode exposing (string, list, Decoder)
 
 
 type alias Documentation =
