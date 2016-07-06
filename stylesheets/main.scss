@@ -130,7 +130,8 @@ ui-reference-title {
 }
 
 ui-reference-content {
-  display: block;
+  flex-direction: column;
+  display: flex;
   flex: 1;
 }
 
@@ -170,6 +171,7 @@ ui-docs {
   padding-bottom: 150px;
   display: block;
   background: $input;
+  flex: 1 0 auto;
 }
 
 ui-docs-title {
