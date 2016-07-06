@@ -7,11 +7,6 @@ ui-hero {
   display: flex;
   color: #FFF;
 
-  ui-hero-title,
-  ui-hero-subtitle {
-    user-select: none;
-  }
-
   ui-hero-title {
     font-family: $title-font;
     font-size: 100px;
