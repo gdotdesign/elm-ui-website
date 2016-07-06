@@ -12,8 +12,8 @@ import Html
 
 
 type Msg
-  = Form Form.Msg
-  | Calendar Ui.Calendar.Msg
+  = Calendar Ui.Calendar.Msg
+  | Form Form.Msg
 
 
 type alias Model =
@@ -83,7 +83,7 @@ updateState ( model, effect ) =
     now =
       Ext.Date.now ()
 
-    updated calendar =
+    updatedComponent calendar =
       { calendar
         | selectable = Form.valueOfCheckbox "selectable" True model.form
         , disabled = Form.valueOfCheckbox "disabled" False model.form
@@ -92,7 +92,7 @@ updateState ( model, effect ) =
         , date = Form.valueOfDate "date" now model.form
       }
   in
-    ( { model | calendar = updated model.calendar }, effect )
+    ( { model | calendar = updatedComponent model.calendar }, effect )
 
 
 view : Model -> Html.Html Msg

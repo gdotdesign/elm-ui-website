@@ -85,7 +85,7 @@ update action model =
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
-    updatedButton button =
+    updatedComponent button =
       { button
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
@@ -94,7 +94,7 @@ updateState ( model, effect ) =
         , text = Form.valueOfInput "text" "Test" model.form
       }
   in
-    ( { model | button = updatedButton model.button }, effect )
+    ( { model | button = updatedComponent model.button }, effect )
 
 
 view : Model -> Html.Html Msg

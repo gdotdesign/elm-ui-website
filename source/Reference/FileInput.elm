@@ -1,76 +1,86 @@
 module Reference.FileInput exposing (..)
 
+import Components.Form as Form
+import Components.Reference
+import Ui.FileInput
 import Html exposing (div)
 import Html.App
 
-import String
-import Color
-
-import Ui.FileInput
-import Ui.Container
-import Ui
-
-import Components.Form as Form exposing (valueOfCheckbox, valueOfInput)
-import Components.Reference
 
 type Msg
-  = Form Form.Msg
-  | FileInput Ui.FileInput.Msg
+  = FileInput Ui.FileInput.Msg
+  | Form Form.Msg
+
 
 type alias Model =
-  { model : Ui.FileInput.Model
-  , fields : Form.Model
+  { fileInput : Ui.FileInput.Model
+  , form : Form.Model
   }
 
+
+init : Model
 init =
-  { model = Ui.FileInput.init "*"
-  , fields = Form.init { checkboxes = [ ("disabled", 1, False)
-                                      , ("readonly", 0, False)
-                                      ]
-                         , choosers = []
-                         , colors = []
-                         , inputs = []
-                         , dates = []
-                         }
+  { fileInput = Ui.FileInput.init "*"
+  , form =
+      Form.init
+        { checkboxes =
+            [ ( "disabled", 1, False )
+            , ( "readonly", 0, False )
+            ]
+        , choosers = []
+        , colors = []
+        , inputs = []
+        , dates = []
+        }
   }
 
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
     Form act ->
       let
-        (fields, effect) = Form.update act model.fields
+        ( form, effect ) =
+          Form.update act model.form
       in
-        ({ model | fields = fields }, Cmd.map Form effect)
+        ( { model | form = form }, Cmd.map Form effect )
           |> updateState
 
     FileInput act ->
       let
-        (component, effect) = Ui.FileInput.update act model.model
+        ( fileInput, effect ) =
+          Ui.FileInput.update act model.fileInput
       in
-        ({ model | model = component }, Cmd.map FileInput effect)
-          |> updateFields
+        ( { model | fileInput = fileInput }, Cmd.map FileInput effect )
 
-updateFields (model, effect) =
-  (model, effect)
 
-updateState (model, effect) =
+updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+updateForm ( model, effect ) =
+  ( model, effect )
+
+
+updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+updateState ( model, effect ) =
   let
-    updatedModel component =
-      { component | disabled = valueOfCheckbox "disabled" False model.fields
-                  , readonly = valueOfCheckbox "readonly" False model.fields
+    updatedComponent component =
+      { component
+        | disabled = Form.valueOfCheckbox "disabled" False model.form
+        , readonly = Form.valueOfCheckbox "readonly" False model.form
       }
   in
-    ({ model | model = updatedModel model.model }, effect)
+    ( { model | fileInput = updatedComponent model.fileInput }, effect )
 
+
+view : Model -> Html.Html Msg
 view model =
   let
-    fields =
-      Html.App.map Form (Form.view model.fields)
+    form =
+      Html.App.map Form (Form.view model.form)
 
     demo =
       div []
-        [ Html.App.map FileInput (Ui.FileInput.view model.model)
-        , Html.App.map FileInput (Ui.FileInput.viewDetails model.model)
+        [ Html.App.map FileInput (Ui.FileInput.view model.fileInput)
+        , Html.App.map FileInput (Ui.FileInput.viewDetails model.fileInput)
         ]
   in
-    Components.Reference.view demo fields
+    Components.Reference.view demo form

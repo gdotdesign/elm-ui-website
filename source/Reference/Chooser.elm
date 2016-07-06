@@ -15,7 +15,7 @@ type Msg
 
 
 type alias Model =
-  { model : Ui.Chooser.Model
+  { chooser : Ui.Chooser.Model
   , form : Form.Model
   }
 
@@ -38,7 +38,7 @@ init =
     placeholder =
       "Select a movie you will..."
   in
-    { model = Ui.Chooser.init data placeholder ""
+    { chooser = Ui.Chooser.init data placeholder ""
     , form =
         Form.init
           { inputs =
@@ -74,9 +74,9 @@ update action model =
     Chooser act ->
       let
         ( chooser, effect ) =
-          Ui.Chooser.update act model.model
+          Ui.Chooser.update act model.chooser
       in
-        ( { model | model = chooser }, Cmd.map Chooser effect )
+        ( { model | chooser = chooser }, Cmd.map Chooser effect )
           |> updateForm
 
 
@@ -84,7 +84,7 @@ updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, effect ) =
   let
     updatedForm =
-      Form.updateCheckbox "open" model.model.open model.form
+      Form.updateCheckbox "open" model.chooser.open model.form
   in
     ( { model | form = updatedForm }, effect )
 
@@ -92,8 +92,8 @@ updateForm ( model, effect ) =
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
-    updatedButton button =
-      { button
+    updatedComponent chooser =
+      { chooser
         | closeOnSelect = Form.valueOfCheckbox "closeOnSelect" False model.form
         , deselectable = Form.valueOfCheckbox "deselectable" False model.form
         , searchable = Form.valueOfCheckbox "searchable" False model.form
@@ -104,14 +104,14 @@ updateState ( model, effect ) =
         , open = Form.valueOfCheckbox "open" False model.form
       }
   in
-    ( { model | model = updatedButton model.model }, effect )
+    ( { model | chooser = updatedComponent model.chooser }, effect )
 
 
 view : Model -> Html.Html Msg
 view model =
   let
     demo =
-      Html.App.map Chooser (Ui.Chooser.view model.model)
+      Html.App.map Chooser (Ui.Chooser.view model.chooser)
 
     form =
       Html.App.map Form (Form.view model.form)
