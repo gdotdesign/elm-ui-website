@@ -226,7 +226,7 @@ renderDocumentation mod =
       case mod.aliases of
         [] -> []
         _ ->
-          [title "Aliases"] ++ List.map renderAlias mod.aliases
+          [title "Type Aliases"] ++ List.map renderAlias mod.aliases
 
     functions =
       case mod.functions of
