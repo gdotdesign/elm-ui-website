@@ -78,6 +78,10 @@ update action model =
         ( { model | dropdownMenu = dropdownMenu }, Cmd.none )
           |> updateForm
 
+    CloseMenu ->
+      ( { model | dropdownMenu = Ui.DropdownMenu.close model.dropdownMenu }, Cmd.none )
+        |> updateForm
+
     _ ->
       ( model, Cmd.none )
 
