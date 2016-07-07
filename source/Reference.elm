@@ -16,8 +16,10 @@ import Ui.Button
 import Ui.App
 import Ui
 
+import Reference.DropdownMenu as DropdownMenu
 import Reference.ButtonGroup as ButtonGroup
 import Reference.ColorPicker as ColorPicker
+import Reference.DatePicker as DatePicker
 import Reference.ColorPanel as ColorPanel
 import Reference.Container as Container
 import Reference.FileInput as FileInput
@@ -39,20 +41,24 @@ type alias Model =
   , fileInput : FileInput.Model
   , container : Container.Model
   , colorPanel : ColorPanel.Model
+  , datePicker : DatePicker.Model
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
+  , dropdownMenu : DropdownMenu.Model
   , documentation : Documentation
   , list : NavList.Model
   }
 
 type Msg
   = ButtonAction Button.Msg
+  | DatePicker DatePicker.Msg
   | ChooserAction Chooser.Msg
   | CalendarAction Calendar.Msg
   | FileInputAction FileInput.Msg
   | ColorPanelAction ColorPanel.Msg
   | ColorPickerAction ColorPicker.Msg
   | ButtonGroupAction ButtonGroup.Msg
+  | DropdownMenu DropdownMenu.Msg
   | Checkbox Checkbox.Msg
   | Container Container.Msg
   | List NavList.Msg
@@ -67,8 +73,10 @@ init =
   , fileInput = FileInput.init
   , container = Container.init
   , colorPanel = ColorPanel.init
+  , datePicker = DatePicker.init
   , colorPicker = ColorPicker.init
   , buttonGroup = ButtonGroup.init
+  , dropdownMenu = DropdownMenu.init
   , documentation = { modules = [] }
   , list = NavList.init "reference" "Search modules..." navItems
   }
@@ -91,6 +99,8 @@ components =
     , ("color-panel", ("Ui.ColorPanel", True))
     , ("color-picker", ("Ui.ColorPicker", True))
     , ("container", ("Ui.Container", True))
+    , ("date-picker", ("Ui.DatePicker", True))
+    , ("dropdown-menu", ("Ui.DropdownMenu", True))
     , ("ext-color", ("Ext.Color", False))
     , ("ext-number", ("Ext.Number", False))
     , ("ext-date", ("Ext.Date", False))
@@ -170,6 +180,18 @@ update action model =
       in
         ({ model | container = container }, Cmd.map Container effect)
 
+    DatePicker act ->
+      let
+        (datePicker, effect) = DatePicker.update act model.datePicker
+      in
+        ({ model | datePicker = datePicker }, Cmd.map DatePicker effect)
+
+    DropdownMenu act ->
+      let
+        (dropdownMenu, effect) = DropdownMenu.update act model.dropdownMenu
+      in
+        ({ model | dropdownMenu = dropdownMenu }, Cmd.map DropdownMenu effect)
+
     List act ->
       let
         (list, effect) = NavList.update act model.list
@@ -180,6 +202,7 @@ subscriptions model =
   Sub.batch
   [ Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
   , Sub.map ColorPickerAction (ColorPicker.subscriptions model.colorPicker)
+  , Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
   ]
 
 findDocumentation name docs =
@@ -300,6 +323,10 @@ view model active =
           Html.App.map Checkbox (Checkbox.view model.checkbox)
         "container" ->
           Html.App.map Container (Container.view model.container)
+        "date-picker" ->
+          Html.App.map DatePicker (DatePicker.view model.datePicker)
+        "dropdown-menu" ->
+          Html.App.map DropdownMenu (DropdownMenu.view model.dropdownMenu)
         _ ->
           text ""
 

@@ -2,11 +2,12 @@ module Reference.ColorPicker exposing (..)
 
 import Components.Form as Form
 import Components.Reference
-import Ui.Container
+
 import Ui.ColorPicker
-import Ui
+
 import Ext.Color exposing (Hsv)
 import Color
+
 import Html.App
 import Html
 
