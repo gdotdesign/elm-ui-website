@@ -6,6 +6,7 @@ import Components.Reference
 import Ui.Container
 import Ui.Chooser
 
+import Html.Attributes exposing (id)
 import Html exposing (node)
 import Html.App
 
@@ -97,7 +98,7 @@ view model =
 
     demo =
       Ui.Container.view model.container
-        []
+        [ id "test-container" ]
         [ node "test-box" [] []
         , node "test-box" [] []
         , node "test-box" [] []
