@@ -20,6 +20,7 @@ type alias Model =
   , form : Form.Model
   }
 
+
 directionData : List Ui.Chooser.Item
 directionData =
   [ { label = "row", value = "row" }
@@ -41,7 +42,7 @@ init : Model
 init =
   { container =
       { direction = "row"
-      , align = "center"
+      , align = "start"
       , compact = False
       }
   , form =
@@ -95,8 +96,7 @@ view model =
       Html.App.map Form (Form.view model.form)
 
     demo =
-      Ui.Container.view
-        model.container
+      Ui.Container.view model.container
         []
         [ node "test-box" [] []
         , node "test-box" [] []
