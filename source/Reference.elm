@@ -16,9 +16,11 @@ import Ui.Button
 import Ui.App
 import Ui
 
+import Reference.ButtonGroup as ButtonGroup
 import Reference.ColorPicker as ColorPicker
 import Reference.ColorPanel as ColorPanel
 import Reference.FileInput as FileInput
+import Reference.Checkbox as Checkbox
 import Reference.Calendar as Calendar
 import Reference.Chooser as Chooser
 import Reference.Button as Button
@@ -31,10 +33,12 @@ import Components.NavList as NavList
 type alias Model =
   { button : Button.Model
   , chooser : Chooser.Model
+  , checkbox : Checkbox.Model
   , calendar : Calendar.Model
   , fileInput : FileInput.Model
   , colorPanel : ColorPanel.Model
   , colorPicker : ColorPicker.Model
+  , buttonGroup : ButtonGroup.Model
   , documentation : Documentation
   , list : NavList.Model
   }
@@ -46,6 +50,8 @@ type Msg
   | FileInputAction FileInput.Msg
   | ColorPanelAction ColorPanel.Msg
   | ColorPickerAction ColorPicker.Msg
+  | ButtonGroupAction ButtonGroup.Msg
+  | Checkbox Checkbox.Msg
   | List NavList.Msg
   | Navigate String
 
@@ -53,10 +59,12 @@ init : Model
 init =
   { button = Button.init
   , chooser = Chooser.init
+  , checkbox = Checkbox.init
   , calendar = Calendar.init
   , fileInput = FileInput.init
   , colorPanel = ColorPanel.init
   , colorPicker = ColorPicker.init
+  , buttonGroup = ButtonGroup.init
   , documentation = { modules = [] }
   , list = NavList.init "reference" "Search modules..." navItems
   }
@@ -72,8 +80,10 @@ components =
   Dict.fromList
     [ ("app", ("Ui.App", False))
     , ("button", ("Ui.Button", True))
-    , ("chooser", ("Ui.Chooser", True))
+    , ("button-group", ("Ui.ButtonGroup", True))
     , ("calendar", ("Ui.Calendar", True))
+    , ("checkbox", ("Ui.Checkbox", True))
+    , ("chooser", ("Ui.Chooser", True))
     , ("color-panel", ("Ui.ColorPanel", True))
     , ("color-picker", ("Ui.ColorPicker", True))
     , ("ext-color", ("Ext.Color", False))
@@ -136,6 +146,18 @@ update action model =
         (fileInput, effect) = FileInput.update act model.fileInput
       in
         ({ model | fileInput = fileInput }, Cmd.map FileInputAction effect)
+
+    ButtonGroupAction act ->
+      let
+        (buttonGroup, effect) = ButtonGroup.update act model.buttonGroup
+      in
+        ({ model | buttonGroup = buttonGroup }, Cmd.map ButtonGroupAction effect)
+
+    Checkbox act ->
+      let
+        (checkbox, effect) = Checkbox.update act model.checkbox
+      in
+        ({ model | checkbox = checkbox }, Cmd.map Checkbox effect)
 
 
     List act ->
@@ -262,6 +284,10 @@ view model active =
           Html.App.map ColorPickerAction (ColorPicker.view model.colorPicker)
         "file-input" ->
           Html.App.map FileInputAction (FileInput.view model.fileInput)
+        "button-group" ->
+          Html.App.map ButtonGroupAction (ButtonGroup.view model.buttonGroup)
+        "checkbox" ->
+          Html.App.map Checkbox (Checkbox.view model.checkbox)
         _ ->
           text ""
 
