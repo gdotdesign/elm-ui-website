@@ -19,6 +19,7 @@ import Ui
 import Reference.ButtonGroup as ButtonGroup
 import Reference.ColorPicker as ColorPicker
 import Reference.ColorPanel as ColorPanel
+import Reference.Container as Container
 import Reference.FileInput as FileInput
 import Reference.Checkbox as Checkbox
 import Reference.Calendar as Calendar
@@ -36,6 +37,7 @@ type alias Model =
   , checkbox : Checkbox.Model
   , calendar : Calendar.Model
   , fileInput : FileInput.Model
+  , container : Container.Model
   , colorPanel : ColorPanel.Model
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
@@ -52,6 +54,7 @@ type Msg
   | ColorPickerAction ColorPicker.Msg
   | ButtonGroupAction ButtonGroup.Msg
   | Checkbox Checkbox.Msg
+  | Container Container.Msg
   | List NavList.Msg
   | Navigate String
 
@@ -62,6 +65,7 @@ init =
   , checkbox = Checkbox.init
   , calendar = Calendar.init
   , fileInput = FileInput.init
+  , container = Container.init
   , colorPanel = ColorPanel.init
   , colorPicker = ColorPicker.init
   , buttonGroup = ButtonGroup.init
@@ -86,6 +90,7 @@ components =
     , ("chooser", ("Ui.Chooser", True))
     , ("color-panel", ("Ui.ColorPanel", True))
     , ("color-picker", ("Ui.ColorPicker", True))
+    , ("container", ("Ui.Container", True))
     , ("ext-color", ("Ext.Color", False))
     , ("ext-number", ("Ext.Number", False))
     , ("ext-date", ("Ext.Date", False))
@@ -159,6 +164,11 @@ update action model =
       in
         ({ model | checkbox = checkbox }, Cmd.map Checkbox effect)
 
+    Container act ->
+      let
+        (container, effect) = Container.update act model.container
+      in
+        ({ model | container = container }, Cmd.map Container effect)
 
     List act ->
       let
@@ -288,6 +298,8 @@ view model active =
           Html.App.map ButtonGroupAction (ButtonGroup.view model.buttonGroup)
         "checkbox" ->
           Html.App.map Checkbox (Checkbox.view model.checkbox)
+        "container" ->
+          Html.App.map Container (Container.view model.container)
         _ ->
           text ""
 

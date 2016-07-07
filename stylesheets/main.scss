@@ -152,6 +152,19 @@ ui-reference-demo {
     padding: 40px;
     flex: 1;
 
+    ui-container {
+      border: 1px dashed rgba(0,0,0,0.4);
+      padding: 20px;
+
+      &.direction-row {
+        width: 500px;
+      }
+
+      &.direction-column {
+        height: 500px;
+      }
+    }
+
     ui-color-picker {
       min-width: 240px;
     }
@@ -256,4 +269,11 @@ pre {
 
 code {
   font-family: $code-font;
+}
+
+test-box {
+  border: 1px solid rgba(#000, 0.1);
+  width: 100px;
+  height: 100px;
+  background: $secondary;
 }
