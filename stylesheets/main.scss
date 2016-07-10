@@ -262,6 +262,17 @@ ui-documentation {
     padding-bottom: 100px;
     flex: 1;
   }
+
+  p {
+    margin: 10px 0;
+  }
+
+  h2 {
+    margin: 0;
+    margin-top: 40px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(#000, 0.1);
+  }
 }
 
 pre {
@@ -269,6 +280,13 @@ pre {
   border-radius: $border-radius;
   border: 1px solid rgba(#000, 0.05);
   background: #F7f7f7;
+}
+
+p code {
+  border: 1px solid rgba(#000, 0.05);
+  border-radius: $border-radius;
+  background: #F7f7f7;
+  padding: 3px 6px;
 }
 
 code {

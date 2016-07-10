@@ -346,6 +346,11 @@ documentation docs name =
 view : Model -> String ->Html.Html Msg
 view model active =
   let
+    allPages =
+      Dict.union components extensions
+      |> Dict.union nativeModules
+      |> Dict.union helpers
+
     componentView =
       case active of
         "button" ->
@@ -378,7 +383,7 @@ view model active =
           text ""
 
     docs =
-      case Dict.get active components of
+      case Dict.get active allPages of
         Just (label, haveDemo) ->
           let
             (title, className) =
@@ -394,7 +399,7 @@ view model active =
           [ ]
 
     content =
-      case Dict.get active components of
+      case Dict.get active allPages of
         Just (label, haveDemo) ->
           if haveDemo then
             [ node "ui-reference-title" [] [ text label ]

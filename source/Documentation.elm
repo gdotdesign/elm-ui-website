@@ -22,13 +22,25 @@ type Msg
 
 pages : List (String, String)
 pages =
-  [ ("getting-started/setup", "Setup")
-  , ("getting-started/adding-components", "Adding Components")
+  [ ("getting-started/setup", "1.1 Setup")
+  , ("getting-started/adding-components", "1.2 Adding Components")
+  ]
+
+guidePages : List (String, String)
+guidePages =
+  [ ("guides/focusing", "Focusing")
+  , ("guides/handling-files", "Handling Files")
+  , ("guides/environment-variables", "Environment Variables")
   ]
 
 navItems =
-  [ ("Getting Started", List.map (\(url, label) -> { href = url, label = label }) pages)
-  ]
+  let
+    convert items =
+      List.map (\(url, label) -> { href = url, label = label }) items
+  in
+    [ ("1. Getting Started", convert pages)
+    , ("Guides", convert guidePages)
+    ]
 
 init : Model
 init =
