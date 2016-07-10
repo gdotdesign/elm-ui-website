@@ -1,11 +1,11 @@
-module Reference.ButtonGroup exposing (..)
+module Reference.IconButton exposing (..)
 
 import Reference.Button exposing (sizeData, kindData)
 
 import Components.Form as Form
 import Components.Reference
 
-import Ui.ButtonGroup
+import Ui.IconButton
 import Ui.Chooser
 
 import Html.App
@@ -18,42 +18,53 @@ type Msg
 
 
 type alias Model =
-  { buttonGroup : Ui.ButtonGroup.Model Msg
+  { iconButton : Ui.IconButton.Model
   , form : Form.Model
   }
 
+glyphData : List Ui.Chooser.Item
+glyphData =
+  [ { label = "Plus", value = "plus" }
+  , { label = "Checkmark", value = "checkmark" }
+  , { label = "Close Circled", value = "close-circled" }
+  , { label = "Heart", value = "heart" }
+  ]
+
+sideData : List Ui.Chooser.Item
+sideData =
+  [ { label = "Left", value = "left" }
+  , { label = "Right", value = "right" }
+  ]
 
 init : Model
 init =
-  { buttonGroup =
-      { items =
-          [ ( "Yoda", Nothing )
-          , ( "Obi-Wan", Nothing )
-          , ( "Darth Vader", Nothing )
-          ]
+  { iconButton =
+      { text = "Add Document"
       , disabled = False
       , readonly = False
       , kind = "primary"
       , size = "medium"
+      , glyph = "plus"
+      , side = "left"
       }
   , form =
       Form.init
-        { textareas = []
-        , colors = []
-        , dates = []
-        , inputs =
-            [ ( "first", 2, "Text...", "Yoda" )
-            , ( "second", 3, "Text...", "Obi-Wan" )
-            , ( "third", 4, "Text...", "Darth Vader" )
+        { inputs =
+            [ ( "text", 2, "Text...", "Add Document" )
             ]
         , checkboxes =
-            [ ( "disabled", 5, False )
-            , ( "readonly", 6, False )
+            [ ( "disabled", 3, False )
+            , ( "readonly", 4, False )
             ]
         , choosers =
             [ ( "kind", 0, kindData, "", "primary" )
             , ( "size", 1, sizeData, "", "medium" )
+            , ( "glyph", 2, glyphData, "", "plus")
+            , ( "side", 2, sideData, "", "left")
             ]
+        , textareas = []
+        , colors = []
+        , dates = []
         }
   }
 
@@ -76,20 +87,18 @@ update action model =
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
-    updatedComponent buttonGroup =
-      { buttonGroup
+    updatedComponent iconButton =
+      { iconButton
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , kind = Form.valueOfChooser "kind" "primary" model.form
         , size = Form.valueOfChooser "size" "medium" model.form
-        , items =
-            [ ( Form.valueOfInput "first" "" model.form, Nothing )
-            , ( Form.valueOfInput "second" "" model.form, Nothing )
-            , ( Form.valueOfInput "third" "" model.form, Nothing )
-            ]
+        , glyph = Form.valueOfChooser "glyph" "plus" model.form
+        , side = Form.valueOfChooser "side" "left" model.form
+        , text = Form.valueOfInput "text" "Test" model.form
       }
   in
-    ( { model | buttonGroup = updatedComponent model.buttonGroup }, effect )
+    ( { model | iconButton = updatedComponent model.iconButton }, effect )
 
 
 view : Model -> Html.Html Msg
@@ -99,6 +108,6 @@ view model =
       Html.App.map Form (Form.view model.form)
 
     demo =
-      Ui.ButtonGroup.view model.buttonGroup
+      Ui.IconButton.view Nothing model.iconButton
   in
     Components.Reference.view demo form

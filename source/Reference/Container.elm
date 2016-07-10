@@ -48,16 +48,17 @@ init =
       }
   , form =
       Form.init
-        { dates = []
-        , colors = []
-        , inputs = []
-        , checkboxes =
+        { checkboxes =
             [ ( "compact", 2, False )
             ]
         , choosers =
             [ ( "direction", 0, directionData, "", "row" )
             , ( "align", 1, alignData, "", "start" )
             ]
+        , textareas = []
+        , colors = []
+        , inputs = []
+        , dates = []
         }
   }
 

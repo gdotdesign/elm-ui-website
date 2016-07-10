@@ -50,8 +50,9 @@ init =
       }
   , form =
       Form.init
-        { dates = []
+        { textareas = []
         , colors = []
+        , dates = []
         , inputs =
             [ ( "text", 2, "Text...", "Use The Force" )
             ]

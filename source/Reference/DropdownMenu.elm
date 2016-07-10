@@ -45,16 +45,17 @@ init =
   { dropdownMenu = Ui.DropdownMenu.init
   , form =
       Form.init
-        { dates = []
-        , colors = []
-        , inputs = []
-        , checkboxes =
+        { checkboxes =
             [ ( "open", 2, False )
             ]
         , choosers =
             [ ( "horizontal", 0, horizontalData, "", "left" )
             , ( "vertical", 1, verticalData, "", "bottom" )
             ]
+        , textareas = []
+        , colors = []
+        , inputs = []
+        , dates = []
         }
   }
 

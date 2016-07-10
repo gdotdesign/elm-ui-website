@@ -35,11 +35,12 @@ init =
               [ ( "disabled", 2, False )
               , ( "readonly", 3, False )
               ]
+          , dates =
+              [ ( "value", 0, (Ext.Date.now ()) ) ]
+          , textareas = []
           , choosers = []
           , colors = []
           , inputs = []
-          , dates =
-              [ ( "value", 0, (Ext.Date.now ()) ) ]
           }
     }
 

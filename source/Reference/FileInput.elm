@@ -29,6 +29,7 @@ init =
             [ ( "disabled", 1, False )
             , ( "readonly", 0, False )
             ]
+        , textareas = []
         , choosers = []
         , colors = []
         , inputs = []

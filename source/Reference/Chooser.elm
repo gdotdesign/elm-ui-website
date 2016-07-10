@@ -53,6 +53,7 @@ init =
               , ( "disabled", 6, False )
               , ( "open", 5, False )
               ]
+          , textareas = []
           , choosers = []
           , colors = []
           , dates = []

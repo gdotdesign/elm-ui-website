@@ -16,9 +16,11 @@ import Ui.Button
 import Ui.App
 import Ui
 
+import Reference.InplaceInput as InplaceInput
 import Reference.DropdownMenu as DropdownMenu
 import Reference.ButtonGroup as ButtonGroup
 import Reference.ColorPicker as ColorPicker
+import Reference.IconButton as IconButton
 import Reference.DatePicker as DatePicker
 import Reference.ColorPanel as ColorPanel
 import Reference.Container as Container
@@ -41,9 +43,11 @@ type alias Model =
   , fileInput : FileInput.Model
   , container : Container.Model
   , colorPanel : ColorPanel.Model
+  , iconButton : IconButton.Model
   , datePicker : DatePicker.Model
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
+  , inplaceInput : InplaceInput.Model
   , dropdownMenu : DropdownMenu.Model
   , documentation : Documentation
   , list : NavList.Model
@@ -58,9 +62,11 @@ type Msg
   | ColorPanelAction ColorPanel.Msg
   | ColorPickerAction ColorPicker.Msg
   | ButtonGroupAction ButtonGroup.Msg
+  | InplaceInput InplaceInput.Msg
   | DropdownMenu DropdownMenu.Msg
-  | Checkbox Checkbox.Msg
+  | IconButton IconButton.Msg
   | Container Container.Msg
+  | Checkbox Checkbox.Msg
   | List NavList.Msg
   | Navigate String
 
@@ -72,10 +78,12 @@ init =
   , calendar = Calendar.init
   , fileInput = FileInput.init
   , container = Container.init
+  , iconButton = IconButton.init
   , colorPanel = ColorPanel.init
   , datePicker = DatePicker.init
   , colorPicker = ColorPicker.init
   , buttonGroup = ButtonGroup.init
+  , inplaceInput = InplaceInput.init
   , dropdownMenu = DropdownMenu.init
   , documentation = { modules = [] }
   , list = NavList.init "reference" "Search modules..." navItems
@@ -105,6 +113,9 @@ components =
     , ("ext-number", ("Ext.Number", False))
     , ("ext-date", ("Ext.Date", False))
     , ("file-input", ("Ui.FileInput", True))
+    , ("icon-button", ("Ui.IconButton", True))
+    , ("image", ("Ui.Image", False))
+    , ("inplace-input", ("Ui.InplaceInput", True))
     , ("native/file-manager", ("Ui.Native.FileManager", False))
     , ("native/browser", ("Ui.Native.Browser", False))
     , ("native/dom", ("Ui.Native.Dom", False))
@@ -191,6 +202,18 @@ update action model =
         (dropdownMenu, effect) = DropdownMenu.update act model.dropdownMenu
       in
         ({ model | dropdownMenu = dropdownMenu }, Cmd.map DropdownMenu effect)
+
+    IconButton act ->
+      let
+        (iconButton, effect) = IconButton.update act model.iconButton
+      in
+        ({ model | iconButton = iconButton }, Cmd.map IconButton effect)
+
+    InplaceInput act ->
+      let
+        (inplaceInput, effect) = InplaceInput.update act model.inplaceInput
+      in
+        ({ model | inplaceInput = inplaceInput }, Cmd.map InplaceInput effect)
 
     List act ->
       let
@@ -327,6 +350,10 @@ view model active =
           Html.App.map DatePicker (DatePicker.view model.datePicker)
         "dropdown-menu" ->
           Html.App.map DropdownMenu (DropdownMenu.view model.dropdownMenu)
+        "icon-button" ->
+          Html.App.map IconButton (IconButton.view model.iconButton)
+        "inplace-input" ->
+          Html.App.map InplaceInput (InplaceInput.view model.inplaceInput)
         _ ->
           text ""
 

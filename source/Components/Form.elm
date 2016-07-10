@@ -11,6 +11,7 @@ import Date
 
 import Ui.ColorPicker
 import Ui.DatePicker
+import Ui.Textarea
 import Ui.Checkbox
 import Ui.Chooser
 import Ui.Input
@@ -20,6 +21,7 @@ type Msg
   = DatePickers String Ui.DatePicker.Msg
   | Checkboxes String Ui.Checkbox.Msg
   | Colors String Ui.ColorPicker.Msg
+  | Textareas String Ui.Textarea.Msg
   | Choosers String Ui.Chooser.Msg
   | Inputs String Ui.Input.Msg
 
@@ -27,6 +29,7 @@ type Msg
 type alias Model =
   { checkboxes : Dict String ( Int, Ui.Checkbox.Model )
   , colors : Dict String ( Int, Ui.ColorPicker.Model )
+  , textareas : Dict String (Int, Ui.Textarea.Model )
   , choosers : Dict String ( Int, Ui.Chooser.Model )
   , dates : Dict String ( Int, Ui.DatePicker.Model )
   , inputs : Dict String ( Int, Ui.Input.Model )
@@ -36,6 +39,7 @@ type alias Model =
 
 type alias TempModel =
   { choosers : List ( String, Int, List Ui.Chooser.Item, String, String )
+  , textareas : List ( String, Int, String, String )
   , inputs : List ( String, Int, String, String )
   , colors : List ( String, Int, Color.Color )
   , checkboxes : List ( String, Int, Bool )
@@ -60,8 +64,12 @@ init data =
 
     initColors ( name, index, value ) =
       ( name, ( index, Ui.ColorPicker.init value ) )
+
+    initTextarea ( name, index, placeholder, value ) =
+      ( name, ( index, Ui.Textarea.init value placeholder ) )
   in
     { checkboxes = Dict.fromList (List.map initCheckbox data.checkboxes)
+    , textareas = Dict.fromList (List.map initTextarea data.textareas)
     , choosers = Dict.fromList (List.map initChooser data.choosers)
     , dates = Dict.fromList (List.map initDatePickers data.dates)
     , colors = Dict.fromList (List.map initColors data.colors)
@@ -103,6 +111,11 @@ valueOfCheckbox name default model =
 valueOfInput : String -> String -> Model -> String
 valueOfInput name default model =
   valueOfSimple name default .value model.inputs
+
+
+valueOfTextarea : String -> String -> Model -> String
+valueOfTextarea name default model =
+  valueOfSimple name default .value model.textareas
 
 
 valueOfColor : String -> Hsv -> Model -> Hsv
@@ -150,6 +163,20 @@ updateDate name value model =
           item
   in
     { model | dates = Dict.update name updatedDate model.dates }
+
+
+updateTextarea : String -> String -> Model -> Model
+updateTextarea name value model =
+  let
+    updatedTextarea item =
+      case item of
+        Just ( index, input ) ->
+          Just ( index, Ui.Textarea.setValue value input )
+
+        _ ->
+          item
+  in
+    { model | textareas = Dict.update name updatedTextarea model.textareas }
 
 
 updateCheckbox : String -> Bool -> Model -> Model
@@ -233,6 +260,15 @@ update action model =
         , Cmd.map (Colors name) effect
         )
 
+    Textareas name act ->
+      let
+        ( effect, updatedTextareas ) =
+          updateDict name act Ui.Textarea.update model.textareas
+      in
+        ( { model | textareas = updatedTextareas }
+        , Cmd.map (Textareas name) effect
+        )
+
 
 view : Model -> Html.Html Msg
 view fields =
@@ -256,6 +292,10 @@ view fields =
     renderColorPicker name data =
       blockField name
         (Html.App.map (Colors name) (Ui.ColorPicker.view data))
+
+    renderTextarea name data =
+      blockField name
+        (Html.App.map (Textareas name) (Ui.Textarea.view data))
 
     blockField name child =
       node "ui-form-block"
@@ -283,6 +323,7 @@ view fields =
         ++ (renderMap renderChooser fields.choosers)
         ++ (renderMap renderDatePicker fields.dates)
         ++ (renderMap renderInput fields.inputs)
+        ++ (renderMap renderTextarea fields.textareas)
       )
 
     sortedItems =

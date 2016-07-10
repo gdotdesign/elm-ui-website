@@ -37,9 +37,10 @@ init =
             [ ( "disabled", 2, False )
             , ( "readonly", 3, False )
             ]
-        , choosers = []
         , colors =
             [ ( "value", 0, Color.yellow ) ]
+        , textareas = []
+        , choosers = []
         , inputs = []
         , dates = []
         }
