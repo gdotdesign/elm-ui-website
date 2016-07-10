@@ -27,7 +27,8 @@ pages =
   ]
 
 navItems =
-  List.map (\(url, label) -> { href = url, label = label }) pages
+  [ ("Getting Started", List.map (\(url, label) -> { href = url, label = label }) pages)
+  ]
 
 init : Model
 init =

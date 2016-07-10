@@ -11,6 +11,8 @@ import Ui.SearchInput
 import String
 import Fuzzy
 
+type alias Category =
+  (String, (List Item))
 
 type alias Item =
   { label : String
@@ -19,8 +21,8 @@ type alias Item =
 
 
 type alias Model =
-  { input : Ui.SearchInput.Model
-  , items : List Item
+  { items : List Category
+  , input : Ui.SearchInput.Model
   , prefix : String
   }
 
@@ -30,11 +32,11 @@ type Msg
   | Navigate String
 
 
-init : String -> String -> List Item -> Model
+init : String -> String -> List Category -> Model
 init prefix placeholder items =
-  { items = items
+  { input = Ui.SearchInput.init 0 placeholder
   , prefix = prefix
-  , input = Ui.SearchInput.init 0 placeholder
+  , items = items
   }
 
 
@@ -67,18 +69,30 @@ match model item =
 
 view : String -> Model -> Html.Html Msg
 view active model =
-  node "ui-nav-list"
-    []
-    [ Html.App.map Input (Ui.SearchInput.view model.input)
-    , node "ui-nav-list-items" [] (renderItems active model)
-    ]
+  let
+    items =
+      List.map (renderCategory active model) model.items
+      |> List.foldr (++) []
+  in
+    node "ui-nav-list"
+      []
+      [ Html.App.map Input (Ui.SearchInput.view model.input)
+      , node "ui-nav-list-items" [] items
+      ]
 
 
-renderItems : String -> Model -> List (Html.Html Msg)
-renderItems active model =
-  List.filter (match model) model.items
-    |> List.sortBy .label
-    |> List.map (renderItem active model)
+renderCategory : String -> Model -> (String, List Item) -> List (Html.Html Msg)
+renderCategory active model (title, categoryItems) =
+  let
+    items =
+      List.filter (match model) categoryItems
+        |> List.sortBy .label
+        |> List.map (renderItem active model)
+  in
+    if (List.isEmpty items) then
+      []
+    else
+      [ node "ui-nav-list-category" [] [ text title ] ] ++ items
 
 
 renderItem : String -> Model -> Item -> Html.Html Msg

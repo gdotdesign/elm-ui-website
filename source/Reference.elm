@@ -93,8 +93,16 @@ setDocumentation docs model =
   { model | documentation = docs }
 
 navItems =
-  Dict.toList components
-  |> List.map (\(url, (name, _)) -> { label = name, href = url })
+  let
+    convert dictList =
+      Dict.toList dictList
+        |> List.map (\(url, (name, _)) -> { label = name, href = url })
+  in
+    [ ("Components", convert components)
+    , ("Helpers", convert helpers)
+    , ("Native Modules", convert nativeModules)
+    , ("Extensions", convert extensions)
+    ]
 
 components =
   Dict.fromList
@@ -109,23 +117,35 @@ components =
     , ("container", ("Ui.Container", True))
     , ("date-picker", ("Ui.DatePicker", True))
     , ("dropdown-menu", ("Ui.DropdownMenu", True))
-    , ("ext-color", ("Ext.Color", False))
-    , ("ext-number", ("Ext.Number", False))
-    , ("ext-date", ("Ext.Date", False))
     , ("file-input", ("Ui.FileInput", True))
     , ("icon-button", ("Ui.IconButton", True))
     , ("image", ("Ui.Image", False))
     , ("inplace-input", ("Ui.InplaceInput", True))
-    , ("native/file-manager", ("Ui.Native.FileManager", False))
+    ]
+
+nativeModules =
+  Dict.fromList
+    [ ("native/file-manager", ("Ui.Native.FileManager", False))
     , ("native/browser", ("Ui.Native.Browser", False))
     , ("native/dom", ("Ui.Native.Dom", False))
     , ("native/local-storage", ("Ui.Native.LocalStorage", False))
     , ("native/scrolls", ("Ui.Native.Scrolls", False))
-    , ("helpers/drag", ("Ui.Helpers.Drag", False))
+    ]
+
+helpers =
+  Dict.fromList
+    [ ("helpers/drag", ("Ui.Helpers.Drag", False))
     , ("helpers/emitter", ("Ui.Helpers.Emitter", False))
     , ("helpers/env", ("Ui.Helpers.Env", False))
     , ("helpers/dropdown", ("Ui.Helpers.Dropdown", False))
     , ("helpers/intendable", ("Ui.Helpers.Intendable", False))
+    ]
+
+extensions =
+  Dict.fromList
+    [ ("ext-color", ("Ext.Color", False))
+    , ("ext-number", ("Ext.Number", False))
+    , ("ext-date", ("Ext.Date", False))
     , ("html/events/geometry", ("Html.Events.Geometry", False))
     , ("html/events/extra", ("Html.Events.Extra", False))
     , ("html/events/options", ("Html.Events.Options", False))

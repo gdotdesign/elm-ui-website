@@ -33,6 +33,16 @@ ui-nav-list {
     margin: 0;
   }
 
+  ui-nav-list-category {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    background: $input;
+    padding: 5px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+  }
+
   ui-nav-list-item {
     border-bottom: 1px solid rgba(#000, 0.1);
     text-decoration: none;
