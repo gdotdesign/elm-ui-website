@@ -40,6 +40,7 @@ init =
               [ ( "value", 1, now )
               , ( "date", 0, now )
               ]
+          , numberRanges = []
           , textareas = []
           , choosers = []
           , colors = []

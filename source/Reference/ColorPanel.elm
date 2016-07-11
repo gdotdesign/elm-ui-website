@@ -40,6 +40,7 @@ init =
             ]
         , colors =
             [ ( "value", 0, Color.yellow ) ]
+        , numberRanges = []
         , textareas = []
         , choosers = []
         , inputs = []

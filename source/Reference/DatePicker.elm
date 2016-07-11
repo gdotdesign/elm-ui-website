@@ -37,6 +37,7 @@ init =
               ]
           , dates =
               [ ( "value", 0, (Ext.Date.now ()) ) ]
+          , numberRanges = []
           , textareas = []
           , choosers = []
           , colors = []

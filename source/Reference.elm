@@ -23,12 +23,14 @@ import Reference.ColorPicker as ColorPicker
 import Reference.IconButton as IconButton
 import Reference.DatePicker as DatePicker
 import Reference.ColorPanel as ColorPanel
+import Reference.NumberPad as NumberPad
 import Reference.Container as Container
 import Reference.FileInput as FileInput
 import Reference.Checkbox as Checkbox
 import Reference.Calendar as Calendar
 import Reference.Chooser as Chooser
 import Reference.Button as Button
+import Reference.Input as Input
 
 import Docs.Types exposing (Documentation)
 
@@ -36,12 +38,14 @@ import Components.Markdown as Markdown
 import Components.NavList as NavList
 
 type alias Model =
-  { button : Button.Model
+  { input : Input.Model
+  , button : Button.Model
   , chooser : Chooser.Model
   , checkbox : Checkbox.Model
   , calendar : Calendar.Model
   , fileInput : FileInput.Model
   , container : Container.Model
+  , numberPad : NumberPad.Model
   , colorPanel : ColorPanel.Model
   , iconButton : IconButton.Model
   , datePicker : DatePicker.Model
@@ -65,19 +69,23 @@ type Msg
   | InplaceInput InplaceInput.Msg
   | DropdownMenu DropdownMenu.Msg
   | IconButton IconButton.Msg
+  | NumberPad NumberPad.Msg
   | Container Container.Msg
   | Checkbox Checkbox.Msg
+  | Input Input.Msg
   | List NavList.Msg
   | Navigate String
 
 init : Model
 init =
-  { button = Button.init
+  { input = Input.init
+  , button = Button.init
   , chooser = Chooser.init
   , checkbox = Checkbox.init
   , calendar = Calendar.init
   , fileInput = FileInput.init
   , container = Container.init
+  , numberPad = NumberPad.init
   , iconButton = IconButton.init
   , colorPanel = ColorPanel.init
   , datePicker = DatePicker.init
@@ -121,6 +129,12 @@ components =
     , ("icon-button", ("Ui.IconButton", True))
     , ("image", ("Ui.Image", False))
     , ("inplace-input", ("Ui.InplaceInput", True))
+    , ("input", ("Ui.Input", True))
+    , ("layout", ("Ui.Layout", True))
+    , ("loader", ("Ui.Loader", True))
+    , ("modal", ("Ui.Modal", True))
+    , ("notification-center", ("Ui.NotificationCenter", True))
+    , ("number-pad", ("Ui.NumberPad", True))
     ]
 
 nativeModules =
@@ -235,6 +249,18 @@ update action model =
       in
         ({ model | inplaceInput = inplaceInput }, Cmd.map InplaceInput effect)
 
+    Input act ->
+      let
+        (input, effect) = Input.update act model.input
+      in
+        ({ model | input = input }, Cmd.map Input effect)
+
+    NumberPad act ->
+      let
+        (numberPad, effect) = NumberPad.update act model.numberPad
+      in
+        ({ model | numberPad = numberPad }, Cmd.map NumberPad effect)
+
     List act ->
       let
         (list, effect) = NavList.update act model.list
@@ -246,6 +272,7 @@ subscriptions model =
   [ Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
   , Sub.map ColorPickerAction (ColorPicker.subscriptions model.colorPicker)
   , Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
+  , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
   ]
 
 findDocumentation name docs =
@@ -379,6 +406,10 @@ view model active =
           Html.App.map IconButton (IconButton.view model.iconButton)
         "inplace-input" ->
           Html.App.map InplaceInput (InplaceInput.view model.inplaceInput)
+        "input" ->
+          Html.App.map Input (Input.view model.input)
+        "number-pad" ->
+          Html.App.map NumberPad (NumberPad.view model.numberPad)
         _ ->
           text ""
 

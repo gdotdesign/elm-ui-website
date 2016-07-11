@@ -36,6 +36,7 @@ init =
             ]
         , textareas =
             [ ( "value", 0, "Placeholder...", "Some content..." )]
+        , numberRanges = []
         , choosers = []
         , inputs = []
         , colors = []

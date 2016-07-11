@@ -52,6 +52,7 @@ init =
             [ ( "horizontal", 0, horizontalData, "", "left" )
             , ( "vertical", 1, verticalData, "", "bottom" )
             ]
+        , numberRanges = []
         , textareas = []
         , colors = []
         , inputs = []

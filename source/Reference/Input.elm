@@ -1,39 +1,44 @@
-module Reference.FileInput exposing (..)
+module Reference.Input exposing (..)
 
 import Components.Form as Form
 import Components.Reference
 
-import Ui.FileInput
+import Ui.Input
 
-import Html exposing (div)
+import Ext.Date
+
 import Html.App
+import Html
 
 
 type Msg
-  = FileInput Ui.FileInput.Msg
+  = Input Ui.Input.Msg
   | Form Form.Msg
 
 
 type alias Model =
-  { fileInput : Ui.FileInput.Model
+  { input : Ui.Input.Model
   , form : Form.Model
   }
 
 
 init : Model
 init =
-  { fileInput = Ui.FileInput.init "*"
+  { input = Ui.Input.init "Some content..." "Placeholder..."
   , form =
       Form.init
         { checkboxes =
-            [ ( "disabled", 1, False )
-            , ( "readonly", 0, False )
+            [ ( "disabled", 3, False )
+            , ( "readonly", 4, False )
+            ]
+        , inputs =
+            [ ( "value", 0, "Placeholder...", "Some content..." )
+            , ( "placeholder", 0, "Placeholder...", "Placeholder..." )
             ]
         , numberRanges = []
         , textareas = []
         , choosers = []
         , colors = []
-        , inputs = []
         , dates = []
         }
   }
@@ -42,6 +47,14 @@ init =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
+    Input act ->
+      let
+        ( input, effect ) =
+          Ui.Input.update act model.input
+      in
+        ( { model | input = input }, Cmd.map Input effect )
+          |> updateForm
+
     Form act ->
       let
         ( form, effect ) =
@@ -50,29 +63,28 @@ update action model =
         ( { model | form = form }, Cmd.map Form effect )
           |> updateState
 
-    FileInput act ->
-      let
-        ( fileInput, effect ) =
-          Ui.FileInput.update act model.fileInput
-      in
-        ( { model | fileInput = fileInput }, Cmd.map FileInput effect )
-
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, effect ) =
-  ( model, effect )
+  let
+    updatedForm =
+      Form.updateInput "value" model.input.value model.form
+  in
+    ( { model | form = updatedForm }, effect )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
-    updatedComponent component =
-      { component
+    updatedComponent input =
+      { input
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
+        , placeholder = Form.valueOfInput "placeholder" "" model.form
+        , value = Form.valueOfInput "value" "" model.form
       }
   in
-    ( { model | fileInput = updatedComponent model.fileInput }, effect )
+    ( { model | input = updatedComponent model.input }, effect )
 
 
 view : Model -> Html.Html Msg
@@ -82,9 +94,6 @@ view model =
       Html.App.map Form (Form.view model.form)
 
     demo =
-      div []
-        [ Html.App.map FileInput (Ui.FileInput.view model.fileInput)
-        , Html.App.map FileInput (Ui.FileInput.viewDetails model.fileInput)
-        ]
+      Html.App.map Input (Ui.Input.view model.input)
   in
     Components.Reference.view demo form

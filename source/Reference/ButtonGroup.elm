@@ -38,7 +38,8 @@ init =
       }
   , form =
       Form.init
-        { textareas = []
+        { numberRanges = []
+        , textareas = []
         , colors = []
         , dates = []
         , inputs =

@@ -62,6 +62,7 @@ init =
             , ( "glyph", 2, glyphData, "", "plus")
             , ( "side", 2, sideData, "", "left")
             ]
+        , numberRanges = []
         , textareas = []
         , colors = []
         , dates = []

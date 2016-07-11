@@ -55,6 +55,7 @@ init =
             [ ( "direction", 0, directionData, "", "row" )
             , ( "align", 1, alignData, "", "start" )
             ]
+        , numberRanges = []
         , textareas = []
         , colors = []
         , inputs = []
