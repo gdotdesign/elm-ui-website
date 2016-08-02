@@ -29,6 +29,7 @@ import Reference.FileInput as FileInput
 import Reference.Checkbox as Checkbox
 import Reference.Calendar as Calendar
 import Reference.Chooser as Chooser
+import Reference.Header as Header
 import Reference.Button as Button
 import Reference.Input as Input
 
@@ -75,6 +76,7 @@ type Msg
   | Input Input.Msg
   | List NavList.Msg
   | Navigate String
+  | Noop
 
 init : Model
 init =
@@ -126,6 +128,7 @@ components =
     , ("date-picker", ("Ui.DatePicker", True))
     , ("dropdown-menu", ("Ui.DropdownMenu", True))
     , ("file-input", ("Ui.FileInput", True))
+    , ("header", ("Ui.Header", True))
     , ("icon-button", ("Ui.IconButton", True))
     , ("image", ("Ui.Image", False))
     , ("inplace-input", ("Ui.InplaceInput", True))
@@ -266,6 +269,9 @@ update action model =
         (list, effect) = NavList.update act model.list
       in
         ({ model | list = list }, Cmd.map List effect)
+
+    Noop ->
+      (model, Cmd.none)
 
 subscriptions model =
   Sub.batch
@@ -410,6 +416,8 @@ view model active =
           Html.App.map Input (Input.view model.input)
         "number-pad" ->
           Html.App.map NumberPad (NumberPad.view model.numberPad)
+        "header" ->
+          Header.view Noop
         _ ->
           text ""
 

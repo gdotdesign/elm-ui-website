@@ -205,11 +205,9 @@ view model =
   Ui.App.view App
     model.app
     [ Ui.Header.view []
-        ([ Ui.Header.title [ onClick (Navigate "/")]
-            [img [src "/images/logo-small.svg"] []
-            , text "Elm-UI"
-            ]
-
+        ([ img [src "/images/logo-small.svg"
+               , onClick (Navigate "/")] []
+         , Ui.Header.title "Elm-UI" (Navigate "/")
          ]
           ++ (viewHeader model)
           ++
