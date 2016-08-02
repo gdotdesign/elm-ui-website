@@ -29,8 +29,11 @@ import Reference.FileInput as FileInput
 import Reference.Checkbox as Checkbox
 import Reference.Calendar as Calendar
 import Reference.Chooser as Chooser
+import Reference.Loader as Loader
+import Reference.Layout as Layout
 import Reference.Header as Header
 import Reference.Button as Button
+import Reference.Layout as Layout
 import Reference.Input as Input
 
 import Docs.Types exposing (Documentation)
@@ -41,6 +44,8 @@ import Components.NavList as NavList
 type alias Model =
   { input : Input.Model
   , button : Button.Model
+  , layout : Layout.Model
+  , loader : Loader.Model
   , chooser : Chooser.Model
   , checkbox : Checkbox.Model
   , calendar : Calendar.Model
@@ -73,6 +78,8 @@ type Msg
   | NumberPad NumberPad.Msg
   | Container Container.Msg
   | Checkbox Checkbox.Msg
+  | Loader Loader.Msg
+  | Layout Layout.Msg
   | Input Input.Msg
   | List NavList.Msg
   | Navigate String
@@ -81,7 +88,9 @@ type Msg
 init : Model
 init =
   { input = Input.init
+  , layout = Layout.init
   , button = Button.init
+  , loader = Loader.init
   , chooser = Chooser.init
   , checkbox = Checkbox.init
   , calendar = Calendar.init
@@ -270,6 +279,18 @@ update action model =
       in
         ({ model | list = list }, Cmd.map List effect)
 
+    Layout act ->
+      let
+        (layout, effect) = Layout.update act model.layout
+      in
+        ({ model | layout = layout }, Cmd.map Layout effect)
+
+    Loader act ->
+      let
+        (loader, effect) = Loader.update act model.loader
+      in
+        ({ model | loader = loader }, Cmd.map Loader effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -416,6 +437,10 @@ view model active =
           Html.App.map Input (Input.view model.input)
         "number-pad" ->
           Html.App.map NumberPad (NumberPad.view model.numberPad)
+        "layout" ->
+          Html.App.map Layout (Layout.view model.layout)
+        "loader" ->
+          Html.App.map Loader (Loader.view model.loader)
         "header" ->
           Header.view Noop
         _ ->

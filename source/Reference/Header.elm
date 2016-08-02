@@ -1,8 +1,10 @@
 module Reference.Header exposing (..)
 
 import Components.Reference
+
 import Ui.Header
 import Ui
+
 import Html exposing (text)
 import Html.App
 

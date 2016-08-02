@@ -165,7 +165,34 @@ ui-reference-demo {
       }
     }
 
-    ui-header {
+    ui-loader {
+      width: 400px;
+      position: relative !important;
+    }
+
+    .ui-layout-center-default {
+      ui-layout-center {
+        width: 450px;
+      }
+    }
+
+    ui-layout {
+      border: 1px dashed rgba(#000, 0.4);
+      background: $input;
+      min-height: 0;
+      height: 300px;
+      width: 600px;
+
+      ui-layout-main {
+      }
+
+      ui-layout-footer {
+        background: $secondary;
+        color: #FFF;
+      }
+    }
+
+    > ui-header {
       width: 600px;
     }
 
@@ -306,4 +333,20 @@ test-box {
   width: 100px;
   height: 100px;
   background: $secondary;
+}
+
+// Inplace input demo.
+.inplace-input {
+  background: $input;
+  padding: 20px;
+
+  > span {
+    border-bottom: 1px solid rgba(#000, 0.05);
+    text-transform: uppercase;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    display: block;
+    opacity: 0.8;
+  }
 }

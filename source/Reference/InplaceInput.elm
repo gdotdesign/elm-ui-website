@@ -7,8 +7,9 @@ import Ui.InplaceInput
 
 import Ext.Date
 
+import Html.Attributes exposing (class)
+import Html exposing (div, span, text)
 import Html.App
-import Html
 
 
 type Msg
@@ -99,6 +100,10 @@ view model =
       Html.App.map Form (Form.view model.form)
 
     demo =
-      Html.App.map InplaceInput (Ui.InplaceInput.view model.inplaceInput)
+      div
+        [ class "inplace-input" ]
+        [ span [] [ text "Click on the content below to edit." ]
+        , Html.App.map InplaceInput (Ui.InplaceInput.view model.inplaceInput)
+        ]
   in
     Components.Reference.view demo form
