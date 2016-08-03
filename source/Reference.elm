@@ -34,6 +34,7 @@ import Reference.Layout as Layout
 import Reference.Header as Header
 import Reference.Button as Button
 import Reference.Layout as Layout
+import Reference.Modal as Modal
 import Reference.Input as Input
 
 import Docs.Types exposing (Documentation)
@@ -43,6 +44,7 @@ import Components.NavList as NavList
 
 type alias Model =
   { input : Input.Model
+  , modal : Modal.Model
   , button : Button.Model
   , layout : Layout.Model
   , loader : Loader.Model
@@ -67,6 +69,7 @@ type Msg
   = ButtonAction Button.Msg
   | DatePicker DatePicker.Msg
   | ChooserAction Chooser.Msg
+  | Modal Modal.Msg
   | CalendarAction Calendar.Msg
   | FileInputAction FileInput.Msg
   | ColorPanelAction ColorPanel.Msg
@@ -88,6 +91,7 @@ type Msg
 init : Model
 init =
   { input = Input.init
+  , modal = Modal.init
   , layout = Layout.init
   , button = Button.init
   , loader = Loader.init
@@ -291,6 +295,12 @@ update action model =
       in
         ({ model | loader = loader }, Cmd.map Loader effect)
 
+    Modal act ->
+      let
+        (modal, effect) = Modal.update act model.modal
+      in
+        ({ model | modal = modal }, Cmd.map Modal effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -443,6 +453,8 @@ view model active =
           Html.App.map Loader (Loader.view model.loader)
         "header" ->
           Header.view Noop
+        "modal" ->
+          Html.App.map Modal (Modal.view model.modal)
         _ ->
           text ""
 
