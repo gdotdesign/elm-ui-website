@@ -188,7 +188,7 @@ content model =
       Pages.Index.view Navigate
 
     ReferencePage ->
-      Html.App.map Reference (Reference.view model.reference "")
+      Html.App.map Reference (Reference.view model.reference "app")
 
     Component comp ->
       Html.App.map Reference (Reference.view model.reference comp)

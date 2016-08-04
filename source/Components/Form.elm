@@ -41,7 +41,7 @@ type alias Model =
 
 
 type alias TempModel =
-  { numberRanges : List ( String, Int, Float, String, Float, Float, Int )
+  { numberRanges : List ( String, Int, Float, String, Float, Float, Int, Float )
   , choosers : List ( String, Int, List Ui.Chooser.Item, String, String )
   , textareas : List ( String, Int, String, String )
   , inputs : List ( String, Int, String, String )
@@ -72,7 +72,7 @@ init data =
     initTextarea ( name, index, placeholder, value ) =
       ( name, ( index, Ui.Textarea.init value placeholder ) )
 
-    initNumberRange ( name, index, value, affix, min, max, round ) =
+    initNumberRange ( name, index, value, affix, min, max, round, step) =
       let
         baseNumberRange =
           Ui.NumberRange.init value
@@ -81,6 +81,7 @@ init data =
           { baseNumberRange
             | affix = affix
             , round = round
+            , step = step
             , max = max
             , min = min
           }

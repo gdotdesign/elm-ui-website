@@ -26,7 +26,7 @@ init =
   , form =
       Form.init
         { numberRanges =
-            [ ( "value", 1, 42, "", 0, (1 / 0), 0)
+            [ ( "value", 1, 42, "", 0, (1 / 0), 0, 1)
             ]
         , textareas = []
         , colors = []

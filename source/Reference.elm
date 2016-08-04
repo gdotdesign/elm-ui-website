@@ -18,6 +18,7 @@ import Ui
 
 import Reference.InplaceInput as InplaceInput
 import Reference.DropdownMenu as DropdownMenu
+import Reference.NumberRange as NumberRange
 import Reference.ButtonGroup as ButtonGroup
 import Reference.ColorPicker as ColorPicker
 import Reference.IconButton as IconButton
@@ -59,6 +60,7 @@ type alias Model =
   , datePicker : DatePicker.Model
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
+  , numberRange : NumberRange.Model
   , inplaceInput : InplaceInput.Model
   , dropdownMenu : DropdownMenu.Model
   , documentation : Documentation
@@ -77,6 +79,7 @@ type Msg
   | ButtonGroupAction ButtonGroup.Msg
   | InplaceInput InplaceInput.Msg
   | DropdownMenu DropdownMenu.Msg
+  | NumberRange NumberRange.Msg
   | IconButton IconButton.Msg
   | NumberPad NumberPad.Msg
   | Container Container.Msg
@@ -104,6 +107,7 @@ init =
   , iconButton = IconButton.init
   , colorPanel = ColorPanel.init
   , datePicker = DatePicker.init
+  , numberRange = NumberRange.init
   , colorPicker = ColorPicker.init
   , buttonGroup = ButtonGroup.init
   , inplaceInput = InplaceInput.init
@@ -151,6 +155,7 @@ components =
     , ("modal", ("Ui.Modal", True))
     , ("notification-center", ("Ui.NotificationCenter", True))
     , ("number-pad", ("Ui.NumberPad", True))
+    , ("number-range", ("Ui.NumberRange", True))
     ]
 
 nativeModules =
@@ -301,14 +306,21 @@ update action model =
       in
         ({ model | modal = modal }, Cmd.map Modal effect)
 
+    NumberRange act ->
+      let
+        (numberRange, effect) = NumberRange.update act model.numberRange
+      in
+        ({ model | numberRange = numberRange }, Cmd.map NumberRange effect)
+
     Noop ->
       (model, Cmd.none)
 
 subscriptions model =
   Sub.batch
-  [ Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
-  , Sub.map ColorPickerAction (ColorPicker.subscriptions model.colorPicker)
+  [ Sub.map ColorPickerAction (ColorPicker.subscriptions model.colorPicker)
+  , Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
   , Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
+  , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
   ]
 
@@ -447,6 +459,8 @@ view model active =
           Html.App.map Input (Input.view model.input)
         "number-pad" ->
           Html.App.map NumberPad (NumberPad.view model.numberPad)
+        "number-range" ->
+          Html.App.map NumberRange (NumberRange.view model.numberRange)
         "layout" ->
           Html.App.map Layout (Layout.view model.layout)
         "loader" ->
