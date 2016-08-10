@@ -31,6 +31,7 @@ import Reference.Checkbox as Checkbox
 import Reference.Calendar as Calendar
 import Reference.Ratings as Ratings
 import Reference.Chooser as Chooser
+import Reference.Slider as Slider
 import Reference.Loader as Loader
 import Reference.Layout as Layout
 import Reference.Header as Header
@@ -61,6 +62,7 @@ type alias Model =
   , calendar : Calendar.Model
   , ratings : Ratings.Model
   , chooser : Chooser.Model
+  , slider : Slider.Model
   , button : Button.Model
   , layout : Layout.Model
   , loader : Loader.Model
@@ -88,6 +90,7 @@ type Msg
   | ButtonAction Button.Msg
   | Checkbox Checkbox.Msg
   | Ratings Ratings.Msg
+  | Slider Slider.Msg
   | Loader Loader.Msg
   | Layout Layout.Msg
   | Input Input.Msg
@@ -114,6 +117,7 @@ init =
   , calendar = Calendar.init
   , ratings = Ratings.init
   , chooser = Chooser.init
+  , slider = Slider.init
   , layout = Layout.init
   , button = Button.init
   , loader = Loader.init
@@ -166,6 +170,7 @@ components =
     , ("number-range", ("Ui.NumberRange", True))
     , ("pager", ("Ui.Pager", True))
     , ("ratings", ("Ui.Ratings", True))
+    , ("slider", ("Ui.Slider", True))
     ]
 
 nativeModules =
@@ -334,6 +339,12 @@ update action model =
       in
         ({ model | ratings = ratings }, Cmd.map Ratings effect)
 
+    Slider act ->
+      let
+        (slider, effect) = Slider.update act model.slider
+      in
+        ({ model | slider = slider }, Cmd.map Slider effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -345,6 +356,7 @@ subscriptions model =
   , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
   , Sub.map Ratings (Ratings.subscriptions model.ratings)
+  , Sub.map Slider (Slider.subscriptions model.slider)
   , Sub.map Pager (Pager.subscriptions model.pager)
   ]
 
@@ -497,6 +509,8 @@ view model active =
           Html.App.map Pager (Pager.view model.pager)
         "ratings" ->
           Html.App.map Ratings (Ratings.view model.ratings)
+        "slider" ->
+          Html.App.map Slider (Slider.view model.slider)
         _ ->
           text ""
 
