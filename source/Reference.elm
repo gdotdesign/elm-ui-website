@@ -21,6 +21,7 @@ import Reference.DropdownMenu as DropdownMenu
 import Reference.NumberRange as NumberRange
 import Reference.ButtonGroup as ButtonGroup
 import Reference.ColorPicker as ColorPicker
+import Reference.SearchInput as SearchInput
 import Reference.IconButton as IconButton
 import Reference.DatePicker as DatePicker
 import Reference.ColorPanel as ColorPanel
@@ -52,6 +53,7 @@ type alias Model =
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
   , numberRange : NumberRange.Model
+  , searchInput : SearchInput.Model
   , colorPanel : ColorPanel.Model
   , iconButton : IconButton.Model
   , datePicker : DatePicker.Model
@@ -82,6 +84,7 @@ type Msg
   | DropdownMenu DropdownMenu.Msg
   | CalendarAction Calendar.Msg
   | NumberRange NumberRange.Msg
+  | SearchInput SearchInput.Msg
   | IconButton IconButton.Msg
   | DatePicker DatePicker.Msg
   | ChooserAction Chooser.Msg
@@ -107,6 +110,7 @@ init =
   , numberRange = NumberRange.init
   , colorPicker = ColorPicker.init
   , buttonGroup = ButtonGroup.init
+  , searchInput = SearchInput.init
   , iconButton = IconButton.init
   , colorPanel = ColorPanel.init
   , datePicker = DatePicker.init
@@ -171,6 +175,7 @@ components =
     , ("pager", ("Ui.Pager", True))
     , ("ratings", ("Ui.Ratings", True))
     , ("slider", ("Ui.Slider", True))
+    , ("search-input", ("Ui.SearchInput", True))
     ]
 
 nativeModules =
@@ -345,6 +350,12 @@ update action model =
       in
         ({ model | slider = slider }, Cmd.map Slider effect)
 
+    SearchInput act ->
+      let
+        (searchInput, effect) = SearchInput.update act model.searchInput
+      in
+        ({ model | searchInput = searchInput }, Cmd.map SearchInput effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -511,6 +522,8 @@ view model active =
           Html.App.map Ratings (Ratings.view model.ratings)
         "slider" ->
           Html.App.map Slider (Slider.view model.slider)
+        "search-input" ->
+          Html.App.map SearchInput (SearchInput.view model.searchInput)
         _ ->
           text ""
 

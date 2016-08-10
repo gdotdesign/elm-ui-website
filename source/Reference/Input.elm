@@ -32,7 +32,7 @@ init =
             , ( "readonly", 4, False )
             ]
         , inputs =
-            [ ( "value", 0, "Placeholder...", "Some content..." )
+            [ ( "value", 0, "Value...", "Some content..." )
             , ( "placeholder", 0, "Placeholder...", "Placeholder..." )
             ]
         , numberRanges = []
