@@ -16,7 +16,7 @@ type Msg
 
 type alias Model =
   { chooser : Ui.Chooser.Model
-  , form : Form.Model
+  , form : Form.Model Msg
   }
 
 
@@ -116,6 +116,6 @@ view model =
       Html.App.map Chooser (Ui.Chooser.view model.chooser)
 
     form =
-      Html.App.map Form (Form.view model.form)
+      Form.view Form model.form
   in
     Components.Reference.view demo form

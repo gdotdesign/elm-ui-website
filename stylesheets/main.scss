@@ -165,6 +165,34 @@ ui-reference-demo {
       }
     }
 
+    ui-pager {
+      border: 3px solid rgba(0,0,0,0.4);
+
+      ui-page > * {
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        display: flex;
+        color: white;
+      }
+
+      .demo-page-1 {
+        background: $primary;
+      }
+
+      .demo-page-2 {
+        background: $success;
+      }
+
+      .demo-page-3 {
+        background: $warning;
+      }
+
+      .demo-page-4 {
+        background: $danger;
+      }
+    }
+
     ui-loader {
       width: 400px;
       position: relative !important;

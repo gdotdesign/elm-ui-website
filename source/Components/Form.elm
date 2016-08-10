@@ -16,6 +16,7 @@ import Ui.DatePicker
 import Ui.Textarea
 import Ui.Checkbox
 import Ui.Chooser
+import Ui.Button
 import Ui.Input
 
 
@@ -29,7 +30,7 @@ type Msg
   | Inputs String Ui.Input.Msg
 
 
-type alias Model =
+type alias Model msg =
   { numberRanges : Dict String ( Int, Ui.NumberRange.Model )
   , checkboxes : Dict String ( Int, Ui.Checkbox.Model )
   , colors : Dict String ( Int, Ui.ColorPicker.Model )
@@ -37,6 +38,7 @@ type alias Model =
   , choosers : Dict String ( Int, Ui.Chooser.Model )
   , dates : Dict String ( Int, Ui.DatePicker.Model )
   , inputs : Dict String ( Int, Ui.Input.Model )
+  , buttons : List ( Int, msg, Ui.Button.Model )
   , uid : String
   }
 
@@ -52,7 +54,7 @@ type alias TempModel =
   }
 
 
-init : TempModel -> Model
+init : TempModel -> Model msg
 init data =
   let
     initDatePickers ( name, index, value ) =
@@ -96,11 +98,26 @@ init data =
     , dates = Dict.fromList (List.map initDatePickers data.dates)
     , colors = Dict.fromList (List.map initColors data.colors)
     , inputs = Dict.fromList (List.map initInput data.inputs)
+    , buttons = []
     , uid = Uid.uid ()
     }
 
 
-subscriptions : Model -> Sub Msg
+button : String -> String -> Int -> msg -> Model msg -> Model msg
+button text kind position msg model =
+  let
+    button =
+      { disabled = False
+      , readonly = False
+      , size = "medium"
+      , kind = kind
+      , text = text
+      }
+  in
+    { model | buttons = (position, msg, button) :: model.buttons }
+
+
+subscriptions : Model msg -> Sub Msg
 subscriptions model =
   let
     colorSub name colorPicker =
@@ -133,37 +150,37 @@ valueOfSimple name default accessor dict =
     |> Maybe.withDefault default
 
 
-valueOfCheckbox : String -> Bool -> Model -> Bool
+valueOfCheckbox : String -> Bool -> Model msg -> Bool
 valueOfCheckbox name default model =
   valueOfSimple name default .value model.checkboxes
 
 
-valueOfInput : String -> String -> Model -> String
+valueOfInput : String -> String -> Model msg -> String
 valueOfInput name default model =
   valueOfSimple name default .value model.inputs
 
 
-valueOfNumberRange : String -> Float -> Model -> Float
+valueOfNumberRange : String -> Float -> Model msg -> Float
 valueOfNumberRange name default model =
   valueOfSimple name default .value model.numberRanges
 
 
-valueOfTextarea : String -> String -> Model -> String
+valueOfTextarea : String -> String -> Model msg -> String
 valueOfTextarea name default model =
   valueOfSimple name default .value model.textareas
 
 
-valueOfColor : String -> Hsv -> Model -> Hsv
+valueOfColor : String -> Hsv -> Model msg -> Hsv
 valueOfColor name default model =
   valueOfSimple name default (\item -> item.colorPanel.value) model.colors
 
 
-valueOfDate : String -> Date.Date -> Model -> Date.Date
+valueOfDate : String -> Date.Date -> Model msg -> Date.Date
 valueOfDate name default model =
   valueOfSimple name default (\item -> item.calendar.value) model.dates
 
 
-valueOfChooser : String -> String -> Model -> String
+valueOfChooser : String -> String -> Model msg -> String
 valueOfChooser name default model =
   case Dict.get name model.choosers of
     Just ( index, chooser ) ->
@@ -172,7 +189,7 @@ valueOfChooser name default model =
     _ ->
       default
 
-updateColor : String -> Color.Color -> Model -> Model
+updateColor : String -> Color.Color -> Model msg -> Model msg
 updateColor name value model =
   let
     updatedColor item =
@@ -186,7 +203,7 @@ updateColor name value model =
     { model | colors = Dict.update name updatedColor model.colors }
 
 
-updateDate : String -> Date.Date -> Model -> Model
+updateDate : String -> Date.Date -> Model msg -> Model msg
 updateDate name value model =
   let
     updatedDate item =
@@ -200,7 +217,7 @@ updateDate name value model =
     { model | dates = Dict.update name updatedDate model.dates }
 
 
-updateTextarea : String -> String -> Model -> Model
+updateTextarea : String -> String -> Model msg -> Model msg
 updateTextarea name value model =
   let
     updatedTextarea item =
@@ -214,7 +231,7 @@ updateTextarea name value model =
     { model | textareas = Dict.update name updatedTextarea model.textareas }
 
 
-updateInput : String -> String -> Model -> Model
+updateInput : String -> String -> Model msg -> Model msg
 updateInput name value model =
   let
     updatedInput item =
@@ -228,7 +245,7 @@ updateInput name value model =
     { model | inputs = Dict.update name updatedInput model.inputs }
 
 
-updateNumberRange : String -> Float -> Model -> Model
+updateNumberRange : String -> Float -> Model msg -> Model msg
 updateNumberRange name value model =
   let
     updatedNumberRange item =
@@ -242,7 +259,7 @@ updateNumberRange name value model =
     { model | numberRanges = Dict.update name updatedNumberRange model.numberRanges }
 
 
-updateCheckbox : String -> Bool -> Model -> Model
+updateCheckbox : String -> Bool -> Model msg -> Model msg
 updateCheckbox name value model =
   let
     updatedCheckbox item =
@@ -275,7 +292,7 @@ updateDict name act fn dict =
       ( Cmd.none, dict )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model msg -> ( Model msg, Cmd Msg )
 update action model =
   case action of
     DatePickers name act ->
@@ -342,36 +359,36 @@ update action model =
         )
 
 
-view : Model -> Html.Html Msg
-view fields =
+view : (Msg -> msg) -> Model msg -> Html.Html msg
+view address fields =
   let
     renderDatePicker name data =
       blockField name
-        (Html.App.map (DatePickers name) (Ui.DatePicker.view "en_us" data))
+        (Html.App.map (address << (DatePickers name)) (Ui.DatePicker.view "en_us" data))
 
     renderCheckbox name data =
       inlineField name
-        (Html.App.map (Checkboxes name) (Ui.Checkbox.view data))
+        (Html.App.map (address << (Checkboxes name)) (Ui.Checkbox.view data))
 
     renderChooser name data =
       blockField name
-        (Html.App.map (Choosers name) (Ui.Chooser.view data))
+        (Html.App.map (address << (Choosers name)) (Ui.Chooser.view data))
 
     renderInput name data =
       blockField name
-        (Html.App.map (Inputs name) (Ui.Input.view data))
+        (Html.App.map (address << (Inputs name)) (Ui.Input.view data))
 
     renderColorPicker name data =
       blockField name
-        (Html.App.map (Colors name) (Ui.ColorPicker.view data))
+        (Html.App.map (address << (Colors name)) (Ui.ColorPicker.view data))
 
     renderTextarea name data =
       blockField name
-        (Html.App.map (Textareas name) (Ui.Textarea.view data))
+        (Html.App.map (address << (Textareas name)) (Ui.Textarea.view data))
 
     renderNumberRange name data =
       blockField name
-        (Html.App.map (NumberRanges name) (Ui.NumberRange.view data))
+        (Html.App.map (address << (NumberRanges name)) (Ui.NumberRange.view data))
 
     blockField name child =
       node "ui-form-block"
@@ -390,6 +407,19 @@ view fields =
     renderList fn ( name, ( index, data ) ) =
       ( index, fn name data )
 
+    renderButton (index, msg, button) =
+      let
+        html =
+          node "ui-form-block"
+          []
+          [ Ui.Button.view msg button
+          ]
+      in
+        ( index, html)
+
+    renderButtons list =
+      List.map renderButton list
+
     renderMap fn list =
       List.map (\item -> renderList fn item) (Dict.toList list)
 
@@ -401,6 +431,7 @@ view fields =
         ++ (renderMap renderInput fields.inputs)
         ++ (renderMap renderTextarea fields.textareas)
         ++ (renderMap renderNumberRange fields.numberRanges)
+        ++ (renderButtons fields.buttons)
       )
 
     sortedItems =

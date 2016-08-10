@@ -17,7 +17,6 @@ ui-form {
   ui-form-fields {
     > * {
       padding: 10px;
-      padding-right: 30px;
     }
 
     > * + * {
@@ -35,6 +34,11 @@ ui-form {
           width: 100%;
         }
       }
+    }
+
+    ui-button {
+      display: flex;
+      width: 100%;
     }
 
     ui-form-inline {

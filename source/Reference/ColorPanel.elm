@@ -20,7 +20,7 @@ type Msg
 
 type alias Model =
   { colorPanel : Ui.ColorPanel.Model
-  , form : Form.Model
+  , form : Form.Model Msg
   }
 
 
@@ -108,6 +108,6 @@ view model =
       Html.App.map ColorPanel (Ui.ColorPanel.view model.colorPanel)
 
     form =
-      Html.App.map Form (Form.view model.form)
+      Form.view Form model.form
   in
     Components.Reference.view demo form

@@ -13,7 +13,7 @@ import Html.App
 
 type alias Model =
   { modal : Ui.Modal.Model
-  , form : Form.Model
+  , form : Form.Model Msg
   }
 
 
@@ -94,7 +94,7 @@ view : Model -> Html.Html Msg
 view model =
   let
     form =
-      Html.App.map Form (Form.view model.form)
+      Form.view Form model.form
 
     viewModel =
       { content = [ text "This is the content of the modal..." ]

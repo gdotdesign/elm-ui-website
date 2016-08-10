@@ -15,7 +15,7 @@ type Msg
 
 
 type alias Model =
-  { form : Form.Model
+  { form : Form.Model Msg
   }
 
 
@@ -59,7 +59,7 @@ view : Model -> Html.Html Msg
 view model =
   let
     form =
-      Html.App.map Form (Form.view model.form)
+      Form.view Form model.form
 
     demo =
       case Form.valueOfChooser "view" "default" model.form of

@@ -19,7 +19,7 @@ type Msg
 
 type alias Model =
   { iconButton : Ui.IconButton.Model
-  , form : Form.Model
+  , form : Form.Model Msg
   }
 
 glyphData : List Ui.Chooser.Item
@@ -106,7 +106,7 @@ view : Model -> Html.Html Msg
 view model =
   let
     form =
-      Html.App.map Form (Form.view model.form)
+      Form.view Form model.form
 
     demo =
       Ui.IconButton.view Nothing model.iconButton

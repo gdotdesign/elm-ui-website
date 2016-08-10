@@ -37,6 +37,7 @@ import Reference.Button as Button
 import Reference.Layout as Layout
 import Reference.Modal as Modal
 import Reference.Input as Input
+import Reference.Pager as Pager
 
 import Docs.Types exposing (Documentation)
 
@@ -44,76 +45,79 @@ import Components.Markdown as Markdown
 import Components.NavList as NavList
 
 type alias Model =
-  { input : Input.Model
-  , modal : Modal.Model
-  , button : Button.Model
-  , layout : Layout.Model
-  , loader : Loader.Model
-  , chooser : Chooser.Model
-  , checkbox : Checkbox.Model
-  , calendar : Calendar.Model
-  , fileInput : FileInput.Model
-  , container : Container.Model
-  , numberPad : NumberPad.Model
-  , colorPanel : ColorPanel.Model
-  , iconButton : IconButton.Model
-  , datePicker : DatePicker.Model
+  { inplaceInput : InplaceInput.Model
+  , dropdownMenu : DropdownMenu.Model
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
   , numberRange : NumberRange.Model
-  , inplaceInput : InplaceInput.Model
-  , dropdownMenu : DropdownMenu.Model
+  , colorPanel : ColorPanel.Model
+  , iconButton : IconButton.Model
+  , datePicker : DatePicker.Model
+  , fileInput : FileInput.Model
+  , container : Container.Model
+  , numberPad : NumberPad.Model
+  , checkbox : Checkbox.Model
+  , calendar : Calendar.Model
+  , chooser : Chooser.Model
+  , button : Button.Model
+  , layout : Layout.Model
+  , loader : Loader.Model
+  , pager : Pager.Model
+  , input : Input.Model
+  , modal : Modal.Model
   , documentation : Documentation
   , list : NavList.Model
   }
 
 type Msg
-  = ButtonAction Button.Msg
-  | DatePicker DatePicker.Msg
-  | ChooserAction Chooser.Msg
-  | Modal Modal.Msg
-  | CalendarAction Calendar.Msg
-  | FileInputAction FileInput.Msg
-  | ColorPanelAction ColorPanel.Msg
-  | ColorPickerAction ColorPicker.Msg
+  = ColorPickerAction ColorPicker.Msg
   | ButtonGroupAction ButtonGroup.Msg
+  | ColorPanelAction ColorPanel.Msg
+  | FileInputAction FileInput.Msg
   | InplaceInput InplaceInput.Msg
   | DropdownMenu DropdownMenu.Msg
+  | CalendarAction Calendar.Msg
   | NumberRange NumberRange.Msg
   | IconButton IconButton.Msg
+  | DatePicker DatePicker.Msg
+  | ChooserAction Chooser.Msg
   | NumberPad NumberPad.Msg
   | Container Container.Msg
+  | ButtonAction Button.Msg
   | Checkbox Checkbox.Msg
   | Loader Loader.Msg
   | Layout Layout.Msg
   | Input Input.Msg
+  | Modal Modal.Msg
+  | Pager Pager.Msg
   | List NavList.Msg
   | Navigate String
   | Noop
 
 init : Model
 init =
-  { input = Input.init
-  , modal = Modal.init
-  , layout = Layout.init
-  , button = Button.init
-  , loader = Loader.init
-  , chooser = Chooser.init
-  , checkbox = Checkbox.init
-  , calendar = Calendar.init
-  , fileInput = FileInput.init
-  , container = Container.init
-  , numberPad = NumberPad.init
-  , iconButton = IconButton.init
-  , colorPanel = ColorPanel.init
-  , datePicker = DatePicker.init
+  { inplaceInput = InplaceInput.init
+  , dropdownMenu = DropdownMenu.init
   , numberRange = NumberRange.init
   , colorPicker = ColorPicker.init
   , buttonGroup = ButtonGroup.init
-  , inplaceInput = InplaceInput.init
-  , dropdownMenu = DropdownMenu.init
-  , documentation = { modules = [] }
+  , iconButton = IconButton.init
+  , colorPanel = ColorPanel.init
+  , datePicker = DatePicker.init
+  , fileInput = FileInput.init
+  , container = Container.init
+  , numberPad = NumberPad.init
+  , checkbox = Checkbox.init
+  , calendar = Calendar.init
+  , chooser = Chooser.init
+  , layout = Layout.init
+  , button = Button.init
+  , loader = Loader.init
+  , pager = Pager.init
+  , input = Input.init
+  , modal = Modal.init
   , list = NavList.init "reference" "Search modules..." navItems
+  , documentation = { modules = [] }
   }
 
 setDocumentation docs model =
@@ -156,6 +160,7 @@ components =
     , ("notification-center", ("Ui.NotificationCenter", True))
     , ("number-pad", ("Ui.NumberPad", True))
     , ("number-range", ("Ui.NumberRange", True))
+    , ("pager", ("Ui.Pager", True))
     ]
 
 nativeModules =
@@ -312,6 +317,12 @@ update action model =
       in
         ({ model | numberRange = numberRange }, Cmd.map NumberRange effect)
 
+    Pager act ->
+      let
+        (pager, effect) = Pager.update act model.pager
+      in
+        ({ model | pager = pager }, Cmd.map Pager effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -322,6 +333,7 @@ subscriptions model =
   , Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
   , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
+  , Sub.map Pager (Pager.subscriptions model.pager)
   ]
 
 findDocumentation name docs =
@@ -469,6 +481,8 @@ view model active =
           Header.view Noop
         "modal" ->
           Html.App.map Modal (Modal.view model.modal)
+        "pager" ->
+          Html.App.map Pager (Pager.view model.pager)
         _ ->
           text ""
 
