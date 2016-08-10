@@ -29,6 +29,7 @@ import Reference.Container as Container
 import Reference.FileInput as FileInput
 import Reference.Checkbox as Checkbox
 import Reference.Calendar as Calendar
+import Reference.Ratings as Ratings
 import Reference.Chooser as Chooser
 import Reference.Loader as Loader
 import Reference.Layout as Layout
@@ -58,6 +59,7 @@ type alias Model =
   , numberPad : NumberPad.Model
   , checkbox : Checkbox.Model
   , calendar : Calendar.Model
+  , ratings : Ratings.Model
   , chooser : Chooser.Model
   , button : Button.Model
   , layout : Layout.Model
@@ -85,6 +87,7 @@ type Msg
   | Container Container.Msg
   | ButtonAction Button.Msg
   | Checkbox Checkbox.Msg
+  | Ratings Ratings.Msg
   | Loader Loader.Msg
   | Layout Layout.Msg
   | Input Input.Msg
@@ -109,6 +112,7 @@ init =
   , numberPad = NumberPad.init
   , checkbox = Checkbox.init
   , calendar = Calendar.init
+  , ratings = Ratings.init
   , chooser = Chooser.init
   , layout = Layout.init
   , button = Button.init
@@ -161,6 +165,7 @@ components =
     , ("number-pad", ("Ui.NumberPad", True))
     , ("number-range", ("Ui.NumberRange", True))
     , ("pager", ("Ui.Pager", True))
+    , ("ratings", ("Ui.Ratings", True))
     ]
 
 nativeModules =
@@ -323,6 +328,12 @@ update action model =
       in
         ({ model | pager = pager }, Cmd.map Pager effect)
 
+    Ratings act ->
+      let
+        (ratings, effect) = Ratings.update act model.ratings
+      in
+        ({ model | ratings = ratings }, Cmd.map Ratings effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -333,6 +344,7 @@ subscriptions model =
   , Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
   , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
+  , Sub.map Ratings (Ratings.subscriptions model.ratings)
   , Sub.map Pager (Pager.subscriptions model.pager)
   ]
 
@@ -483,6 +495,8 @@ view model active =
           Html.App.map Modal (Modal.view model.modal)
         "pager" ->
           Html.App.map Pager (Pager.view model.pager)
+        "ratings" ->
+          Html.App.map Ratings (Ratings.view model.ratings)
         _ ->
           text ""
 
