@@ -9,6 +9,7 @@ import Dict exposing (Dict)
 import Color
 import Date
 
+import Ui.Native.Uid as Uid
 import Ui.ColorPicker
 import Ui.NumberRange
 import Ui.DatePicker
@@ -95,7 +96,7 @@ init data =
     , dates = Dict.fromList (List.map initDatePickers data.dates)
     , colors = Dict.fromList (List.map initColors data.colors)
     , inputs = Dict.fromList (List.map initInput data.inputs)
-    , uid = Native.Uid.uid ()
+    , uid = Uid.uid ()
     }
 
 
