@@ -16,6 +16,7 @@ import Ui.Button
 import Ui.App
 import Ui
 
+import Reference.NotificationCenter as NotificationCenter
 import Reference.InplaceInput as InplaceInput
 import Reference.DropdownMenu as DropdownMenu
 import Reference.NumberRange as NumberRange
@@ -49,7 +50,8 @@ import Components.Markdown as Markdown
 import Components.NavList as NavList
 
 type alias Model =
-  { inplaceInput : InplaceInput.Model
+  { notificationCenter : NotificationCenter.Model
+  , inplaceInput : InplaceInput.Model
   , dropdownMenu : DropdownMenu.Model
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
@@ -78,7 +80,8 @@ type alias Model =
   }
 
 type Msg
-  = ColorPickerAction ColorPicker.Msg
+  = NotificationCenter NotificationCenter.Msg
+  | ColorPickerAction ColorPicker.Msg
   | ButtonGroupAction ButtonGroup.Msg
   | ColorPanelAction ColorPanel.Msg
   | FileInputAction FileInput.Msg
@@ -108,7 +111,8 @@ type Msg
 
 init : Model
 init =
-  { inplaceInput = InplaceInput.init
+  { notificationCenter = NotificationCenter.init
+  , inplaceInput = InplaceInput.init
   , dropdownMenu = DropdownMenu.init
   , numberRange = NumberRange.init
   , colorPicker = ColorPicker.init
@@ -367,6 +371,12 @@ update action model =
       in
         ({ model | textarea = textarea }, Cmd.map Textarea effect)
 
+    NotificationCenter act ->
+      let
+        (notificationCenter, effect) = NotificationCenter.update act model.notificationCenter
+      in
+        ({ model | notificationCenter = notificationCenter }, Cmd.map NotificationCenter effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -537,6 +547,8 @@ view model active =
           Html.App.map SearchInput (SearchInput.view model.searchInput)
         "textarea" ->
           Html.App.map Textarea (Textarea.view model.textarea)
+        "notification-center" ->
+          Html.App.map NotificationCenter (NotificationCenter.view model.notificationCenter)
         _ ->
           text ""
 
