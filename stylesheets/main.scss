@@ -354,7 +354,8 @@ pre {
   background: #F7f7f7;
 }
 
-p code {
+p code,
+li code {
   border: 1px solid rgba(#000, 0.05);
   border-radius: $border-radius;
   background: #F7f7f7;

@@ -5,7 +5,8 @@ Environment Variables are must have for applications that supports [multiple env
 The variables for different environments live in the **config** folder of an Elm-UI application.
 
 Each environment can have **JSON** file, for example this app uses three environments (development, staging, production):
-```
+
+```bash
 my-app
 ├── config
 │   ├── development.json
@@ -19,7 +20,7 @@ Every command can have the `-e, --env [env]` flag that specifies the current env
 
 Running the development server in staging environment:
 
-```
+```bash
 elm-ui start -e staging
 ```
 

@@ -1,5 +1,6 @@
 # Adding Components
-Components are added with the traditional The Elm Architecture way with some modifications:
+Components are added with the traditional The Elm Architecture way with some
+modifications:
   - Add a field to the model for the components `Model`
   - Initialize the component with the `init` function
   - Create a tag for its messages (`Msg`)
@@ -57,8 +58,8 @@ Now we can add its view below the buttons:
 view : Model -> Html.Html Msg
 view model =
   ...
-  , Ui.Button.primary "Increment" Increment
-      ]
+    , Ui.Button.primary "Increment" Increment
+    ]
   , Html.App.map NumberRange (Ui.NumberRange.view model.numberRange)
   ]
   ...
@@ -68,7 +69,10 @@ Right now we are be seeing something like this:
 
 ![Adding Components](/images/adding-components.jpg)
 
-But the number range component doesn't seem work right, it's value cannot be changed by dragging.That is because some components like this one need subscriptions (for mouse and such) and it needs to be wired in to our application.
+But the number range component doesn't seem work right, it's value cannot be
+changed by dragging. That is because some components like this one need
+subscriptions (for mouse and such) and it needs to be wired in to our
+application.
 
 To do that we need to add the following line:
 ```elm

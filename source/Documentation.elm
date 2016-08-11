@@ -24,13 +24,15 @@ pages : List (String, String)
 pages =
   [ ("getting-started/setup", "1.1 Setup")
   , ("getting-started/adding-components", "1.2 Adding Components")
+  , ("getting-started/reacting-to-changes", "1.3 Reacting to Changes")
   ]
 
 guidePages : List (String, String)
 guidePages =
-  [ ("guides/focusing", "Focusing")
-  , ("guides/handling-files", "Handling Files")
-  , ("guides/environment-variables", "Environment Variables")
+  [ ("guides/introduction", "2.1 Introduction")
+  , ("guides/focusing", "2.2 Focusing")
+  , ("guides/handling-files", "2.3 Handling Files")
+  , ("guides/environment-variables", "2.4 Environment Variables")
   ]
 
 navItems =
@@ -39,7 +41,7 @@ navItems =
       List.map (\(url, label) -> { href = url, label = label }) items
   in
     [ ("1. Getting Started", convert pages)
-    , ("Guides", convert guidePages)
+    , ("2. Guides", convert guidePages)
     ]
 
 init : Model
