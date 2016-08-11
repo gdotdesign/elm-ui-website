@@ -29,6 +29,7 @@ import Reference.NumberPad as NumberPad
 import Reference.Container as Container
 import Reference.FileInput as FileInput
 import Reference.Checkbox as Checkbox
+import Reference.Textarea as Textarea
 import Reference.Calendar as Calendar
 import Reference.Ratings as Ratings
 import Reference.Chooser as Chooser
@@ -60,6 +61,7 @@ type alias Model =
   , fileInput : FileInput.Model
   , container : Container.Model
   , numberPad : NumberPad.Model
+  , textarea : Textarea.Model
   , checkbox : Checkbox.Model
   , calendar : Calendar.Model
   , ratings : Ratings.Model
@@ -91,6 +93,7 @@ type Msg
   | NumberPad NumberPad.Msg
   | Container Container.Msg
   | ButtonAction Button.Msg
+  | Textarea Textarea.Msg
   | Checkbox Checkbox.Msg
   | Ratings Ratings.Msg
   | Slider Slider.Msg
@@ -118,6 +121,7 @@ init =
   , container = Container.init
   , numberPad = NumberPad.init
   , checkbox = Checkbox.init
+  , textarea = Textarea.init
   , calendar = Calendar.init
   , ratings = Ratings.init
   , chooser = Chooser.init
@@ -176,6 +180,7 @@ components =
     , ("ratings", ("Ui.Ratings", True))
     , ("slider", ("Ui.Slider", True))
     , ("search-input", ("Ui.SearchInput", True))
+    , ("textarea", ("Ui.Textarea", True))
     ]
 
 nativeModules =
@@ -356,6 +361,12 @@ update action model =
       in
         ({ model | searchInput = searchInput }, Cmd.map SearchInput effect)
 
+    Textarea act ->
+      let
+        (textarea, effect) = Textarea.update act model.textarea
+      in
+        ({ model | textarea = textarea }, Cmd.map Textarea effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -524,6 +535,8 @@ view model active =
           Html.App.map Slider (Slider.view model.slider)
         "search-input" ->
           Html.App.map SearchInput (SearchInput.view model.searchInput)
+        "textarea" ->
+          Html.App.map Textarea (Textarea.view model.textarea)
         _ ->
           text ""
 
