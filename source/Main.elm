@@ -13,6 +13,8 @@ import Html.Attributes exposing (href, class, src, target)
 import Html.Events exposing (onClick)
 import Html exposing (node, div, span, strong, text, a, img)
 import Html.App
+import Dom.Scroll
+import Dom
 
 import Ui.Helpers.Emitter as Emitter
 import Ui.Container
@@ -46,6 +48,8 @@ type Msg
   | Failed Http.Error
   | Loaded Docs.Types.Documentation
   | Docs Documentation.Msg
+  | NotFound Dom.Error
+  | NoOp ()
 
 
 
@@ -94,7 +98,9 @@ urlUpdate ( route, location ) model =
           Cmd.map Docs (Documentation.load page)
         _ -> Cmd.none
   in
-    ( updatedModel, cmd )
+    ( updatedModel, Cmd.batch [ cmd
+                              , Task.perform NotFound NoOp (Dom.Scroll.toTop "body")
+                              ] )
 
 
 routerConfig : Hop.Types.Config Route
@@ -179,6 +185,9 @@ update action model =
           Ui.App.update act model.app
       in
         ( { model | app = app }, Cmd.map App effect )
+
+    _ ->
+      (model, Cmd.none)
 
 
 
