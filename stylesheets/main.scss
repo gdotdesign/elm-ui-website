@@ -152,6 +152,11 @@ ui-reference-demo {
     padding: 40px;
     flex: 1;
 
+    #time-demo {
+      background: $input;
+      padding: 15px;
+    }
+
     #test-container {
       border: 1px dashed rgba(0,0,0,0.4);
       padding: 20px;
@@ -193,7 +198,7 @@ ui-reference-demo {
       }
     }
 
-    ui-textarea {
+    > ui-textarea {
       min-height: 100px;
       width: 400px;
     }
@@ -377,6 +382,7 @@ test-box {
 .inplace-input {
   background: $input;
   padding: 20px;
+  width: 300px;
 
   > span {
     border-bottom: 1px solid rgba(#000, 0.05);

@@ -43,6 +43,7 @@ import Reference.Layout as Layout
 import Reference.Modal as Modal
 import Reference.Input as Input
 import Reference.Pager as Pager
+import Reference.Time as Time
 
 import Docs.Types exposing (Documentation)
 
@@ -75,6 +76,7 @@ type alias Model =
   , pager : Pager.Model
   , input : Input.Model
   , modal : Modal.Model
+  , time : Time.Model
   , documentation : Documentation
   , list : NavList.Model
   }
@@ -105,6 +107,7 @@ type Msg
   | Input Input.Msg
   | Modal Modal.Msg
   | Pager Pager.Msg
+  | Time Time.Msg
   | List NavList.Msg
   | Navigate String
   | Noop
@@ -136,6 +139,7 @@ init =
   , pager = Pager.init
   , input = Input.init
   , modal = Modal.init
+  , time = Time.init
   , list = NavList.init "reference" "Search modules..." navItems
   , documentation = { modules = [] }
   }
@@ -185,6 +189,7 @@ components =
     , ("slider", ("Ui.Slider", True))
     , ("search-input", ("Ui.SearchInput", True))
     , ("textarea", ("Ui.Textarea", True))
+    , ("time", ("Ui.Time", True))
     ]
 
 nativeModules =
@@ -377,6 +382,12 @@ update action model =
       in
         ({ model | notificationCenter = notificationCenter }, Cmd.map NotificationCenter effect)
 
+    Time act ->
+      let
+        (time, effect) = Time.update act model.time
+      in
+        ({ model | time = time }, Cmd.map Time effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -549,6 +560,8 @@ view model active =
           Html.App.map Textarea (Textarea.view model.textarea)
         "notification-center" ->
           Html.App.map NotificationCenter (NotificationCenter.view model.notificationCenter)
+        "time" ->
+          Html.App.map Time (Time.view model.time)
         _ ->
           text ""
 
