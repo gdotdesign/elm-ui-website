@@ -203,59 +203,6 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.FileInput",
-    "comment": " Component for selecting a file.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs view, render\n\n# View Variations\n@docs viewDetails, renderDetails\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a file input:\n  - **readonly** - Whether or not the date picker is readonly\n  - **disabled** - Whether or not the date picker is disabled\n  - **accept** - The mime types that the file input accepts\n  - **file** - (Maybe) The selected file\n",
-        "args": [],
-        "type": "{ readonly : Bool , disabled : Bool , file : Maybe.Maybe Ui.Native.FileManager.File , accept : String }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a file input can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initializes a file input with the given accept value.\n\n    fileInput = Ui.FileInput.init \"image/*\"\n",
-        "type": "String -> Ui.FileInput.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a file input.\n\n    Ui.FileInput.render fileInput\n",
-        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
-      },
-      {
-        "name": "renderDetails",
-        "comment": " Renders a file input showing the details of the file.\n\n    Ui.FileInput.renderDetails fileInput\n",
-        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a file input.\n\n    Ui.FileInput.update msg fileInput\n",
-        "type": "Ui.FileInput.Msg -> Ui.FileInput.Model -> ( Ui.FileInput.Model, Platform.Cmd.Cmd Ui.FileInput.Msg )"
-      },
-      {
-        "name": "view",
-        "comment": " Renders a file input lazily.\n\n    Ui.FileInput.view fileInput\n",
-        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
-      },
-      {
-        "name": "viewDetails",
-        "comment": " Renders a file input lazily showing the details of the file.\n\n    Ui.FileInput.renderDetails fileInput\n",
-        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ui.IconButton",
     "comment": " Button with an icon either on the left or right side.\n\n# Model\n@docs Model, init\n\n# View\n@docs render, view\n\n# View Variations\n@docs primary, primaryBig, primarySmall\n@docs secondary, secondaryBig, secondarySmall\n@docs warning, warningBig, warningSmall\n@docs success, successBig, successSmall\n@docs danger, dangerBig, dangerSmall\n",
     "aliases": [
@@ -362,6 +309,59 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
+    "name": "Ui.FileInput",
+    "comment": " Component for selecting a file.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs view, render\n\n# View Variations\n@docs viewDetails, renderDetails\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a file input:\n  - **readonly** - Whether or not the date picker is readonly\n  - **disabled** - Whether or not the date picker is disabled\n  - **accept** - The mime types that the file input accepts\n  - **file** - (Maybe) The selected file\n",
+        "args": [],
+        "type": "{ readonly : Bool , disabled : Bool , file : Maybe.Maybe Ui.Native.FileManager.File , accept : String }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a file input can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initializes a file input with the given accept value.\n\n    fileInput = Ui.FileInput.init \"image/*\"\n",
+        "type": "String -> Ui.FileInput.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a file input.\n\n    Ui.FileInput.render fileInput\n",
+        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
+      },
+      {
+        "name": "renderDetails",
+        "comment": " Renders a file input showing the details of the file.\n\n    Ui.FileInput.renderDetails fileInput\n",
+        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a file input.\n\n    Ui.FileInput.update msg fileInput\n",
+        "type": "Ui.FileInput.Msg -> Ui.FileInput.Model -> ( Ui.FileInput.Model, Platform.Cmd.Cmd Ui.FileInput.Msg )"
+      },
+      {
+        "name": "view",
+        "comment": " Renders a file input lazily.\n\n    Ui.FileInput.view fileInput\n",
+        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
+      },
+      {
+        "name": "viewDetails",
+        "comment": " Renders a file input lazily showing the details of the file.\n\n    Ui.FileInput.renderDetails fileInput\n",
+        "type": "Ui.FileInput.Model -> Html.Html Ui.FileInput.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
     "name": "Ui.ButtonGroup",
     "comment": " Groups a series of buttons together.\n\n# Model\n@docs Model, init\n\n# View\n@docs view, render\n",
     "aliases": [
@@ -395,20 +395,20 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.ColorPanel",
-    "comment": " Color panel component for selecting a colors **hue**, **saturation**,\n**value** and **alpha** components with draggable interfaces.\n\n# Model\n@docs Model, Msg, init, update, subscribe, subscriptions\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
+    "name": "Ui.Slider",
+    "comment": " Simple slider component.\n\n# Model\n@docs Model, Msg, init, subscribe, subscriptions, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
     "aliases": [
       {
         "name": "Model",
-        "comment": " Representation of a color panel:\n  - **alphaDrag** - The drag model of the alpha slider\n  - **hueDrag** - The drag model of the hue slider\n  - **drag** - The drag model of the value / saturation rectangle\n  - **disabled** - Whether or not the color panel is disabled\n  - **readonly** - Whether or not the color panel is editable\n  - **uid** - The unique identifier of the color panel\n  - **value** - The current HSV color\n",
+        "comment": " Representation of a slider:\n  - **startDistance** - The distance in pixels when the dragging can start\n  - **drag** - The drag for the slider\n  - **disabled** - Whether or not the slider is disabled\n  - **readonly** - Whether or not the slider is readonly\n  - **value** - The current value (0 - 100)\n  - **left** - The left position of the handle\n  - **uid** - The unique identifier of the slider\n",
         "args": [],
-        "type": "{ alphaDrag : Ui.Helpers.Drag.Model , hueDrag : Ui.Helpers.Drag.Model , drag : Ui.Helpers.Drag.Model , disabled : Bool , readonly : Bool , uid : String , value : Ext.Color.Hsv }"
+        "type": "{ startDistance : Float , drag : Ui.Helpers.Drag.Model , disabled : Bool , readonly : Bool , value : Float , left : Float , uid : String }"
       }
     ],
     "types": [
       {
         "name": "Msg",
-        "comment": " Messages that a color panel can receive.\n",
+        "comment": " Messages that a slider can receive.\n",
         "args": [],
         "cases": []
       }
@@ -416,38 +416,38 @@
     "values": [
       {
         "name": "init",
-        "comment": " Initializes a color panel with the given Elm color.\n\n    colorPanel = Ui.ColorPanel.init Color.blue\n",
-        "type": "Color.Color -> Ui.ColorPanel.Model"
+        "comment": " Initializes a slider with the given value.\n\n    slider = Ui.Slider.init 0.5\n",
+        "type": "Float -> Ui.Slider.Model"
       },
       {
         "name": "render",
-        "comment": " Renders a color panel.\n\n    Ui.ColorPanel.render colorPanel\n",
-        "type": "Ui.ColorPanel.Model -> Html.Html Ui.ColorPanel.Msg"
+        "comment": " Renders a slider.\n\n    Ui.Slider.render slider\n",
+        "type": "Ui.Slider.Model -> Html.Html Ui.Slider.Msg"
       },
       {
         "name": "setValue",
-        "comment": " Sets the vale of a color panel.\n\n    Ui.ColorPanel.setValue Color.black colorPanel\n",
-        "type": "Color.Color -> Ui.ColorPanel.Model -> Ui.ColorPanel.Model"
+        "comment": " Sets the value of the slider.\n",
+        "type": "Float -> Ui.Slider.Model -> Ui.Slider.Model"
       },
       {
         "name": "subscribe",
-        "comment": " Subscribe for the changes of a color panel.\n\n    ...\n    subscriptions =\n      \\model ->\n        Ui.ColorPanel.subscribe\n          ColorPanelChanged\n          model.colorPanel\n    ...\n",
-        "type": "(Ext.Color.Hsv -> msg) -> Ui.ColorPanel.Model -> Platform.Sub.Sub msg"
+        "comment": " Subscribe to the changes of a slider.\n\n    ...\n    subscriptions =\n      \\model -> Ui.Slider.subscribe SliderChanged model.slider\n    ...\n",
+        "type": "(Float -> msg) -> Ui.Slider.Model -> Platform.Sub.Sub msg"
       },
       {
         "name": "subscriptions",
-        "comment": " Subscriptions for a color panel.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          ColorPanel\n          (Ui.ColorPanel.subscriptions model.colorPanel)\n    ...\n",
-        "type": "Ui.ColorPanel.Model -> Platform.Sub.Sub Ui.ColorPanel.Msg"
+        "comment": " Subscriptions for a slider.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          Slider\n          (Ui.Slider.subscriptions model.slider)\n    ...\n",
+        "type": "Ui.Slider.Model -> Platform.Sub.Sub Ui.Slider.Msg"
       },
       {
         "name": "update",
-        "comment": " Updates a color panel.\n\n    Ui.ColorPanel.update msg colorPanel\n",
-        "type": "Ui.ColorPanel.Msg -> Ui.ColorPanel.Model -> ( Ui.ColorPanel.Model, Platform.Cmd.Cmd Ui.ColorPanel.Msg )"
+        "comment": " Updates a slider.\n\n    Ui.Slider.update msg slider\n",
+        "type": "Ui.Slider.Msg -> Ui.Slider.Model -> ( Ui.Slider.Model, Platform.Cmd.Cmd Ui.Slider.Msg )"
       },
       {
         "name": "view",
-        "comment": " Lazily renders a color panel.\n\n    Ui.ColorPanel.view colorPanel\n",
-        "type": "Ui.ColorPanel.Model -> Html.Html Ui.ColorPanel.Msg"
+        "comment": " Lazily renders a slider.\n\n    Ui.Slider.view slider\n",
+        "type": "Ui.Slider.Model -> Html.Html Ui.Slider.Msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -521,20 +521,20 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Slider",
-    "comment": " Simple slider component.\n\n# Model\n@docs Model, Msg, init, subscribe, subscriptions, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
+    "name": "Ui.ColorPanel",
+    "comment": " Color panel component for selecting a colors **hue**, **saturation**,\n**value** and **alpha** components with draggable interfaces.\n\n# Model\n@docs Model, Msg, init, update, subscribe, subscriptions\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
     "aliases": [
       {
         "name": "Model",
-        "comment": " Representation of a slider:\n  - **startDistance** - The distance in pixels when the dragging can start\n  - **drag** - The drag for the slider\n  - **disabled** - Whether or not the slider is disabled\n  - **readonly** - Whether or not the slider is readonly\n  - **value** - The current value (0 - 100)\n  - **left** - The left position of the handle\n  - **uid** - The unique identifier of the slider\n",
+        "comment": " Representation of a color panel:\n  - **alphaDrag** - The drag model of the alpha slider\n  - **hueDrag** - The drag model of the hue slider\n  - **drag** - The drag model of the value / saturation rectangle\n  - **disabled** - Whether or not the color panel is disabled\n  - **readonly** - Whether or not the color panel is editable\n  - **uid** - The unique identifier of the color panel\n  - **value** - The current HSV color\n",
         "args": [],
-        "type": "{ startDistance : Float , drag : Ui.Helpers.Drag.Model , disabled : Bool , readonly : Bool , value : Float , left : Float , uid : String }"
+        "type": "{ alphaDrag : Ui.Helpers.Drag.Model , hueDrag : Ui.Helpers.Drag.Model , drag : Ui.Helpers.Drag.Model , disabled : Bool , readonly : Bool , uid : String , value : Ext.Color.Hsv }"
       }
     ],
     "types": [
       {
         "name": "Msg",
-        "comment": " Messages that a slider can receive.\n",
+        "comment": " Messages that a color panel can receive.\n",
         "args": [],
         "cases": []
       }
@@ -542,38 +542,38 @@
     "values": [
       {
         "name": "init",
-        "comment": " Initializes a slider with the given value.\n\n    slider = Ui.Slider.init 0.5\n",
-        "type": "Float -> Ui.Slider.Model"
+        "comment": " Initializes a color panel with the given Elm color.\n\n    colorPanel = Ui.ColorPanel.init Color.blue\n",
+        "type": "Color.Color -> Ui.ColorPanel.Model"
       },
       {
         "name": "render",
-        "comment": " Renders a slider.\n\n    Ui.Slider.render slider\n",
-        "type": "Ui.Slider.Model -> Html.Html Ui.Slider.Msg"
+        "comment": " Renders a color panel.\n\n    Ui.ColorPanel.render colorPanel\n",
+        "type": "Ui.ColorPanel.Model -> Html.Html Ui.ColorPanel.Msg"
       },
       {
         "name": "setValue",
-        "comment": " Sets the value of the slider.\n",
-        "type": "Float -> Ui.Slider.Model -> Ui.Slider.Model"
+        "comment": " Sets the vale of a color panel.\n\n    Ui.ColorPanel.setValue Color.black colorPanel\n",
+        "type": "Color.Color -> Ui.ColorPanel.Model -> Ui.ColorPanel.Model"
       },
       {
         "name": "subscribe",
-        "comment": " Subscribe to the changes of a slider.\n\n    ...\n    subscriptions =\n      \\model -> Ui.Slider.subscribe SliderChanged model.slider\n    ...\n",
-        "type": "(Float -> msg) -> Ui.Slider.Model -> Platform.Sub.Sub msg"
+        "comment": " Subscribe for the changes of a color panel.\n\n    ...\n    subscriptions =\n      \\model ->\n        Ui.ColorPanel.subscribe\n          ColorPanelChanged\n          model.colorPanel\n    ...\n",
+        "type": "(Ext.Color.Hsv -> msg) -> Ui.ColorPanel.Model -> Platform.Sub.Sub msg"
       },
       {
         "name": "subscriptions",
-        "comment": " Subscriptions for a slider.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          Slider\n          (Ui.Slider.subscriptions model.slider)\n    ...\n",
-        "type": "Ui.Slider.Model -> Platform.Sub.Sub Ui.Slider.Msg"
+        "comment": " Subscriptions for a color panel.\n\n    ...\n    subscriptions =\n      \\model ->\n        Sub.map\n          ColorPanel\n          (Ui.ColorPanel.subscriptions model.colorPanel)\n    ...\n",
+        "type": "Ui.ColorPanel.Model -> Platform.Sub.Sub Ui.ColorPanel.Msg"
       },
       {
         "name": "update",
-        "comment": " Updates a slider.\n\n    Ui.Slider.update msg slider\n",
-        "type": "Ui.Slider.Msg -> Ui.Slider.Model -> ( Ui.Slider.Model, Platform.Cmd.Cmd Ui.Slider.Msg )"
+        "comment": " Updates a color panel.\n\n    Ui.ColorPanel.update msg colorPanel\n",
+        "type": "Ui.ColorPanel.Msg -> Ui.ColorPanel.Model -> ( Ui.ColorPanel.Model, Platform.Cmd.Cmd Ui.ColorPanel.Msg )"
       },
       {
         "name": "view",
-        "comment": " Lazily renders a slider.\n\n    Ui.Slider.view slider\n",
-        "type": "Ui.Slider.Model -> Html.Html Ui.Slider.Msg"
+        "comment": " Lazily renders a color panel.\n\n    Ui.ColorPanel.view colorPanel\n",
+        "type": "Ui.ColorPanel.Model -> Html.Html Ui.ColorPanel.Msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -716,6 +716,79 @@
         "name": "view",
         "comment": " Lazily renders a ratings component.\n\n    Ui.Ratings.view ratings\n",
         "type": "Ui.Ratings.Model -> Html.Html Ui.Ratings.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Checkbox",
+    "comment": " Checkbox component with three different views.\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# Views\n@docs view, render\n\n# View Variations\n@docs viewRadio, viewToggle, renderRadio, renderToggle\n\n# Functions\n@docs setValue\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a checkbox:\n  - **disabled** - Whether or not the checkbox is disabled\n  - **readonly** - Whether or not the checkbox is readonly\n  - **value** - Whether or not the checkbox is checked\n  - **uid** - The unique identifier of the checkbox\n",
+        "args": [],
+        "type": "{ disabled : Bool, readonly : Bool, value : Bool, uid : String }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a checkbox can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initiaizes a checkbox with the given value.\n\n    checkbox = Ui.Checkbox.init False\n",
+        "type": "Bool -> Ui.Checkbox.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a checkbox.\n\n    Ui.Checkbox.render checkbox\n",
+        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
+      },
+      {
+        "name": "renderRadio",
+        "comment": " Renders a checkbox as a radio.\n\n    Ui.Checkbox.renderRadio checkbox\n",
+        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
+      },
+      {
+        "name": "renderToggle",
+        "comment": " Renders a checkbox as a toggle.\n\n    Ui.Checkbox.renderToggle checkbox\n",
+        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
+      },
+      {
+        "name": "setValue",
+        "comment": " Sets the value of a checkbox to the given one.\n\n    Ui.Checkbox.setValue False checkbox\n",
+        "type": "Bool -> Ui.Checkbox.Model -> Ui.Checkbox.Model"
+      },
+      {
+        "name": "subscribe",
+        "comment": " Subscribe to the changes of a checkbox.\n\n    Ui.Calendar.subscribe CheckboxChanged checkbox\n",
+        "type": "(Bool -> a) -> Ui.Checkbox.Model -> Platform.Sub.Sub a"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a checkbox.\n\n    Ui.Checkbox.update msg checkbox\n",
+        "type": "Ui.Checkbox.Msg -> Ui.Checkbox.Model -> ( Ui.Checkbox.Model, Platform.Cmd.Cmd Ui.Checkbox.Msg )"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a checkbox.\n\n    Ui.Checkbox.view checkbox\n",
+        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
+      },
+      {
+        "name": "viewRadio",
+        "comment": " Lazily renders a checkbox as a radio.\n\n    Ui.Checkbox.viewRadio checkbox\n",
+        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
+      },
+      {
+        "name": "viewToggle",
+        "comment": " Lazily renders a checkbox as a toggle.\n\n    Ui.Checkbox.viewToggle checkbox\n",
+        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -1205,87 +1278,14 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Checkbox",
-    "comment": " Checkbox component with three different views.\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# Views\n@docs view, render\n\n# View Variations\n@docs viewRadio, viewToggle, renderRadio, renderToggle\n\n# Functions\n@docs setValue\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a checkbox:\n  - **disabled** - Whether or not the checkbox is disabled\n  - **readonly** - Whether or not the checkbox is readonly\n  - **value** - Whether or not the checkbox is checked\n  - **uid** - The unique identifier of the checkbox\n",
-        "args": [],
-        "type": "{ disabled : Bool, readonly : Bool, value : Bool, uid : String }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a checkbox can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initiaizes a checkbox with the given value.\n\n    checkbox = Ui.Checkbox.init False\n",
-        "type": "Bool -> Ui.Checkbox.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a checkbox.\n\n    Ui.Checkbox.render checkbox\n",
-        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
-      },
-      {
-        "name": "renderRadio",
-        "comment": " Renders a checkbox as a radio.\n\n    Ui.Checkbox.renderRadio checkbox\n",
-        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
-      },
-      {
-        "name": "renderToggle",
-        "comment": " Renders a checkbox as a toggle.\n\n    Ui.Checkbox.renderToggle checkbox\n",
-        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
-      },
-      {
-        "name": "setValue",
-        "comment": " Sets the value of a checkbox to the given one.\n\n    Ui.Checkbox.setValue False checkbox\n",
-        "type": "Bool -> Ui.Checkbox.Model -> Ui.Checkbox.Model"
-      },
-      {
-        "name": "subscribe",
-        "comment": " Subscribe to the changes of a checkbox.\n\n    Ui.Calendar.subscribe CheckboxChanged checkbox\n",
-        "type": "(Bool -> a) -> Ui.Checkbox.Model -> Platform.Sub.Sub a"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a checkbox.\n\n    Ui.Checkbox.update msg checkbox\n",
-        "type": "Ui.Checkbox.Msg -> Ui.Checkbox.Model -> ( Ui.Checkbox.Model, Platform.Cmd.Cmd Ui.Checkbox.Msg )"
-      },
-      {
-        "name": "view",
-        "comment": " Lazily renders a checkbox.\n\n    Ui.Checkbox.view checkbox\n",
-        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
-      },
-      {
-        "name": "viewRadio",
-        "comment": " Lazily renders a checkbox as a radio.\n\n    Ui.Checkbox.viewRadio checkbox\n",
-        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
-      },
-      {
-        "name": "viewToggle",
-        "comment": " Lazily renders a checkbox as a toggle.\n\n    Ui.Checkbox.viewToggle checkbox\n",
-        "type": "Ui.Checkbox.Model -> Html.Html Ui.Checkbox.Msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ui.App",
     "comment": " Ui.App is the starting point of any Elm-UI application, it has multiple\nresponsibilities:\n  - Schedules updates for the **Ui.Time** component\n  - Sets the **viewport meta tag** to be mobile friendly\n  - Sets the **title** of the window\n\n# Model\n@docs Model, Msg, update, init, subscriptions\n\n# View\n@docs view, render\n\n# Functions\n@docs setTitle\n",
     "aliases": [
       {
         "name": "Model",
-        "comment": " Representation of an application:\n  - **title** - The title of the application (and the window)\n  - **uid** - The unique identifier of the application\n",
+        "comment": " Representation of an application:\n  - **title** - The title of the application (and the window)\n",
         "args": [],
-        "type": "{ title : String, uid : String }"
+        "type": "{ title : String }"
       }
     ],
     "types": [
@@ -1529,6 +1529,54 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
+    "name": "Ui.Pager",
+    "comment": " Pager Component.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs view, render\n\n# Functions\n@docs select\n",
+    "aliases": [
+      {
+        "name": "Model",
+        "comment": " Representation of a pager:\n  - **center** - Pages at the center\n  - **left** - Pages at the left side\n  - **height** - The height of the pager\n  - **width** - The width of the pager\n  - **active** - The active page\n",
+        "args": [],
+        "type": "{ center : List Int , left : List Int , height : String , width : String , active : Int }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Messages that a pager can receive.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "init",
+        "comment": " Initailizes a pager with the given page as active.\n\n    pager = Ui.Pager.init 0\n",
+        "type": "Int -> Ui.Pager.Model"
+      },
+      {
+        "name": "render",
+        "comment": " Renders a pager.\n\n    Ui.Pager.render Pager pages pager\n",
+        "type": "(Ui.Pager.Msg -> msg) -> List (Html.Html msg) -> Ui.Pager.Model -> Html.Html msg"
+      },
+      {
+        "name": "select",
+        "comment": " Selects the page with the given index.\n\n    Ui.Pager.select 0 pager -- Selects the first page\n",
+        "type": "Int -> Ui.Pager.Model -> Ui.Pager.Model"
+      },
+      {
+        "name": "update",
+        "comment": " Updates a pager.\n\n    Ui.Pager.update msg pager\n",
+        "type": "Ui.Pager.Msg -> Ui.Pager.Model -> Ui.Pager.Model"
+      },
+      {
+        "name": "view",
+        "comment": " Lazily renders a pager.\n\n    Ui.Pager.view Pager pages pager\n",
+        "type": "(Ui.Pager.Msg -> msg) -> List (Html.Html msg) -> Ui.Pager.Model -> Html.Html msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
     "name": "Ui.Image",
     "comment": " Image component that fades when loaded.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs render, view\n",
     "aliases": [
@@ -1651,99 +1699,6 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Pager",
-    "comment": " Pager Component.\n\n# Model\n@docs Model, Msg, init, update\n\n# View\n@docs view, render\n\n# Functions\n@docs select\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a pager:\n  - **center** - Pages at the center\n  - **left** - Pages at the left side\n  - **height** - The height of the pager\n  - **width** - The width of the pager\n  - **active** - The active page\n",
-        "args": [],
-        "type": "{ center : List Int , left : List Int , height : String , width : String , active : Int }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Messages that a pager can receive.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initailizes a pager with the given page as active.\n\n    pager = Ui.Pager.init 0\n",
-        "type": "Int -> Ui.Pager.Model"
-      },
-      {
-        "name": "render",
-        "comment": " Renders a pager.\n\n    Ui.Pager.render Pager pages pager\n",
-        "type": "(Ui.Pager.Msg -> msg) -> List (Html.Html msg) -> Ui.Pager.Model -> Html.Html msg"
-      },
-      {
-        "name": "select",
-        "comment": " Selects the page with the given index.\n\n    Ui.Pager.select 0 pager -- Selects the first page\n",
-        "type": "Int -> Ui.Pager.Model -> Ui.Pager.Model"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a pager.\n\n    Ui.Pager.update msg pager\n",
-        "type": "Ui.Pager.Msg -> Ui.Pager.Model -> Ui.Pager.Model"
-      },
-      {
-        "name": "view",
-        "comment": " Lazily renders a pager.\n\n    Ui.Pager.view Pager pages pager\n",
-        "type": "(Ui.Pager.Msg -> msg) -> List (Html.Html msg) -> Ui.Pager.Model -> Html.Html msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.NotificationCenter",
-    "comment": " Notification center for displaying messages to the user.\n\n# Models\n@docs Model, Msg, init, update\n\n# View\n@docs view\n\n# Functions\n@docs notify\n",
-    "aliases": [
-      {
-        "name": "Model",
-        "comment": " Representation of a notification center:\n  - **timeout** - The timeout of the notification before it's hidden\n  - **notifications** - The list of notifications that is displayed\n  - **duration** - The duration of the notifications animation\n",
-        "args": [
-          "msg"
-        ],
-        "type": "{ notifications : List (Ui.NotificationCenter.Notification msg) , duration : Float , timeout : Float }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Msg",
-        "comment": " Actions that notification center can make.\n",
-        "args": [],
-        "cases": []
-      }
-    ],
-    "values": [
-      {
-        "name": "init",
-        "comment": " Initializes a notification center with the given timeout and duration (in\nmilliseconds).\n\n    notis = Ui.NotificationCenter.init timeout duration\n",
-        "type": "Float -> Float -> Ui.NotificationCenter.Model msg"
-      },
-      {
-        "name": "notify",
-        "comment": " Adds a notification with the given html content.\n\n    Ui.NotificationCenter.notify (text \"Hello\") model\n",
-        "type": "Html.Html msg -> Ui.NotificationCenter.Model msg -> ( Ui.NotificationCenter.Model msg , Platform.Cmd.Cmd Ui.NotificationCenter.Msg )"
-      },
-      {
-        "name": "update",
-        "comment": " Updates a notification center.\n\n    Ui.NotificationCenter.update notis\n",
-        "type": "Ui.NotificationCenter.Msg -> Ui.NotificationCenter.Model msg -> ( Ui.NotificationCenter.Model msg , Platform.Cmd.Cmd Ui.NotificationCenter.Msg )"
-      },
-      {
-        "name": "view",
-        "comment": " Renders a notification center.\n\n    Ui.NotificationCenter.view notis\n",
-        "type": "(Ui.NotificationCenter.Msg -> a) -> Ui.NotificationCenter.Model a -> Html.Html a"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ui.Input",
     "comment": " Component for single line text based input (wrapper for the input HTML tag).\n\n# Model\n@docs Model, Msg, init, subscribe, update\n\n# View\n@docs view, render\n\n# Functions\n@docs setValue\n",
     "aliases": [
@@ -1792,6 +1747,60 @@
         "name": "view",
         "comment": " Lazily renders an input.\n\n    Ui.Input.view input\n",
         "type": "Ui.Input.Model -> Html.Html Ui.Input.Msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Html.Events.Geometry",
+    "comment": " Helper models, decoders and event handlers for extracting HTMLElement\ndimensions, mouse position and window size from events.\n\n# Models\n@docs ElementDimensions, MousePosition, WindowSize, Dimensions\n\n# Decoders\n@docs decodeElementDimensions, decodeMousePosition, decodeWindowSize\n\n# EventHandlers\n@docs onWithDimensions\n",
+    "aliases": [
+      {
+        "name": "Dimensions",
+        "comment": " Dimensions to generally use that contain MousePosition, ElementDimensions\nand WindowSize.\n",
+        "args": [],
+        "type": "( Html.Events.Geometry.MousePosition , Html.Events.Geometry.ElementDimensions , Html.Events.Geometry.WindowSize )"
+      },
+      {
+        "name": "ElementDimensions",
+        "comment": " Represents a HTMLElements dimensions, specifically the ClientRect object\nreturned by [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)\nfunction with scroll position additions.\n",
+        "args": [],
+        "type": "{ scrollLeft : Float , scrollTop : Float , height : Float , width : Float , bottom : Float , right : Float , left : Float , top : Float }"
+      },
+      {
+        "name": "MousePosition",
+        "comment": " Represents the position of the mouse.\n",
+        "args": [],
+        "type": "{ left : Float, top : Float }"
+      },
+      {
+        "name": "WindowSize",
+        "comment": " Represents the size of the window.\n",
+        "args": [],
+        "type": "{ height : Float, width : Float }"
+      }
+    ],
+    "types": [],
+    "values": [
+      {
+        "name": "decodeElementDimensions",
+        "comment": " Decodes dimensions from an HTMLElement.\n",
+        "type": "Json.Decode.Decoder Html.Events.Geometry.ElementDimensions"
+      },
+      {
+        "name": "decodeMousePosition",
+        "comment": " Decodes the mouse position from an event.\n",
+        "type": "Json.Decode.Decoder Html.Events.Geometry.MousePosition"
+      },
+      {
+        "name": "decodeWindowSize",
+        "comment": " Decodes the windows size form an event.\n",
+        "type": "Json.Decode.Decoder Html.Events.Geometry.WindowSize"
+      },
+      {
+        "name": "onWithDimensions",
+        "comment": " An event listener that will returns the dimensions of the element that\ntriggered it, position of the mouse and window size.\n",
+        "type": "String -> Bool -> (Html.Events.Geometry.Dimensions -> msg) -> Html.Attribute msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -1850,55 +1859,42 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Html.Events.Geometry",
-    "comment": " Helper models, decoders and event handlers for extracting HTMLElement\ndimensions, mouse position and window size from events.\n\n# Models\n@docs ElementDimensions, MousePosition, WindowSize, Dimensions\n\n# Decoders\n@docs decodeElementDimensions, decodeMousePosition, decodeWindowSize\n\n# EventHandlers\n@docs onWithDimensions\n",
+    "name": "Ext.Color",
+    "comment": " Utility functions for colors.\n\n# Representations\n@docs Hsv\n\n# Converting\n@docs hsvToRgb\n\n# Rendering\n@docs toCSSRgba\n\n# Extracting\n@docs toHsv\n\n# Decoding / Encoding\n@docs decodeHsv, encodeHsv\n",
     "aliases": [
       {
-        "name": "Dimensions",
-        "comment": " Dimensions to generally use that contain MousePosition, ElementDimensions\nand WindowSize.\n",
+        "name": "Hsv",
+        "comment": " Hsv color type.\n",
         "args": [],
-        "type": "( Html.Events.Geometry.MousePosition , Html.Events.Geometry.ElementDimensions , Html.Events.Geometry.WindowSize )"
-      },
-      {
-        "name": "ElementDimensions",
-        "comment": " Represents a HTMLElements dimensions, specifically the ClientRect object\nreturned by [getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)\nfunction with scroll position additions.\n",
-        "args": [],
-        "type": "{ scrollLeft : Float , scrollTop : Float , height : Float , width : Float , bottom : Float , right : Float , left : Float , top : Float }"
-      },
-      {
-        "name": "MousePosition",
-        "comment": " Represents the position of the mouse.\n",
-        "args": [],
-        "type": "{ left : Float, top : Float }"
-      },
-      {
-        "name": "WindowSize",
-        "comment": " Represents the size of the window.\n",
-        "args": [],
-        "type": "{ height : Float, width : Float }"
+        "type": "{ saturation : Float, value : Float, alpha : Float, hue : Float }"
       }
     ],
     "types": [],
     "values": [
       {
-        "name": "decodeElementDimensions",
-        "comment": " Decodes dimensions from an HTMLElement.\n",
-        "type": "Json.Decode.Decoder Html.Events.Geometry.ElementDimensions"
+        "name": "decodeHsv",
+        "comment": " Decodes a HSV color type from a four element tuple.\n",
+        "type": "Json.Decode.Decoder Ext.Color.Hsv"
       },
       {
-        "name": "decodeMousePosition",
-        "comment": " Decodes the mouse position from an event.\n",
-        "type": "Json.Decode.Decoder Html.Events.Geometry.MousePosition"
+        "name": "encodeHsv",
+        "comment": " Encodes a HSV color type to a four element tuple.\n",
+        "type": "Ext.Color.Hsv -> Json.Encode.Value"
       },
       {
-        "name": "decodeWindowSize",
-        "comment": " Decodes the windows size form an event.\n",
-        "type": "Json.Decode.Decoder Html.Events.Geometry.WindowSize"
+        "name": "hsvToRgb",
+        "comment": " Converts the given HSV color into Elm's color type.\n",
+        "type": "Ext.Color.Hsv -> Color.Color"
       },
       {
-        "name": "onWithDimensions",
-        "comment": " An event listener that will returns the dimensions of the element that\ntriggered it, position of the mouse and window size.\n",
-        "type": "String -> Bool -> (Html.Events.Geometry.Dimensions -> msg) -> Html.Attribute msg"
+        "name": "toCSSRgba",
+        "comment": " Renders the given HSV color to CSS rgba string.\n\n    Ext.Color.toCSSRgba blackHsv -- \"rgba(0,0,0,1)\"\n",
+        "type": "Ext.Color.Hsv -> String"
+      },
+      {
+        "name": "toHsv",
+        "comment": " Extract the components of a color in the HSV format.\n",
+        "type": "Color.Color -> Ext.Color.Hsv"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -1973,42 +1969,46 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ext.Color",
-    "comment": " Utility functions for colors.\n\n# Representations\n@docs Hsv\n\n# Converting\n@docs hsvToRgb\n\n# Rendering\n@docs toCSSRgba\n\n# Extracting\n@docs toHsv\n\n# Decoding / Encoding\n@docs decodeHsv, encodeHsv\n",
+    "name": "Ui.NotificationCenter",
+    "comment": " Notification center for displaying messages to the user.\n\n# Models\n@docs Model, Msg, init, update\n\n# View\n@docs view\n\n# Functions\n@docs notify\n",
     "aliases": [
       {
-        "name": "Hsv",
-        "comment": " Hsv color type.\n",
-        "args": [],
-        "type": "{ saturation : Float, value : Float, alpha : Float, hue : Float }"
+        "name": "Model",
+        "comment": " Representation of a notification center:\n  - **timeout** - The timeout of the notification before it's hidden\n  - **notifications** - The list of notifications that is displayed\n  - **duration** - The duration of the notifications animation\n",
+        "args": [
+          "msg"
+        ],
+        "type": "{ notifications : List (Ui.NotificationCenter.Notification msg) , duration : Float , timeout : Float }"
       }
     ],
-    "types": [],
+    "types": [
+      {
+        "name": "Msg",
+        "comment": " Actions that notification center can make.\n",
+        "args": [],
+        "cases": []
+      }
+    ],
     "values": [
       {
-        "name": "decodeHsv",
-        "comment": " Decodes a HSV color type from a four element tuple.\n",
-        "type": "Json.Decode.Decoder Ext.Color.Hsv"
+        "name": "init",
+        "comment": " Initializes a notification center with the given timeout and duration (in\nmilliseconds).\n\n    notis = Ui.NotificationCenter.init timeout duration\n",
+        "type": "Float -> Float -> Ui.NotificationCenter.Model msg"
       },
       {
-        "name": "encodeHsv",
-        "comment": " Encodes a HSV color type to a four element tuple.\n",
-        "type": "Ext.Color.Hsv -> Json.Encode.Value"
+        "name": "notify",
+        "comment": " Adds a notification with the given html content.\n\n    Ui.NotificationCenter.notify (text \"Hello\") model\n",
+        "type": "Html.Html msg -> Ui.NotificationCenter.Model msg -> ( Ui.NotificationCenter.Model msg , Platform.Cmd.Cmd Ui.NotificationCenter.Msg )"
       },
       {
-        "name": "hsvToRgb",
-        "comment": " Converts the given HSV color into Elm's color type.\n",
-        "type": "Ext.Color.Hsv -> Color.Color"
+        "name": "update",
+        "comment": " Updates a notification center.\n\n    Ui.NotificationCenter.update notis\n",
+        "type": "Ui.NotificationCenter.Msg -> Ui.NotificationCenter.Model msg -> ( Ui.NotificationCenter.Model msg , Platform.Cmd.Cmd Ui.NotificationCenter.Msg )"
       },
       {
-        "name": "toCSSRgba",
-        "comment": " Renders the given HSV color to CSS rgba string.\n\n    Ext.Color.toCSSRgba blackHsv -- \"rgba(0,0,0,1)\"\n",
-        "type": "Ext.Color.Hsv -> String"
-      },
-      {
-        "name": "toHsv",
-        "comment": " Extract the components of a color in the HSV format.\n",
-        "type": "Color.Color -> Ext.Color.Hsv"
+        "name": "view",
+        "comment": " Renders a notification center.\n\n    Ui.NotificationCenter.view notis\n",
+        "type": "(Ui.NotificationCenter.Msg -> a) -> Ui.NotificationCenter.Model a -> Html.Html a"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -2101,50 +2101,6 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Helpers.Intendable",
-    "comment": " Helper functions for intending list items.\n\n# Functions\n@docs first, index, select, next, nextItem, previous, previousItem\n",
-    "aliases": [],
-    "types": [],
-    "values": [
-      {
-        "name": "first",
-        "comment": " Returns the first item of a list.\n",
-        "type": "List String -> Maybe.Maybe String"
-      },
-      {
-        "name": "index",
-        "comment": " Returns the index of the given value in a list.\n",
-        "type": "String -> List String -> Int"
-      },
-      {
-        "name": "next",
-        "comment": " Return the next selectable item in a list.\n",
-        "type": "String -> List String -> String"
-      },
-      {
-        "name": "nextItem",
-        "comment": " Return the next selectable item in separated list with a fallback.\n",
-        "type": "( List String, List String ) -> Maybe.Maybe String -> String"
-      },
-      {
-        "name": "previous",
-        "comment": " Return the previous selectable item in a list.\n",
-        "type": "String -> List String -> String"
-      },
-      {
-        "name": "previousItem",
-        "comment": " Return the previous selectable item in separated list with a fallback.\n",
-        "type": "( List String, List String ) -> Maybe.Maybe String -> String"
-      },
-      {
-        "name": "select",
-        "comment": " Return an item with a fallback value.\n",
-        "type": "Maybe.Maybe String -> Maybe.Maybe String -> String"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ui.Container",
     "comment": " Flexbox container component.\n\n# Model\n@docs Model\n\n# View\n@docs view, render\n\n# Row\n@docs row, rowStart, rowEnd, rowCenter\n\n# Column\n@docs column, columnStart, columnEnd, columnCenter\n",
     "aliases": [
@@ -2211,124 +2167,8 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Native.Scrolls",
-    "comment": " This library lets you listen to global scroll events.\n\n# Subscriptions\n@docs scrolls\n",
-    "aliases": [],
-    "types": [],
-    "values": [
-      {
-        "name": "scrolls",
-        "comment": " Subscribe to scrolls anywhere on screen.\n",
-        "type": "msg -> Platform.Sub.Sub msg"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.Native.Browser",
-    "comment": " Browser related helper functions.\n\n# Window\n@docs openWindow, redirect, alert\n\n# Vendor Prefix\n@docs Prefix, prefix\n\n# Location\n@docs Location, location\n",
-    "aliases": [
-      {
-        "name": "Location",
-        "comment": " Location model.\n",
-        "args": [],
-        "type": "{ pathname : String , hostname : String , protocol : String , search : String , host : String , hash : String , port' : Int }"
-      }
-    ],
-    "types": [
-      {
-        "name": "Prefix",
-        "comment": " A union of prefix tags.\n",
-        "args": [],
-        "cases": [
-          [
-            "Moz",
-            []
-          ],
-          [
-            "Webkit",
-            []
-          ],
-          [
-            "MS",
-            []
-          ],
-          [
-            "O",
-            []
-          ],
-          [
-            "Unknown",
-            []
-          ]
-        ]
-      }
-    ],
-    "values": [
-      {
-        "name": "alert",
-        "comment": " Shows an alert dialog with the given text and returns the given value.\n\n    Ui.Native.Browser.alert \"Hey there!\"\" value\n",
-        "type": "String -> value -> value"
-      },
-      {
-        "name": "location",
-        "comment": " The current location object.\n",
-        "type": "() -> Ui.Native.Browser.Location"
-      },
-      {
-        "name": "openWindow",
-        "comment": " Opens a new window with the given URL and return the given value.\n\n    Ui.Native.Browser.openWindow \"url\" value\n",
-        "type": "String -> value -> value"
-      },
-      {
-        "name": "prefix",
-        "comment": " The detected vendor prefix.\n\n    ```elm\n    displayValue : String\n    displayValue =\n        if Ui.Browser.prefix == Ui.Browser.Webkit\n        then \"-webkit-flex\"\n        else \"flex\"\n    ```\n",
-        "type": "Ui.Native.Browser.Prefix"
-      },
-      {
-        "name": "redirect",
-        "comment": " Replace the current page with the given URL and return the given value.\n\n    Ui.Native.Browser.redirect \"http://elm-lang.org\" value\n",
-        "type": "String -> value -> value"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.Helpers.Env",
-    "comment": " Module for interacting with the environment variables.\n\n# Functions\n@docs get, getString\n",
-    "aliases": [],
-    "types": [],
-    "values": [
-      {
-        "name": "get",
-        "comment": " Gets the value of the given environment variable with a decoder and a\ndefault value.\n\n    case Ui.Helpers.Env.get \"token\" Json.Decode.string of\n      Ok value -> value\n      Err msg -> msg\n",
-        "type": "String -> Json.Decode.Decoder a -> Result.Result String a"
-      },
-      {
-        "name": "getString",
-        "comment": " Gets a string value of the given environment varaible.\n\n    case Ui.Helpers.Env.getString \"token\" of\n      Ok value -> value\n      Err msg -> msg\n",
-        "type": "String -> Result.Result String String"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
-    "name": "Ui.Native.Uid",
-    "comment": " Natively generate unique hash ids.\n\n# Functions\n@docs uid\n",
-    "aliases": [],
-    "types": [],
-    "values": [
-      {
-        "name": "uid",
-        "comment": " Generates a unique id from an empty tuple.\n",
-        "type": "() -> String"
-      }
-    ],
-    "generated-with-elm-version": "0.17.1"
-  },
-  {
     "name": "Ui.Native.FileManager",
-    "comment": " Low level functions for managing [Files](https://developer.mozilla.org/en/docs/Web/API/File).\n\n# Types\n@docs File\n\n# Reading\n@docs readAsString, readAsDataURL\n\n# For Http\n@docs toFormData\n\n# Open / Download\n@docs openSingle, openMultiple, download\n",
+    "comment": " Low level functions for managing [Files](https://developer.mozilla.org/en/docs/Web/API/File).\n\n# Types\n@docs File\n\n# Reading\n@docs readAsString, readAsDataURL\n\n# For Http\n@docs toFormData\n\n# Open / Download\n@docs openSingleDecoder, openMultipleDecoder, download\n",
     "aliases": [
       {
         "name": "File",
@@ -2345,14 +2185,14 @@
         "type": "String -> String -> String -> Task.Task Basics.Never String"
       },
       {
-        "name": "openMultiple",
-        "comment": " Opens a file browser for selecting multiple files.\n\n    task = FileManager.openMultiple \"image/*\"\n",
-        "type": "String -> Task.Task Basics.Never (List Ui.Native.FileManager.File)"
+        "name": "openMultipleDecoder",
+        "comment": " Opens a file browser for selecting a multiple files.\n\n    task = FileManager.openSingle \"image/*\"\n",
+        "type": "String -> Json.Decode.Decoder (Task.Task Basics.Never (List Ui.Native.FileManager.File))"
       },
       {
-        "name": "openSingle",
+        "name": "openSingleDecoder",
         "comment": " Opens a file browser for selecting a single file.\n\n    task = FileManager.openSingle \"image/*\"\n",
-        "type": "String -> Task.Task Basics.Never Ui.Native.FileManager.File"
+        "type": "String -> Json.Decode.Decoder (Task.Task Basics.Never Ui.Native.FileManager.File)"
       },
       {
         "name": "readAsDataURL",
@@ -2373,104 +2213,29 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Ui.Helpers.Emitter",
-    "comment": " This is a module for publishing and subscribing to arbritary data in\ndifferent channels that are identified by strings.\n\n# Listining\n@docs listen, listenString, listenFloat, listenInt, listenBool, listenNaked\n\n# Sending Data\n@docs send, sendString, sendFloat, sendInt, sendBool, sendNaked\n\n# Decodeing\n@docs decode\n\n",
+    "name": "Ui.Native.Uid",
+    "comment": " Natively generate unique hash ids.\n\n# Functions\n@docs uid\n",
     "aliases": [],
     "types": [],
     "values": [
       {
-        "name": "decode",
-        "comment": " Decodes a Json value and maps it to a message with a fallback value.\n\n    Ui.Helpers.Emitter.decode Json.Decode.string \"\" HandleString value\n",
-        "type": "Json.Decode.Decoder value -> value -> (value -> msg) -> Json.Decode.Value -> msg"
-      },
-      {
-        "name": "listen",
-        "comment": " Creates a subscription for the given channel.\n\n    Ui.Helpers.Emitter.listen \"channelId\" HandleValue\n",
-        "type": "String -> (Json.Decode.Value -> msg) -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "listenBool",
-        "comment": " Creates a subscription for the given boolean channel.\n\n    Ui.Helpers.Emitter.listenBool \"channelId\" HandleInt\n",
-        "type": "String -> (Bool -> msg) -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "listenFloat",
-        "comment": " Creates a subscription for the given float channel.\n\n    Ui.Helpers.Emitter.listenFloat \"channelId\" HandleFloat\n",
-        "type": "String -> (Float -> msg) -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "listenInt",
-        "comment": " Creates a subscription for the given integer channel.\n\n    Ui.Helpers.Emitter.listenInt \"channelId\" HandleInt\n",
-        "type": "String -> (Int -> msg) -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "listenNaked",
-        "comment": " Creates a subscription for the given channel.\n\n    Ui.Helpers.Emitter.listenNaked \"channelId\" NakedMsg\n",
-        "type": "String -> msg -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "listenString",
-        "comment": " Creates a subscription for the given string channel.\n\n    Ui.Helpers.Emitter.listenString \"channelId\" HandleString\n",
-        "type": "String -> (String -> msg) -> Platform.Sub.Sub msg"
-      },
-      {
-        "name": "send",
-        "comment": " Sends the given value to the given channel.\n\n    Ui.Helpers.Emitter.send \"channelId\" (Json.string \"test\")\n",
-        "type": "String -> Json.Decode.Value -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "sendBool",
-        "comment": " Sends a boolean value to the given channel.\n\n    Ui.Helpers.Emitter.sendBool \"channelId\" 10\n",
-        "type": "String -> Bool -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "sendFloat",
-        "comment": " Sends a float value to the given channel.\n\n    Ui.Helpers.Emitter.sendFloat \"channelId\" 0.42\n",
-        "type": "String -> Float -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "sendInt",
-        "comment": " Sends a integer value to the given channel.\n\n    Ui.Helpers.Emitter.sendInt \"channelId\" 10\n",
-        "type": "String -> Int -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "sendNaked",
-        "comment": " Sends a _naked message_ (without value) to the given channel. This is used\ngenerally to trigger actions.\n\n    Ui.Helpers.Emitter.send \"channelId\"\n",
-        "type": "String -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "sendString",
-        "comment": " Sends a string value to the given channel.\n\n    Ui.Helpers.Emitter.sendString \"channelId\" \"test\"\n",
-        "type": "String -> String -> Platform.Cmd.Cmd msg"
+        "name": "uid",
+        "comment": " Generates a unique id from an empty tuple.\n",
+        "type": "() -> String"
       }
     ],
     "generated-with-elm-version": "0.17.1"
   },
   {
     "name": "Ui.Native.Dom",
-    "comment": " Helper functions and tasks for DOM related activities.\n\n# Focusing / Bluring\n@docs focusSelector, focusComponent, blur\n\n# Decoder Queries\n@docs decodeElementFunction, withBoundingClientRect, withClosest, withSelector\n@docs withNearest\n",
+    "comment": " Helper functions and tasks for DOM related activities.\n\n# Decoder Queries\n@docs decodeElementFunction, withBoundingClientRect, withClosest, withSelector\n@docs withNearest\n",
     "aliases": [],
     "types": [],
     "values": [
       {
-        "name": "blur",
-        "comment": " Blurs the active element in the DOM.\n\n    cmd = Ui.Native.Dom.blur NoOp\n",
-        "type": "msg -> Platform.Cmd.Cmd msg"
-      },
-      {
         "name": "decodeElementFunction",
         "comment": " This function allows decoders to call JavaScript functions on objects\nand Elements (with one parameter).\n\n    -- This will call toString() and try to decode it as String\n    decodeElementFunction \"toString\" param Json.Decoder.string\n",
         "type": "String -> String -> Json.Decode.Decoder a -> Json.Decode.Decoder a"
-      },
-      {
-        "name": "focusComponent",
-        "comment": " Focuses a UI component that have a uid field.\n\n    cmd = Ui.Native.Dom.focusUid NoOp \"xxxx-xxx-xxx-xxxx\"\n",
-        "type": "msg -> { a | uid : String } -> Platform.Cmd.Cmd msg"
-      },
-      {
-        "name": "focusSelector",
-        "comment": " Focuses a DOM element with the given selector.\n\n    cmd = Ui.Native.Dom.focusSelector \"input#comments\"\n",
-        "type": "msg -> String -> Platform.Cmd.Cmd msg"
       },
       {
         "name": "withBoundingClientRect",
@@ -2496,25 +2261,64 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
-    "name": "Html.Events.Options",
-    "comment": " Extra options for event handlers.\n\n# Options\n@docs preventDefaultOptions, stopPropagationOptions, stopOptions\n",
+    "name": "Ui.Helpers.Intendable",
+    "comment": " Helper functions for intending list items.\n\n# Functions\n@docs first, index, select, next, nextItem, previous, previousItem\n",
     "aliases": [],
     "types": [],
     "values": [
       {
-        "name": "preventDefaultOptions",
-        "comment": " Prevent default options.\n",
-        "type": "Html.Events.Options"
+        "name": "first",
+        "comment": " Returns the first item of a list.\n",
+        "type": "List String -> Maybe.Maybe String"
       },
       {
-        "name": "stopOptions",
-        "comment": " Options for completely stopping an event and\npreventing it's default behavior.\n",
-        "type": "Html.Events.Options"
+        "name": "index",
+        "comment": " Returns the index of the given value in a list.\n",
+        "type": "String -> List String -> Int"
       },
       {
-        "name": "stopPropagationOptions",
-        "comment": " Stop propagation options.\n",
-        "type": "Html.Events.Options"
+        "name": "next",
+        "comment": " Return the next selectable item in a list.\n",
+        "type": "String -> List String -> String"
+      },
+      {
+        "name": "nextItem",
+        "comment": " Return the next selectable item in separated list with a fallback.\n",
+        "type": "( List String, List String ) -> Maybe.Maybe String -> String"
+      },
+      {
+        "name": "previous",
+        "comment": " Return the previous selectable item in a list.\n",
+        "type": "String -> List String -> String"
+      },
+      {
+        "name": "previousItem",
+        "comment": " Return the previous selectable item in separated list with a fallback.\n",
+        "type": "( List String, List String ) -> Maybe.Maybe String -> String"
+      },
+      {
+        "name": "select",
+        "comment": " Return an item with a fallback value.\n",
+        "type": "Maybe.Maybe String -> Maybe.Maybe String -> String"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Helpers.Env",
+    "comment": " Module for interacting with the environment variables.\n\n# Functions\n@docs get, getString\n",
+    "aliases": [],
+    "types": [],
+    "values": [
+      {
+        "name": "get",
+        "comment": " Gets the value of the given environment variable with a decoder and a\ndefault value.\n\n    case Ui.Helpers.Env.get \"token\" Json.Decode.string of\n      Ok value -> value\n      Err msg -> msg\n",
+        "type": "String -> Json.Decode.Decoder a -> Result.Result String a"
+      },
+      {
+        "name": "getString",
+        "comment": " Gets a string value of the given environment varaible.\n\n    case Ui.Helpers.Env.getString \"token\" of\n      Ok value -> value\n      Err msg -> msg\n",
+        "type": "String -> Result.Result String String"
       }
     ],
     "generated-with-elm-version": "0.17.1"
@@ -2604,6 +2408,20 @@
     "generated-with-elm-version": "0.17.1"
   },
   {
+    "name": "Ui.Native.Scrolls",
+    "comment": " This library lets you listen to global scroll events.\n\n# Subscriptions\n@docs scrolls\n",
+    "aliases": [],
+    "types": [],
+    "values": [
+      {
+        "name": "scrolls",
+        "comment": " Subscribe to scrolls anywhere on screen.\n",
+        "type": "msg -> Platform.Sub.Sub msg"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
     "name": "Ext.Number",
     "comment": " Utility functions for numbers.\n\n# Functions\n@docs toFixed, remFloat, roundTo\n",
     "aliases": [],
@@ -2623,6 +2441,173 @@
         "name": "toFixed",
         "comment": " Formats a number using fixed-point notation. It's the direct wrapper for\nJavaScripts [toFixed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed).\n\n    Ext.Number.toFixed 0.12340 2 -- \"0.12\"\n    Ext.Number.toFxied 12 2 -- \"12.00\"\n",
         "type": "Int -> Float -> String"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Html.Events.Options",
+    "comment": " Extra options for event handlers.\n\n# Options\n@docs preventDefaultOptions, stopPropagationOptions, stopOptions\n",
+    "aliases": [],
+    "types": [],
+    "values": [
+      {
+        "name": "preventDefaultOptions",
+        "comment": " Prevent default options.\n",
+        "type": "Html.Events.Options"
+      },
+      {
+        "name": "stopOptions",
+        "comment": " Options for completely stopping an event and\npreventing it's default behavior.\n",
+        "type": "Html.Events.Options"
+      },
+      {
+        "name": "stopPropagationOptions",
+        "comment": " Stop propagation options.\n",
+        "type": "Html.Events.Options"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Native.Browser",
+    "comment": " Browser related helper functions.\n\n# Window\n@docs openWindow, redirect, alert\n\n# Vendor Prefix\n@docs Prefix, prefix\n\n# Location\n@docs Location, location\n",
+    "aliases": [
+      {
+        "name": "Location",
+        "comment": " Location model.\n",
+        "args": [],
+        "type": "{ pathname : String , hostname : String , protocol : String , search : String , host : String , hash : String , port' : Int }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Prefix",
+        "comment": " A union of prefix tags.\n",
+        "args": [],
+        "cases": [
+          [
+            "Moz",
+            []
+          ],
+          [
+            "Webkit",
+            []
+          ],
+          [
+            "MS",
+            []
+          ],
+          [
+            "O",
+            []
+          ],
+          [
+            "Unknown",
+            []
+          ]
+        ]
+      }
+    ],
+    "values": [
+      {
+        "name": "alert",
+        "comment": " Shows an alert dialog with the given text and returns the given value.\n\n    Ui.Native.Browser.alert \"Hey there!\"\" value\n",
+        "type": "String -> value -> value"
+      },
+      {
+        "name": "location",
+        "comment": " The current location object.\n",
+        "type": "() -> Ui.Native.Browser.Location"
+      },
+      {
+        "name": "openWindow",
+        "comment": " Opens a new window with the given URL and return the given value.\n\n    Ui.Native.Browser.openWindow \"url\" value\n",
+        "type": "String -> value -> value"
+      },
+      {
+        "name": "prefix",
+        "comment": " The detected vendor prefix.\n\n    ```elm\n    displayValue : String\n    displayValue =\n        if Ui.Browser.prefix == Ui.Browser.Webkit\n        then \"-webkit-flex\"\n        else \"flex\"\n    ```\n",
+        "type": "Ui.Native.Browser.Prefix"
+      },
+      {
+        "name": "redirect",
+        "comment": " Replace the current page with the given URL and return the given value.\n\n    Ui.Native.Browser.redirect \"http://elm-lang.org\" value\n",
+        "type": "String -> value -> value"
+      }
+    ],
+    "generated-with-elm-version": "0.17.1"
+  },
+  {
+    "name": "Ui.Helpers.Emitter",
+    "comment": " This is a module for publishing and subscribing to arbritary data in\ndifferent channels that are identified by strings.\n\n# Listining\n@docs listen, listenString, listenFloat, listenInt, listenBool, listenNaked\n\n# Sending Data\n@docs send, sendString, sendFloat, sendInt, sendBool, sendNaked\n\n# Decodeing\n@docs decode\n\n",
+    "aliases": [],
+    "types": [],
+    "values": [
+      {
+        "name": "decode",
+        "comment": " Decodes a Json value and maps it to a message with a fallback value.\n\n    Ui.Helpers.Emitter.decode Json.Decode.string \"\" HandleString value\n",
+        "type": "Json.Decode.Decoder value -> value -> (value -> msg) -> Json.Decode.Value -> msg"
+      },
+      {
+        "name": "listen",
+        "comment": " Creates a subscription for the given channel.\n\n    Ui.Helpers.Emitter.listen \"channelId\" HandleValue\n",
+        "type": "String -> (Json.Decode.Value -> msg) -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "listenBool",
+        "comment": " Creates a subscription for the given boolean channel.\n\n    Ui.Helpers.Emitter.listenBool \"channelId\" HandleInt\n",
+        "type": "String -> (Bool -> msg) -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "listenFloat",
+        "comment": " Creates a subscription for the given float channel.\n\n    Ui.Helpers.Emitter.listenFloat \"channelId\" HandleFloat\n",
+        "type": "String -> (Float -> msg) -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "listenInt",
+        "comment": " Creates a subscription for the given integer channel.\n\n    Ui.Helpers.Emitter.listenInt \"channelId\" HandleInt\n",
+        "type": "String -> (Int -> msg) -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "listenNaked",
+        "comment": " Creates a subscription for the given channel.\n\n    Ui.Helpers.Emitter.listenNaked \"channelId\" NakedMsg\n",
+        "type": "String -> msg -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "listenString",
+        "comment": " Creates a subscription for the given string channel.\n\n    Ui.Helpers.Emitter.listenString \"channelId\" HandleString\n",
+        "type": "String -> (String -> msg) -> Platform.Sub.Sub msg"
+      },
+      {
+        "name": "send",
+        "comment": " Sends the given value to the given channel.\n\n    Ui.Helpers.Emitter.send \"channelId\" (Json.string \"test\")\n",
+        "type": "String -> Json.Decode.Value -> Platform.Cmd.Cmd msg"
+      },
+      {
+        "name": "sendBool",
+        "comment": " Sends a boolean value to the given channel.\n\n    Ui.Helpers.Emitter.sendBool \"channelId\" 10\n",
+        "type": "String -> Bool -> Platform.Cmd.Cmd msg"
+      },
+      {
+        "name": "sendFloat",
+        "comment": " Sends a float value to the given channel.\n\n    Ui.Helpers.Emitter.sendFloat \"channelId\" 0.42\n",
+        "type": "String -> Float -> Platform.Cmd.Cmd msg"
+      },
+      {
+        "name": "sendInt",
+        "comment": " Sends a integer value to the given channel.\n\n    Ui.Helpers.Emitter.sendInt \"channelId\" 10\n",
+        "type": "String -> Int -> Platform.Cmd.Cmd msg"
+      },
+      {
+        "name": "sendNaked",
+        "comment": " Sends a _naked message_ (without value) to the given channel. This is used\ngenerally to trigger actions.\n\n    Ui.Helpers.Emitter.send \"channelId\"\n",
+        "type": "String -> Platform.Cmd.Cmd msg"
+      },
+      {
+        "name": "sendString",
+        "comment": " Sends a string value to the given channel.\n\n    Ui.Helpers.Emitter.sendString \"channelId\" \"test\"\n",
+        "type": "String -> String -> Platform.Cmd.Cmd msg"
       }
     ],
     "generated-with-elm-version": "0.17.1"
