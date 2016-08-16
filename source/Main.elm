@@ -31,6 +31,10 @@ import Pages.Index
 import Docs.Types
 import Http
 
+import Utils.ScrollToTop
+import Animation
+import Ease
+
 type alias Model =
   { app : Ui.App.Model
   , page : String
@@ -38,6 +42,7 @@ type alias Model =
   , docs : Documentation.Model
   , route : Route
   , location : Hop.Types.Location
+  , scrollToTop : Utils.ScrollToTop.Model
   }
 
 
@@ -48,8 +53,7 @@ type Msg
   | Failed Http.Error
   | Loaded Docs.Types.Documentation
   | Docs Documentation.Msg
-  | NotFound Dom.Error
-  | NoOp ()
+  | ScrollToTop Utils.ScrollToTop.Msg
 
 
 
@@ -99,7 +103,7 @@ urlUpdate ( route, location ) model =
         _ -> Cmd.none
   in
     ( updatedModel, Cmd.batch [ cmd
-                              , Task.perform NotFound NoOp (Dom.Scroll.toTop "body")
+                              , Cmd.map ScrollToTop Utils.ScrollToTop.start
                               ] )
 
 
@@ -126,6 +130,10 @@ pages =
 init : ( Route, Hop.Types.Location ) -> ( Model, Cmd Msg )
 init ( route, location ) =
   let
+    setupAnimation animation =
+      Animation.duration 500 animation
+      |> Animation.ease Ease.outCubic
+
     (mod, effect) =
       { app = Ui.App.init "Elm-UI"
       , page = "reference"
@@ -133,12 +141,13 @@ init ( route, location ) =
       , route = route
       , docs = Documentation.init
       , location = location
+      , scrollToTop = Utils.ScrollToTop.init setupAnimation
       }
       |> urlUpdate (route, location)
   in
     ( mod
     , Cmd.batch [Task.perform Failed Loaded (Http.get Docs.Types.decodeDocumentation "/documentation.json")
-                , effect]
+                ,effect]
     )
 
 
@@ -186,8 +195,11 @@ update action model =
       in
         ( { model | app = app }, Cmd.map App effect )
 
-    _ ->
-      (model, Cmd.none)
+    ScrollToTop act ->
+      let
+        (scrollToTop, cmd) = Utils.ScrollToTop.update act model.scrollToTop
+      in
+        ({ model | scrollToTop = scrollToTop }, Cmd.map ScrollToTop cmd)
 
 
 
@@ -260,6 +272,7 @@ main =
         \model ->
           Sub.batch
             [ Emitter.listenString "navigation" Navigate
+            , Sub.map ScrollToTop (Utils.ScrollToTop.subscriptions model.scrollToTop)
             , Sub.map Reference (Reference.subscriptions model.reference)
             ]
     }
