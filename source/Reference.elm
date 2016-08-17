@@ -38,6 +38,7 @@ import Reference.Slider as Slider
 import Reference.Loader as Loader
 import Reference.Layout as Layout
 import Reference.Header as Header
+import Reference.Tagger as Tagger
 import Reference.Button as Button
 import Reference.Layout as Layout
 import Reference.Modal as Modal
@@ -71,6 +72,7 @@ type alias Model =
   , chooser : Chooser.Model
   , slider : Slider.Model
   , button : Button.Model
+  , tagger : Tagger.Model
   , layout : Layout.Model
   , loader : Loader.Model
   , pager : Pager.Model
@@ -101,6 +103,7 @@ type Msg
   | Textarea Textarea.Msg
   | Checkbox Checkbox.Msg
   | Ratings Ratings.Msg
+  | Tagger Tagger.Msg
   | Slider Slider.Msg
   | Loader Loader.Msg
   | Layout Layout.Msg
@@ -136,6 +139,7 @@ init =
   , layout = Layout.init
   , button = Button.init
   , loader = Loader.init
+  , tagger = Tagger.init
   , pager = Pager.init
   , input = Input.init
   , modal = Modal.init
@@ -188,6 +192,7 @@ components =
     , ("ratings", ("Ui.Ratings", True))
     , ("slider", ("Ui.Slider", True))
     , ("search-input", ("Ui.SearchInput", True))
+    , ("tagger", ("Ui.Tagger", True))
     , ("textarea", ("Ui.Textarea", True))
     , ("time", ("Ui.Time", True))
     ]
@@ -388,6 +393,12 @@ update action model =
       in
         ({ model | time = time }, Cmd.map Time effect)
 
+    Tagger act ->
+      let
+        (tagger, effect) = Tagger.update act model.tagger
+      in
+        ({ model | tagger = tagger }, Cmd.map Tagger effect)
+
     Noop ->
       (model, Cmd.none)
 
@@ -399,6 +410,7 @@ subscriptions model =
   , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
   , Sub.map Ratings (Ratings.subscriptions model.ratings)
+  , Sub.map Tagger (Tagger.subscriptions model.tagger)
   , Sub.map Slider (Slider.subscriptions model.slider)
   , Sub.map Pager (Pager.subscriptions model.pager)
   ]
@@ -562,6 +574,8 @@ view model active =
           Html.App.map NotificationCenter (NotificationCenter.view model.notificationCenter)
         "time" ->
           Html.App.map Time (Time.view model.time)
+        "tagger" ->
+          Html.App.map Tagger (Tagger.view model.tagger)
         _ ->
           text ""
 

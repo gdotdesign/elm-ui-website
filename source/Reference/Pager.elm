@@ -43,8 +43,8 @@ init =
           , inputs = []
           , dates = []
           }
-        |> Form.button "Next Page" "primary" 0 Next
-        |> Form.button "Previous Page" "primary" 0 Previous
+        |> Form.button "Next Page" "primary" Next
+        |> Form.button "Previous Page" "primary" Previous
     }
 
 
