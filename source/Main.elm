@@ -209,10 +209,10 @@ content model =
       Pages.Index.view Navigate
 
     ReferencePage ->
-      Html.App.map Reference (Reference.view model.reference "app")
+      Html.App.map Reference (Reference.viewLazy model.reference "app")
 
     Component comp ->
-      Html.App.map Reference (Reference.view model.reference comp)
+      Html.App.map Reference (Reference.viewLazy model.reference comp)
 
     Documentation ->
       Html.App.map Docs (Documentation.view model.docs)

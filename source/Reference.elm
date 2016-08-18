@@ -3,6 +3,7 @@ module Reference exposing (..)
 import Html exposing (div, span, strong, text, node, a)
 import Html.Attributes exposing (classList, class)
 import Html.Events exposing (onClick)
+import Html.Lazy
 import Html.App
 
 import List.Extra
@@ -498,7 +499,11 @@ documentation docs name =
   |> Maybe.map renderDocumentation
   |> Maybe.withDefault (text "")
 
-view : Model -> String ->Html.Html Msg
+viewLazy : Model -> String -> Html.Html Msg
+viewLazy model active =
+  Html.Lazy.lazy2 view model active
+
+view : Model -> String -> Html.Html Msg
 view model active =
   let
     allPages =
