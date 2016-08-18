@@ -3,6 +3,7 @@ module Components.NavList exposing (..)
 import Html.Attributes exposing (classList, href)
 import Html.Events exposing (onClick)
 import Html exposing (node, text)
+import Html.Lazy
 import Html.App
 
 import Ui.Helpers.Emitter as Emitter
@@ -66,9 +67,12 @@ match model item =
   in
     result.score < 2000
 
-
 view : String -> Model -> Html.Html Msg
 view active model =
+  Html.Lazy.lazy2 render active model
+
+render : String -> Model -> Html.Html Msg
+render active model =
   let
     items =
       List.map (renderCategory active model) model.items

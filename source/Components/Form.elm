@@ -2,6 +2,7 @@ module Components.Form exposing (..)
 
 import Html exposing (node, text)
 import Html.Keyed
+import Html.Lazy
 import Html.App
 
 import Ext.Color exposing (Hsv)
@@ -436,12 +437,12 @@ view address fields =
 
     items =
       ((renderMap renderCheckbox fields.checkboxes)
-        ++ (renderMap renderColorPicker fields.colors)
-        ++ (renderMap renderChooser fields.choosers)
-        ++ (renderMap renderDatePicker fields.dates)
-        ++ (renderMap renderInput fields.inputs)
-        ++ (renderMap renderTextarea fields.textareas)
-        ++ (renderMap renderNumberRange fields.numberRanges)
+        ++ (renderMap (Html.Lazy.lazy2 renderColorPicker) fields.colors)
+        ++ (renderMap (Html.Lazy.lazy2 renderChooser) fields.choosers)
+        ++ (renderMap (Html.Lazy.lazy2 renderDatePicker) fields.dates)
+        ++ (renderMap (Html.Lazy.lazy2 renderInput) fields.inputs)
+        ++ (renderMap (Html.Lazy.lazy2 renderTextarea) fields.textareas)
+        ++ (renderMap (Html.Lazy.lazy2 renderNumberRange) fields.numberRanges)
         ++ (renderButtons fields.buttons)
       )
 

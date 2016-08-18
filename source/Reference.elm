@@ -508,7 +508,7 @@ renderDocumentation mod =
 
 documentation docs name =
   findDocumentation name docs
-  |> Maybe.map renderDocumentation
+  |> Maybe.map (Html.Lazy.lazy renderDocumentation)
   |> Maybe.withDefault (text "")
 
 viewLazy : Model -> String -> Html.Html Msg
