@@ -102,9 +102,20 @@ init data =
     , uid = Uid.uid ()
     }
 
+nextPosition : Model msg -> Int
+nextPosition model =
+  (Dict.size model.numberRanges) +
+  (Dict.size model.checkboxes) +
+  (Dict.size model.textareas) +
+  (Dict.size model.choosers) +
+  (Dict.size model.dates) +
+  (Dict.size model.colors) +
+  (Dict.size model.inputs) +
+  (List.length model.buttons)
 
-button : String -> String -> Int -> msg -> Model msg -> Model msg
-button text kind position msg model =
+
+button : String -> String -> msg -> Model msg -> Model msg
+button text kind msg model =
   let
     button =
       { disabled = False
@@ -114,7 +125,7 @@ button text kind position msg model =
       , text = text
       }
   in
-    { model | buttons = (position, msg, button) :: model.buttons }
+    { model | buttons = (nextPosition model, msg, button) :: model.buttons }
 
 
 subscriptions : Model msg -> Sub Msg
