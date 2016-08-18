@@ -21,8 +21,8 @@ type alias Model =
 
 viewData : List Ui.Chooser.Item
 viewData =
-  [ { label = "Center Default", value = "centerDefault" }
-  , { label = "Default", value = "default" }
+  [ { label = "App", value = "app" }
+  , { label = "Website", value = "website" }
   , { label = "Sidebar", value = "sidebar" }
   ]
 
@@ -38,7 +38,7 @@ init =
         , colors = []
         , dates = []
         , choosers =
-            [ ( "view", 0, viewData, "", "default" )
+            [ ( "view", 0, viewData, "", "app" )
             ]
         }
   }
@@ -64,17 +64,20 @@ view model =
     demo =
       case Form.valueOfChooser "view" "default" model.form of
         "sidebar" ->
-          Ui.Layout.sidebar [ text "SIDEBAR" ]
+          Ui.Layout.sidebar
+            [ text "SIDEBAR" ]
             [ text "CONTENT" ]
 
-        "centerDefault" ->
-          Ui.Layout.centerDefault [ text "HEADER" ]
+        "website" ->
+          Ui.Layout.website
+            [ text "HEADER" ]
             [ text "CONTENT" ]
             [ text "FOOTER" ]
 
         _ ->
-          Ui.Layout.default [ text "HEADER" ]
+          Ui.Layout.app
+            [ text "SIDEBAR" ]
+            [ text "TOOLBAR" ]
             [ text "CONTENT" ]
-            [ text "FOOTER" ]
   in
     Components.Reference.view demo form

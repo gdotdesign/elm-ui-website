@@ -1,46 +1,8 @@
 ui-app > ui-header {
-  background-image: url('images/noise.png');
-  background-color: #1a4561;
-
-  transform: translate3d(0,0,0);
-  font-family: $title-font;
-  border-bottom: 0;
-  box-shadow: none;
-  padding: 0 20px;
-
-  ui-header-title {
-    font-weight: normal;
-    margin-right: auto;
-    cursor: pointer;
-    font-size: 24px;
-  }
-
   img {
     vertical-align: middle;
     margin-right: 5px;
     margin-top: -2px;
     width: 24px;
-  }
-
-  ui-header-item {
-    text-transform: uppercase;
-    font-weight: 600;
-    cursor: pointer;
-
-    &.active a span {
-      border-bottom: 2px solid currentColor;
-    }
-
-    ui-icon {
-      margin-right: 10px;
-    }
-
-    a {
-      text-decoration: none;
-      font-weight: normal;
-      font-size: 20px;
-      display: block;
-      color: inherit;
-    }
   }
 }

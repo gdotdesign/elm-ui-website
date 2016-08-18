@@ -46,11 +46,6 @@ ui-playground {
   }
 }
 
-ui-reference,
-ui-documentation {
-  border-top: 2px solid #3b779e;
-}
-
 ui-reference {
   min-height: calc(100vh - 60px);
   display: flex;
@@ -214,26 +209,29 @@ ui-reference-demo {
       position: relative !important;
     }
 
-    .ui-layout-center-default {
-      ui-layout-center {
-        width: 450px;
-      }
-    }
 
-    ui-layout {
-      border: 1px dashed rgba(#000, 0.4);
+    ui-layout-website,
+    ui-layout-app,
+    ui-layout-sidebar {
+      border: 1px solid rgba(#000, 0.4);
       background: $input;
       min-height: 0;
       height: 300px;
       width: 600px;
+    }
 
-      ui-layout-main {
-      }
+    ui-layout-website > *,
+    ui-layout-sidebar > *,
+    ui-layout-app-wrapper > *,
+    ui-layout-app-sidebar {
+      border: 1px dashed rgba(#000, 0.4);
+      margin: 5px;
+      padding: 10px;
+    }
 
-      ui-layout-footer {
-        background: $secondary;
-        color: #FFF;
-      }
+    ui-layout-app-wrapper {
+      min-height: 0;
+      height: inherit;
     }
 
     > ui-header {

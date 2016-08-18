@@ -17,6 +17,7 @@ import Dom.Scroll
 import Dom
 
 import Ui.Helpers.Emitter as Emitter
+import Ui.Native.Browser as Browser
 import Ui.Container
 import Ui.Header
 import Ui.Button
@@ -54,6 +55,8 @@ type Msg
   | Loaded Docs.Types.Documentation
   | Docs Documentation.Msg
   | ScrollToTop Utils.ScrollToTop.Msg
+  | OpenGithub
+  | NoOp
 
 
 
@@ -201,6 +204,11 @@ update action model =
       in
         ({ model | scrollToTop = scrollToTop }, Cmd.map ScrollToTop cmd)
 
+    OpenGithub ->
+      (Browser.openWindow "https://github.com/gdotdesign/elm-ui" model, Cmd.none)
+
+    NoOp ->
+      (model, Cmd.none)
 
 
 content model =
@@ -225,42 +233,31 @@ view : Model -> Html.Html Msg
 view model =
   Ui.App.view App
     model.app
-    [ Ui.Header.view []
+    [ Ui.Header.view
         ([ img [src "/images/logo-small.svg"
                , onClick (Navigate "/")] []
-         , Ui.Header.title "Elm-UI" (Navigate "/")
+         , Ui.Header.title { text = "Elm-UI", action = Just (Navigate "/") }
+         , Ui.spacer
+         , Ui.Header.item
+            { text = "Documentation"
+            , action = Just (Navigate "/documentation")
+            }
+         , Ui.Header.item
+            { text = "Reference"
+            , action = Just (Navigate "/reference")
+            }
+         , Ui.Header.separator
+         , Ui.Header.iconItem
+            { text = "Github"
+            , action = Just OpenGithub
+            , glyph = "social-github"
+            , side = "left"
+            }
          ]
-          ++ (viewHeader model)
-          ++
-          [ renderHeaderLink "Github" "social-github" "https://github.com/gdotdesign/elm-ui"
-          ]
         )
     , content model
     , node "ui-footer" [] []
     ]
-
-
-renderHeader model ( page, label ) =
-  node "ui-header-item"
-    []
-    [ a [ onClick (Navigate page) ]
-        [ span [] [ text label ]
-        ]
-    ]
-
-renderHeaderLink label glyph link =
-  node "ui-header-item"
-    []
-    [ a [ href link, target "_blank" ]
-        [ Ui.icon glyph False []
-        , span [] [ text label ]
-        ]
-    ]
-
-
-viewHeader model =
-  List.map (renderHeader model) pages
-
 
 main =
   Navigation.program urlParser
