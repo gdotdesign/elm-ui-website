@@ -56,7 +56,6 @@ type Msg
   | Docs Documentation.Msg
   | ScrollToTop Utils.ScrollToTop.Msg
   | OpenGithub
-  | NoOp
 
 
 
@@ -206,9 +205,6 @@ update action model =
 
     OpenGithub ->
       (Browser.openWindow "https://github.com/gdotdesign/elm-ui" model, Cmd.none)
-
-    NoOp ->
-      (model, Cmd.none)
 
 
 content model =
