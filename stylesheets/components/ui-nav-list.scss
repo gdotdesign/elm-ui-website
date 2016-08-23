@@ -46,17 +46,28 @@ ui-nav-list {
   ui-nav-list-item {
     border-bottom: 1px solid rgba(#000, 0.1);
     text-decoration: none;
-    padding-right: 30px;
     line-height: 30px;
-    padding: 5px 20px;
     font-size: 16px;
     display: block;
     color: inherit;
 
-    &.active, &:hover {
-      background: $input;
-      cursor: pointer;
-      color: $focus;
+    a {
+      text-decoration: none;
+      padding-right: 30px;
+      padding: 5px 20px;
+      border-bottom: 0;
+      display: block;
+      color: inherit;
+
+      &:focus {
+        outline: none;
+      }
+
+      &.active, &:hover, &:focus {
+        background: $input;
+        cursor: pointer;
+        color: $focus;
+      }
     }
   }
 }

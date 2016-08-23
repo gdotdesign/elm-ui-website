@@ -14,13 +14,25 @@ view msg =
   let
     demo =
       Ui.Header.view
-        [ Ui.Header.title { text = "Hello World", action = Just msg }
+        [ Ui.Header.title
+          { text = "Hello World"
+          , action = Just msg
+          , link = Nothing
+          , target = ""
+          }
         , Ui.spacer
-        , Ui.Header.item { text = "Home", action = Just msg }
+        , Ui.Header.item
+          { text = "Home"
+          , action = Just msg
+          , link = Nothing
+          , target = ""
+          }
         , Ui.Header.separator
         , Ui.Header.iconItem
           { text = "Github"
           , action = Just msg
+          , link = Nothing
+          , target = ""
           , glyph = "social-github"
           , side = "left"
           }
@@ -28,6 +40,8 @@ view msg =
         , Ui.Header.icon
           { glyph = "navicon-round"
           , action = Just msg
+          , link = Nothing
+          , target = ""
           , size = 24
           }
         ]

@@ -8,6 +8,7 @@ import Html.App
 
 import Ui.Helpers.Emitter as Emitter
 import Ui.SearchInput
+import Ui
 
 import String
 import Fuzzy
@@ -107,7 +108,6 @@ renderItem active model item =
   in
     node "ui-nav-list-item"
       [ classList [ ( "active", active == item.href ) ]
-      , onClick (Navigate url)
       ]
-      [ text item.label
+      [ Ui.link (Just (Navigate url)) (Just url) "_self" [ text item.label ]
       ]

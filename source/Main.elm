@@ -55,7 +55,6 @@ type Msg
   | Loaded Docs.Types.Documentation
   | Docs Documentation.Msg
   | ScrollToTop Utils.ScrollToTop.Msg
-  | OpenGithub
 
 
 
@@ -203,10 +202,6 @@ update action model =
       in
         ({ model | scrollToTop = scrollToTop }, Cmd.map ScrollToTop cmd)
 
-    OpenGithub ->
-      (Browser.openWindow "https://github.com/gdotdesign/elm-ui" model, Cmd.none)
-
-
 content model =
   case model.route of
     Home ->
@@ -232,21 +227,32 @@ view model =
     [ Ui.Header.view
         ([ img [src "/images/logo-small.svg"
                , onClick (Navigate "/")] []
-         , Ui.Header.title { text = "Elm-UI", action = Just (Navigate "/") }
+         , Ui.Header.title
+            { text = "Elm-UI"
+            , action = Just (Navigate "/")
+            , link = Just "/"
+            , target = "_self"
+            }
          , Ui.spacer
          , Ui.Header.item
             { text = "Documentation"
             , action = Just (Navigate "/documentation")
+            , link = Just "/documentation"
+            , target = "_self"
             }
          , Ui.Header.item
             { text = "Reference"
             , action = Just (Navigate "/reference")
+            , link = Just "/reference"
+            , target = "_self"
             }
          , Ui.Header.separator
          , Ui.Header.iconItem
             { text = "Github"
-            , action = Just OpenGithub
+            , action = Nothing
             , glyph = "social-github"
+            , link = Just "https://github.com/gdotdesign/elm-ui"
+            , target = "_blank"
             , side = "left"
             }
          ]
