@@ -45,7 +45,7 @@ init =
               [ ( "placeholder", 0, placeholder, placeholder )
               ]
           , checkboxes =
-              [ ( "closeOnSelect", 1, False )
+              [ ( "close on select", 1, False )
               , ( "deselectable", 2, False )
               , ( "searchable", 3, False )
               , ( "multiple", 4, False )
@@ -96,7 +96,7 @@ updateState ( model, effect ) =
   let
     updatedComponent chooser =
       { chooser
-        | closeOnSelect = Form.valueOfCheckbox "closeOnSelect" False model.form
+        | closeOnSelect = Form.valueOfCheckbox "close on select" False model.form
         , deselectable = Form.valueOfCheckbox "deselectable" False model.form
         , searchable = Form.valueOfCheckbox "searchable" False model.form
         , placeholder = Form.valueOfInput "placeholder" "" model.form
