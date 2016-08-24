@@ -234,16 +234,21 @@ view model =
             , target = "_self"
             }
          , Ui.spacer
-         , Ui.Header.item
+         , Ui.Header.iconItem
             { text = "Documentation"
             , action = Just (Navigate "/documentation")
             , link = Just "/documentation"
+            , glyph = "bookmark"
+            , side = "left"
             , target = "_self"
             }
-         , Ui.Header.item
+         , Ui.Header.separator
+         , Ui.Header.iconItem
             { text = "Reference"
             , action = Just (Navigate "/reference")
             , link = Just "/reference"
+            , glyph = "code"
+            , side = "left"
             , target = "_self"
             }
          , Ui.Header.separator
