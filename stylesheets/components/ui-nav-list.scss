@@ -62,12 +62,12 @@ ui-nav-list {
       &:focus {
         outline: none;
       }
+    }
 
-      &.active, &:hover, &:focus {
-        background: $input;
-        cursor: pointer;
-        color: $focus;
-      }
+    &.active a, a:hover, a:focus {
+      background: $input;
+      cursor: pointer;
+      color: $focus;
     }
   }
 }
