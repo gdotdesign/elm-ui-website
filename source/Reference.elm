@@ -204,6 +204,7 @@ nativeModules =
     , ("native/browser", ("Ui.Native.Browser", False))
     , ("native/dom", ("Ui.Native.Dom", False))
     , ("native/local-storage", ("Ui.Native.LocalStorage", False))
+    , ("native/uid", ("Ui.Native.Uid", False))
     , ("native/scrolls", ("Ui.Native.Scrolls", False))
     ]
 
@@ -213,6 +214,7 @@ helpers =
     , ("helpers/emitter", ("Ui.Helpers.Emitter", False))
     , ("helpers/env", ("Ui.Helpers.Env", False))
     , ("helpers/dropdown", ("Ui.Helpers.Dropdown", False))
+    , ("helpers/ripple", ("Ui.Helpers.Ripple", False))
     , ("helpers/intendable", ("Ui.Helpers.Intendable", False))
     ]
 
