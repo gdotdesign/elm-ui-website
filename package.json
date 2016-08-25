@@ -6,6 +6,7 @@
     "start": "elm-ui server",
     "deploy": "gulp deploy",
     "predeploy": "npm run build",
+    "install": "elm-ui install",
     "build": "elm-ui build"
   },
   "homepage": "https://github.com/gdotdesign/elm-ui-website",
