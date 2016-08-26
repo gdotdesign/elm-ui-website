@@ -28,7 +28,7 @@ type Msg
 init : Model
 init =
   { input = Ui.Input.init "" "Message..."
-  , notifications = Notifications.init 5000 500
+  , notifications = Notifications.init 5000 400
   }
 
 

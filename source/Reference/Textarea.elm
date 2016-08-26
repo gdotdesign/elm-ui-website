@@ -33,11 +33,12 @@ init =
             , ( "enter allowed", 3, True)
             ]
         , inputs =
-            [ ( "value", 2, "Value...", "Some content..." )
-            , ( "placeholder", 1, "Placeholder...", "Placeholder..." )
+            [ ( "placeholder", 1, "Placeholder...", "Placeholder..." )
             ]
         , numberRanges = []
-        , textareas = []
+        , textareas =
+            [ ( "value", 2, "Value...", "Some content..." )
+            ]
         , choosers = []
         , colors = []
         , dates = []
@@ -69,7 +70,7 @@ updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, effect ) =
   let
     updatedForm =
-      Form.updateInput "value" model.textarea.value model.form
+      Form.updateTextarea "value" model.textarea.value model.form
   in
     ( { model | form = updatedForm }, effect )
 
@@ -83,7 +84,7 @@ updateState ( model, effect ) =
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , placeholder = Form.valueOfInput "placeholder" "" model.form
         , enterAllowed = Form.valueOfCheckbox "enter allowed" False model.form
-        , value = Form.valueOfInput "value" "" model.form
+        , value = Form.valueOfTextarea "value" "" model.form
       }
   in
     ( { model | textarea = updatedComponent model.textarea }, effect )

@@ -25,8 +25,11 @@ type alias Model =
 init : Model
 init =
   let
+    date =
+      Ext.Date.createDate 1980 5 17
+
     datePicker =
-      Ui.DatePicker.init (Ext.Date.now ())
+      Ui.DatePicker.init date
   in
     { datePicker = { datePicker | format = "%B %e, %Y" }
     , form =
@@ -36,7 +39,7 @@ init =
               , ( "readonly", 3, False )
               ]
           , dates =
-              [ ( "value", 0, (Ext.Date.now ()) ) ]
+              [ ( "value", 0, date ) ]
           , numberRanges = []
           , textareas = []
           , choosers = []

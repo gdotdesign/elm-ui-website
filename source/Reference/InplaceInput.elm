@@ -32,7 +32,7 @@ init =
             [ ( "required", 2, False )
             , ( "disabled", 3, False )
             , ( "readonly", 4, False )
-            , ( "ctrlSave", 5, False )
+            , ( "ctrl save", 5, False )
             , ( "open", 6, False )
             ]
         , textareas =
@@ -84,7 +84,7 @@ updateState ( model, effect ) =
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , required = Form.valueOfCheckbox "required" False model.form
-        , ctrlSave = Form.valueOfCheckbox "ctrlSave" False model.form
+        , ctrlSave = Form.valueOfCheckbox "ctrl save" False model.form
         , open = Form.valueOfCheckbox "open" True model.form
       }
       |> Ui.InplaceInput.setValue (Form.valueOfTextarea "value" "" model.form)

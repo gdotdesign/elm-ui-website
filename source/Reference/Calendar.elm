@@ -25,10 +25,9 @@ type alias Model =
 init : Model
 init =
   let
-    now =
-      Ext.Date.now ()
+    date = Ext.Date.createDate 1977 5 25
   in
-    { calendar = Ui.Calendar.init now
+    { calendar = Ui.Calendar.init date
     , form =
         Form.init
           { checkboxes =
@@ -37,8 +36,8 @@ init =
               , ( "readonly", 4, False )
               ]
           , dates =
-              [ ( "value", 1, now )
-              , ( "date", 0, now )
+              [ ( "value", 1, date )
+              , ( "date", 0, date )
               ]
           , numberRanges = []
           , textareas = []

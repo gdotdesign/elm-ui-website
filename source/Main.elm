@@ -136,7 +136,7 @@ init ( route, location ) =
       |> Animation.ease Ease.outCubic
 
     (mod, effect) =
-      { app = Ui.App.init "Elm-UI"
+      { app = Ui.App.init
       , page = "reference"
       , reference = Reference.init
       , route = route

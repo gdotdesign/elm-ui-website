@@ -193,6 +193,7 @@ components =
     , ("ratings", ("Ui.Ratings", True))
     , ("slider", ("Ui.Slider", True))
     , ("search-input", ("Ui.SearchInput", True))
+    , ("tabs", ("Ui.Tabs", True))
     , ("tagger", ("Ui.Tagger", True))
     , ("textarea", ("Ui.Textarea", True))
     , ("time", ("Ui.Time", True))
