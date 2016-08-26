@@ -1,9 +1,9 @@
 # Guides
 
 This chapter contains patterns and solutions for common problems encountered when building web applications. The problems include:
-* [Focusing arbitrary components and HTML Elements](guides/focusing.html)
-* [Handling files](guides/handling_files.html)
-* [Accessing environment variables](guides/environment_variables.html)
+* [Focusing arbitrary components and HTML Elements](/documentation/guides/focusing)
+* [Handling files](/documentation/guides/handling_files)
+* [Accessing environment variables](/documentation/guides/environment_variables)
 * Scrolling to different parts of the page
 * Handling drag & drop interactions
 * Creating drop down menus and panels
