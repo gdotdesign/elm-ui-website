@@ -1,5 +1,5 @@
 # Adding Components
-Components are added with the traditional The Elm Architecture way with some
+Components are added with the traditional **The Elm Architecture** way with some
 modifications:
   - Add a field to the model for the components `Model`
   - Initialize the component with the `init` function
@@ -9,7 +9,7 @@ modifications:
   - Add the component to the view using the `view` or `render` functions
 
 ## Example
-We will be expanding the created application to set the counters value with a `Ui.NumberRange` component.
+We will be expanding the scaffolded application to set the counters value with a `Ui.NumberRange` component.
 
 We start by importing the component we want to use:
 ```elm
@@ -26,7 +26,7 @@ type alias Model =
 
 init : Model
 init =
-  { app = Ui.App.init "Elm-UI Project"
+  { app = Ui.App.init
   , numberRange = Ui.NumberRange.init 0
   , counter = 0
   }
@@ -86,7 +86,3 @@ main =
     }
 ```
 And now our new component works as expected.
-
--------------------------------------------------------------------------------------
-
-In the next part we will see how can we **react** to the changes of this component.

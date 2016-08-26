@@ -76,6 +76,4 @@ Decrement ->
 ...
 ```
 
--------------------------------------------------------------------------------------
-
 So now whatever we do the counter and the number range component are in sync.

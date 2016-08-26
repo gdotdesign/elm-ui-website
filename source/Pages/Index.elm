@@ -6,29 +6,36 @@ import Html.Attributes exposing (src)
 import Components.Terminal as Terminal
 import Components.Markdown as Markdown
 
+import Ui.Button
+import Ui
 
-hero : Html.Html msg
-hero =
-  node "ui-hero"
-    []
-    [ node "ui-hero-title"
-        []
-        [ img [ src "/images/logo.svg" ] []
-        , text "Elm-UI"
-        ]
-    , node "ui-hero-subtitle"
-        []
-        [ text "A user interface library and framework for Elm!" ]
-    , Terminal.view
-        [ "npm install elm-ui -g"
-        , "----------------------------------"
-        , "elm-ui init my-project"
-        , "cd my-project"
-        , "elm-ui server"
-        , "elm-ui install"
-        , "> Listening on localhost:8001..."
-        ]
-    ]
+hero : (String -> msg) -> msg -> Html.Html msg
+hero msg noop =
+  let
+    url = "/documentation/getting-started/setup"
+  in
+    node "ui-hero"
+      []
+      [ node "ui-hero-title"
+          []
+          [ img [ src "/images/logo.svg" ] []
+          , text "Elm-UI"
+          ]
+      , node "ui-hero-subtitle"
+          []
+          [ text "A user interface library and framework for Elm!" ]
+      , Ui.link (Just (msg url)) (Just url) "_self"
+          [ Ui.Button.dangerBig "Get Started" noop ]
+      , Terminal.view
+          [ "npm install elm-ui -g"
+          , "----------------------------------"
+          , "elm-ui init my-project"
+          , "cd my-project"
+          , "elm-ui server"
+          , "elm-ui install"
+          , "> Listening on localhost:8001..."
+          ]
+      ]
 
 
 browser : String -> Html.Html msg
@@ -79,11 +86,11 @@ apps.
 """
 
 
-view : (String -> msg) -> Html.Html msg
-view navigateMsg =
+view : (String -> msg) -> msg -> Html.Html msg
+view navigateMsg noop =
   node "ui-index"
     []
-    [ hero
+    [ hero navigateMsg noop
     , section "Development Workflow" worklfowContent "/images/workflow.svg"
     , section "Component Library" componentLibraryContent "/images/components.png"
     ]

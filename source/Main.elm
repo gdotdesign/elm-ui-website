@@ -55,6 +55,7 @@ type Msg
   | Loaded Docs.Types.Documentation
   | Docs Documentation.Msg
   | ScrollToTop Utils.ScrollToTop.Msg
+  | NoOp
 
 
 
@@ -203,10 +204,13 @@ update action model =
       in
         ({ model | scrollToTop = scrollToTop }, Cmd.map ScrollToTop cmd)
 
+    NoOp ->
+      model ! []
+
 content model =
   case model.route of
     Home ->
-      Pages.Index.view Navigate
+      Pages.Index.view Navigate NoOp
 
     ReferencePage ->
       Html.App.map Reference (Reference.viewLazy model.reference "app")
