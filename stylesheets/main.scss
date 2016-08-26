@@ -165,6 +165,21 @@ ui-reference-demo {
       }
     }
 
+    ui-tabs {
+      width: 400px;
+      height: 150px;
+      display: flex;
+      flex-direction: column;
+
+      ui-panel {
+        padding: 10px;
+      }
+
+      ui-tabs-content {
+        flex: 1;
+      }
+    }
+
     ui-tagger {
       background: $background;
       padding: 20px;

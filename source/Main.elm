@@ -101,6 +101,7 @@ urlUpdate ( route, location ) model =
 
         DocumentationPage page ->
           Cmd.map Docs (Documentation.load page)
+
         _ -> Cmd.none
   in
     ( updatedModel, Cmd.batch [ cmd

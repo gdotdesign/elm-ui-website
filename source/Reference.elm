@@ -45,6 +45,7 @@ import Reference.Layout as Layout
 import Reference.Modal as Modal
 import Reference.Input as Input
 import Reference.Pager as Pager
+import Reference.Tabs as Tabs
 import Reference.Time as Time
 
 import Docs.Types exposing (Documentation)
@@ -80,6 +81,7 @@ type alias Model =
   , input : Input.Model
   , modal : Modal.Model
   , time : Time.Model
+  , tabs : Tabs.Model
   , documentation : Documentation
   , list : NavList.Model
   }
@@ -112,6 +114,7 @@ type Msg
   | Modal Modal.Msg
   | Pager Pager.Msg
   | Time Time.Msg
+  | Tabs Tabs.Msg
   | List NavList.Msg
   | Navigate String
   | Noop
@@ -145,6 +148,7 @@ init =
   , input = Input.init
   , modal = Modal.init
   , time = Time.init
+  , tabs = Tabs.init
   , list = NavList.init "reference" "Search modules..." navItems
   , documentation = { modules = [] }
   }
@@ -397,6 +401,12 @@ update action model =
       in
         ({ model | time = time }, Cmd.map Time effect)
 
+    Tabs act ->
+      let
+        (tabs, effect) = Tabs.update act model.tabs
+      in
+        ({ model | tabs = tabs }, Cmd.map Tabs effect)
+
     Tagger act ->
       let
         (tagger, effect) = Tagger.update act model.tagger
@@ -417,6 +427,7 @@ subscriptions model =
   , Sub.map Tagger (Tagger.subscriptions model.tagger)
   , Sub.map Slider (Slider.subscriptions model.slider)
   , Sub.map Pager (Pager.subscriptions model.pager)
+  , Sub.map Tabs (Tabs.subscriptions model.tabs)
   ]
 
 findDocumentation name docs =
@@ -582,6 +593,8 @@ view model active =
           Html.App.map NotificationCenter (NotificationCenter.view model.notificationCenter)
         "time" ->
           Html.App.map Time (Time.view model.time)
+        "tabs" ->
+          Html.App.map Tabs (Tabs.view model.tabs)
         "tagger" ->
           Html.App.map Tagger (Tagger.view model.tagger)
         _ ->
