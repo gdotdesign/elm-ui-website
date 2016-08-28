@@ -1,8 +1,9 @@
 ui-nav-list {
   border-right: 5px solid rgba(#000, 0.1);
+  background: $background;
   display: block;
   flex: 0 0 auto;
-  width: 250px;
+  width: 300px;
 
   ui-search-input {
     height: 40px;
@@ -16,6 +17,10 @@ ui-nav-list {
 
     ui-icon {
       left: 10px;
+    }
+
+    ui-input {
+      width: inherit;
     }
 
     input[type=text] {

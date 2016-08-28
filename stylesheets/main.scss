@@ -349,13 +349,14 @@ ui-footer {
 }
 
 ui-documentation {
-  display: flex;
+  background: $input;
   min-height: 80vh;
+  display: flex;
 
   div.markdown-medium {
-    background: $input;
     padding: 30px;
     padding-bottom: 100px;
+    max-width: 800px;
     flex: 1;
   }
 
@@ -376,6 +377,8 @@ pre {
   border-radius: $border-radius;
   border: 1px solid rgba(#000, 0.05);
   background: #F7f7f7;
+  overflow: auto;
+  line-height: 23px;
 }
 
 p code,

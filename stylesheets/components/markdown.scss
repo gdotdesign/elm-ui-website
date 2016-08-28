@@ -41,6 +41,10 @@ div[class^=markdown] {
     border: 0;
     border-top: 1px solid rgba(#000, 0.1);
   }
+
+  .hljs-comment {
+    opacity: 0.6;
+  }
 }
 
 div.markdown-small {

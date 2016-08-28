@@ -219,10 +219,10 @@ content model =
       Html.App.map Reference (Reference.viewLazy model.reference comp)
 
     Documentation ->
-      Html.App.map Docs (Documentation.view model.docs)
+      Html.App.map Docs (Documentation.view "" model.docs)
 
     DocumentationPage page ->
-      Html.App.map Docs (Documentation.view model.docs)
+      Html.App.map Docs (Documentation.view page model.docs)
 
 
 view : Model -> Html.Html Msg

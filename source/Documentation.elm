@@ -83,9 +83,9 @@ update msg model =
       in
         ({ model | list = list }, Cmd.map List effect)
 
-view : Model -> Html.Html Msg
-view model =
+view : String -> Model -> Html.Html Msg
+view active model =
   node "ui-documentation" []
-    [ Html.App.map List (NavList.view "" model.list)
+    [ Html.App.map List (NavList.view active model.list)
     , Markdown.view model.contents
     ]
