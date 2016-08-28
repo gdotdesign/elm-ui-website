@@ -1,25 +1,24 @@
 # Focusing
-Focusing **components** or **HTML elements** is an integral part of any application. The main reason for focusing a component is to guide the user to a specific part of the application that requires user input.
+Focusing **components** or **HTML elements** is an integral part of any
+application. The main reason for focusing a component is to guide the user
+to a specific part of the application that requires user input.
 
 ## HTML Elements
-You can focus any HTML elements in Elm-UI with the [`Ui.Native.Dom.focusSelector`](/reference/native/dom) function, which takes a **noop** message and an arbitrary **CSS selector** and returns a **command**.
+Focusing HTML elemenst is done via the official [Dom package](http://package.elm-lang.org/packages/elm-lang/dom).
+You can focus any HTML element with and **id attribute** using the
+[Dom.focus](http://package.elm-lang.org/packages/elm-lang/dom/1.1.0/Dom#focus)
+function which returns a task, when run it will focus the element and if it's
+not present in the DOM it returns an error.
 
 ```elm
-focus : Cmd Msg
-focus =
-  Ui.Native.Dom.focusSelector NoOp "input#first-name"
+  task = Dom.focus "my-thing"
 ```
-The command when executed will try to find the element and will call `focus()` on it.
 
-## Components
-You can focus any rendered `Ui.*` component with the [`Ui.Native.Dom.focusComponent`](/reference/native/dom) function, which takes a **noop** message and an arbitrary component `{ component | uid : String }` and returns a **command**.
+## Ui.* Components
+Most `Ui.*` components implement a `uid` field, the value of this field is
+set for the **id** attribute of the for focusable HTML element. This means if
+you need to focus a component you can just call:
 
 ```elm
-focus : Model -> Cmd Msg
-focus model =
-  Ui.Native.Dom.focusComponent NoOp model.textarea
+  task = Dom.focus model.textarea.uid
 ```
-The command when executed will try to find the component with the attribute `uid` and will call `focus()` on it.
-
-## Delay
-There is a **30 milliseconds ~ 2 frames** delay to make sure the element / component is available in the DOM after an Elm update.
