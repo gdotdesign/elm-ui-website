@@ -6,9 +6,9 @@ when building web applications.
 The problems include:
 * [Focusing arbitrary components and HTML Elements](/documentation/guides/focusing)
 * [Handling files](/documentation/guides/handling_files)
-* [Accessing environment variables](/documentation/guides/environment_variables)
+* [Accessing environment variables](/documentation/guides/environment-variables)
 * Scrolling to different parts of the page
-* Handling drag & drop interactions
+* [Handling drag & drop interactions](/documentation/guides/drag-and-drop)
 * Creating drop down menus and panels
 
 _Some of these solutions and patterns for these problems are unique to Elm-UI at
