@@ -15,43 +15,33 @@ module will look something like this:
 
 ```
 type alias Model =
-  { dropdownPosition : String -- the position of the drop-down ("top-left")
-  , open : Bool -- whether the drop-down is open or not
+  { dropdownPosition : String
+  , open : Bool
   }
+
 
 init : Model
 init =
-  { dropdownPosition = "top-left"
-  , open = false
+  { dropdownPosition = "bottom-right"
+  , open = False
   }
 ```
 
-## View
-The module offers a view for your drop-down:
-
-```
-view : Model -> Html.Html Msg
-view model =
-  div
-    [ class "my-dropdown" ]
-    [ span [] [ text "open" ]
-    , Ui.Helpers.Dropdown.view
-        NoOp
-        model.dropdownPosition
-        [ text "Dropdown Contents" ]
-    ]
-```
-
-## Opening
+## Opening / Closing
 To open a drop-down you will need the dimensions of the element where you want
 to position around the drop-down and the dimensions of the drop-down. There are
 decoders for this.
+
+We will use the **focus** event to open the dropdown and the **blur event** to
+close it.
 
 To use them we need have tags that handle them:
 
 ```
 type Msg
   = Open Ui.Helpers.Dropdown.Dimensions
+  | Close
+  | NoOp -- this is needed to stop the click event inside the dropdown
 ```
 
 Also we need to change our view:
@@ -59,43 +49,56 @@ Also we need to change our view:
 ```
 view : Model -> Html.Html Msg
 view model =
-  div
-    [ class "my-dropdown" ]
-    [ span
-      [ tabindex 0
-      , Ui.Helpers.Dropdown.onWithDimensions "focus" Open
+  let
+    classes =
+      classList
+        [ ( "my-dropdown", True )
+        -- this class is required to show the dropdown
+        , ( "dropdown-open", model.open )
+        ]
+  in
+    div [ classes ]
+      [ span
+          [ tabindex 0 -- make sure it's focusable
+          , Ui.Helpers.Dropdown.onWithDimensions "focus" Open
+          , on "blur" (Json.succeed Close)
+          ]
+          [ text "Open" ]
+      , Ui.Helpers.Dropdown.view NoOp
+          model.dropdownPosition
+          [ text "Dropdown Contents" ]
       ]
-      [ text "Open" ]
-    , Ui.Helpers.Dropdown.view
-        NoOp -- This is needed for stopping click events
-        model.dropdownPosition
-        [ text "Dropdown Contents" ]
-    ]
 ```
 
 Then to actually open the drop-down we need to call the
 `Ui.Helpers.Dropdown.openWithDimensions` function in the update.
 
 ```
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
     Open dimensions ->
-      (Ui.Helpers.Dropdown.openWithDimensions model, Cmd.none)
+      ( Ui.Helpers.Dropdown.openWithDimensions dimensions model
+      , Cmd.none )
+
+    Close ->
+      ( Ui.Helpers.Dropdown.close model, Cmd.none )
+
+    NoOp ->
+      ( model, Cmd.none )
 ```
 
-## Closing
-To close the drop-down when clicking outside of it we will use the blur event:
+The last thing is to make sure that the our component has **relative** or
+**absolute** positioning.
 
+We can add that to the **stylesheets/main.scss**
+
+```scss
+@import 'ui';
+
+.my-dropdown {
+  position: relative
+}
 ```
-...
-  | Close
 
-
-...
-      [ tabindex 0
-      , Ui.Helpers.Dropdown.onWithDimensions "focus" Open
-      , on "blur" (Json.succeed Close)
-      ]
-...
-```
+You can see the full code for the example [here]()
