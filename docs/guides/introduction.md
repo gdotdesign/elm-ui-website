@@ -7,9 +7,9 @@ The problems include:
 * [Focusing arbitrary components and HTML Elements](/documentation/guides/focusing)
 * [Handling files](/documentation/guides/handling_files)
 * [Accessing environment variables](/documentation/guides/environment-variables)
-* Scrolling to different parts of the page
+* [Scrolling to different parts of the page](/documentation/guides/scrolling)
 * [Handling drag & drop interactions](/documentation/guides/drag-and-drop)
-* Creating drop down menus and panels
+* [Creating drop down menus and panels](/documentation/guides/drop-downs)
 
 _Some of these solutions and patterns for these problems are unique to Elm-UI at
 this point, mostly because there are no official way to handle these in pure Elm._
