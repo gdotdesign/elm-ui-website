@@ -5,9 +5,9 @@ to a specific part of the application that requires user input.
 
 ## HTML Elements
 Focusing HTML elemenst is done via the official [Dom package](http://package.elm-lang.org/packages/elm-lang/dom).
-You can focus any HTML element with and **id attribute** using the
+You can focus any HTML element that has an **id attribute** using the
 [Dom.focus](http://package.elm-lang.org/packages/elm-lang/dom/1.1.0/Dom#focus)
-function which returns a task, when run it will focus the element and if it's
+function which returns a task, when run, it will focus the element and if it's
 not present in the DOM it returns an error.
 
 ```elm

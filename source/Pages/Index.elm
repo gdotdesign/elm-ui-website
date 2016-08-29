@@ -31,8 +31,8 @@ hero msg noop =
           , "----------------------------------"
           , "elm-ui init my-project"
           , "cd my-project"
-          , "elm-ui server"
           , "elm-ui install"
+          , "elm-ui server"
           , "> Listening on localhost:8001..."
           ]
       ]

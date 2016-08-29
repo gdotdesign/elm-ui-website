@@ -12,8 +12,8 @@ _Currently there are no official way for doing these things in Elm. The
 following patterns and solutions are Elm-UI only and uses native code._
 
 ## The File Type
-If the user selects file(s) then the given then the end result will be
-a single or a list of `File`:
+If the user selects file(s) then the end result will be a single or a
+list of `File`:
 
 ```elm
 type alias File =
@@ -94,5 +94,8 @@ You can initiate a download with `download` function:
 -- Ui.Native.FileManager.download : String -> String -> String -> Task Never String
 task = Ui.Native.FileManager.download "my.json" "application/json" stringData
 ```
-This functions uses the [chrome.fileSystem](https://developer.chrome.com/apps/fileSystem)
-to show the save as dialog for Chrome apps.
+
+Caveats:
+- This function uses the [chrome.fileSystem](https://developer.chrome.com/apps/fileSystem)
+	to show the save as dialog for Chrome apps.
+- This function wraps the [download.js](http://danml.com/download.html) library

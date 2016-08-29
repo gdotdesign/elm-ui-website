@@ -4,7 +4,7 @@ many things from sliders to image cropping, handling these can be difficult so
 this guide tries to help you tackle them.
 
 Most drag and drop functionality in Elm-UI is using the `Ui.Helpers.Drag`
-module, which is the guide is about.
+module, which is this guide is about.
 
 ## Setup
 The module offers a model for a **drag** which keeps track of the mouse start
