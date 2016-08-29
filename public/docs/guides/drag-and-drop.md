@@ -41,25 +41,25 @@ There is a decoder to get these from an event `onWithDimensions` from the
 ```
 {- We need a tag to handle the event. -}
 type Msg
-  = MouseDown Dimensinos
+  = MouseDown Dimensions
 
 {- In the update we start the drag -}
-update : Model -> Msg -> (Model, Cmd Msg)
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     MouseDown (mousePosition, dimensions, windowSize) ->
       ({ model
-       | drag = drag.lift dimensions mousePosition model.drag
+       | drag = Drag.lift dimensions mousePosition model.drag
        , startPosition = model.position
        }, Cmd.none)
 
 {- In the view we use the decoder. -}
-view : Model -> Html.Html msg
+view : Model -> Html.Html Msg
 view model =
   div
     [ style
-      [ ("top", (toString (fst model.position)) ++ px)
-      , ("left", (toString (snd model.position)) ++ px)
+      [ ("top", (toString (fst model.position)) ++ "px")
+      , ("left", (toString (snd model.position)) ++ "px")
       ]
     , onWithDimensions "mousedown" False MouseDown
     ]
@@ -95,16 +95,16 @@ MouseMove (left, top) ->
       Drag.diff left top model.drag
 
     position =
-      ( (fst model.startPosition) - diff.left)
-      , (snd model.startPosition) - diff.top)
+      ( (fst model.startPosition) + diff.top
+      , (snd model.startPosition) + diff.left)
   in
     ({ model | position = position }, Cmd.none)
 
 {- Here we handle th click, stopping the drag if pressed is false -}
 Click pressed ->
-  ({ model | drag = Drag.handleClick presse model.drag }, Cmd.none)
+  ({ model | drag = Drag.handleClick pressed model.drag }, Cmd.none)
 ```
 
 That's it our example is complete the div is now draggable on the page.
 
-  You can see the full code for the example [here]()
+You can see the full code for the example [here]()
