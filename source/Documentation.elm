@@ -34,6 +34,7 @@ guidePages =
   , ("guides/focusing", "2.2 Focusing")
   , ("guides/handling-files", "2.3 Handling Files")
   , ("guides/environment-variables", "2.4 Environment Variables")
+  , ("guides/scrolling", "2.5 Scrolling")
   , ("guides/drag-and-drop", "2.6 Drag and Drop")
   , ("guides/drop-downs", "2.6 Drop Downs")
   ]

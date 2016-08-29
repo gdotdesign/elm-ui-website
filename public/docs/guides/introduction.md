@@ -7,7 +7,7 @@ The problems include:
 * [Focusing arbitrary components and HTML Elements](/documentation/guides/focusing)
 * [Handling files](/documentation/guides/handling_files)
 * [Accessing environment variables](/documentation/guides/environment-variables)
-* Scrolling to different parts of the page
+* [Scrolling to different parts of the page](/documentation/guides/scrolling)
 * [Handling drag & drop interactions](/documentation/guides/drag-and-drop)
 * [Creating drop down menus and panels](/documentation/guides/drop-downs)
 

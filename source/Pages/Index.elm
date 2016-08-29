@@ -25,7 +25,7 @@ hero msg noop =
           []
           [ text "A user interface library and framework for Elm!" ]
       , Ui.link (Just (msg url)) (Just url) "_self"
-          [ Ui.Button.dangerBig "Get Started" noop ]
+          [ Ui.Button.primaryBig "Get Started" noop ]
       , Terminal.view
           [ "npm install elm-ui -g"
           , "----------------------------------"
