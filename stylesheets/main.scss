@@ -365,8 +365,8 @@ ui-footer {
 }
 
 ui-documentation {
+  min-height: calc(100vh - 110px);
   background: $input;
-  min-height: 80vh;
   display: flex;
 
   div.markdown-medium {
