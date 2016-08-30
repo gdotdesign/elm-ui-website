@@ -44,5 +44,5 @@ For example we have the following data:
 We can read the `endpoint` with the following code:
 ```elm
 -- Ui.Helpers.Env.get : String -> Json.Decoder a -> Result String a
-result = Ui.Helpers.Env.get "endpoint" Json.Decode.decodeString
+result = Ui.Helpers.Env.get "endpoint" Json.Decode.string
 ```
