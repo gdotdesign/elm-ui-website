@@ -20,8 +20,8 @@
     "url": "https://github.com/gdotdesign/elm-ui-website/issues"
   },
   "dependencies": {
-    "elm-ui": "gdotdesign/elm-ui#github-install",
     "gulp-gh-pages": "0.5.4",
+    "elm-ui": "0.3.0",
     "gulp": "3.9.1"
   },
   "engines": {
