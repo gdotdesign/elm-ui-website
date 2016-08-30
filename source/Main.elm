@@ -7,6 +7,8 @@ import Hop
 import Combine exposing (Parser)
 import Navigation
 import Task
+import Date
+import Ext.Date
 import Dict
 
 import Html.Attributes exposing (href, class, src, target)
@@ -65,7 +67,6 @@ type Msg
 type Route
   = Component String
   | Home
-  | Documentation
   | DocumentationPage String
   | ReferencePage
 
@@ -80,7 +81,6 @@ matchers =
   , match2 Component "/reference/" all
   , match2 DocumentationPage "/documentation/" all
   , match1 ReferencePage "/reference"
-  , match1 Documentation "/documentation"
   ]
 
 
@@ -97,9 +97,6 @@ urlUpdate ( route, location ) model =
 
     cmd =
       case route of
-        Documentation ->
-          Cmd.map Docs (Documentation.load "index")
-
         DocumentationPage page ->
           Cmd.map Docs (Documentation.load page)
 
@@ -218,9 +215,6 @@ content model =
     Component comp ->
       Html.App.map Reference (Reference.viewLazy model.reference comp)
 
-    Documentation ->
-      Html.App.map Docs (Documentation.view "" model.docs)
-
     DocumentationPage page ->
       Html.App.map Docs (Documentation.view page model.docs)
 
@@ -241,8 +235,8 @@ view model =
          , Ui.spacer
          , Ui.Header.iconItem
             { text = "Documentation"
-            , action = Just (Navigate "/documentation")
-            , link = Just "/documentation"
+            , action = Just (Navigate "/documentation/getting-started/setup")
+            , link = Just "/documentation/getting-started/setup"
             , glyph = "bookmark"
             , side = "left"
             , target = "_self"
@@ -268,7 +262,18 @@ view model =
          ]
         )
     , content model
-    , node "ui-footer" [] []
+    , node "ui-footer" []
+      [ node "div"
+        []
+        [ node "a" [ href "https://github.com/gdotdesign/elm-ui" ]
+          [ Ui.icon "social-github" False []
+          , span [] [ text "Code on Github" ]
+          ]
+        , node "span" [] [ text "|" ]
+        , node "span" []
+          [ text (toString (Date.year (Ext.Date.now ()))) ]
+        ]
+      ]
     ]
 
 main =

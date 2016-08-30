@@ -83,7 +83,7 @@ To convert a `File` to FormData you can use the following code:
 data = Ui.Native.FileManager.toFormData "key" file
 ```
 
-A full example of a file upload can be viewed [here](https://github.com/gdotdesign/elm-ui-guide/blob/master/examples/file-upload.elm).
+A full example of a file upload can be viewed [here](https://github.com/gdotdesign/elm-ui-examples/tree/master/file-upload).
 
 ## Downloading Files
 Sometimes you have string data that you want to download to the users local

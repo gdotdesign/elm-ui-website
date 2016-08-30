@@ -1,7 +1,7 @@
 module Pages.Index exposing (..)
 
+import Html.Attributes exposing (src, class)
 import Html exposing (node, text, img)
-import Html.Attributes exposing (src)
 
 import Components.Terminal as Terminal
 import Components.Markdown as Markdown
@@ -70,7 +70,7 @@ worklfowContent =
 Elm-UI gives you the perfect tools so you can focus on the code instead of the environment:
 - Colored **errors messages** displayed in the browser
 - Development server with built in **live reload**
-- **Scaffolding** to quickly start a new project
+- **Scaffolding** to quickly start a new projects
 - **Building and minifying** your final files
 - **Environment configurations**
 """
@@ -93,4 +93,9 @@ view navigateMsg noop =
     [ hero navigateMsg noop
     , section "Development Workflow" worklfowContent "/images/workflow.svg"
     , section "Component Library" componentLibraryContent "/images/components.png"
+    , node "div"
+      [ class "cta" ]
+      [ node "span" [] [ text "Interesed?" ]
+      , Ui.Button.primaryBig "Get Started" (navigateMsg "/documentation/getting-started/setup")
+      ]
     ]

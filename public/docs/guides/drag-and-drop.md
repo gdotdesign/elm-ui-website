@@ -68,7 +68,7 @@ view model =
 
 ## Subscriptions - Updating the model
 The module offers a way to simplify getting the mouse position and the click
-events from the official [Mouse]() package.
+events from the official [Mouse](http://package.elm-lang.org/packages/elm-lang/mouse/latest) package.
 
 To use it you need to provide two tags, one for the mouse position and one
 for the clicks and an additional parameter which is the state of the drag
@@ -107,4 +107,4 @@ Click pressed ->
 
 That's it our example is complete the div is now draggable on the page.
 
-You can see the full code for the example [here]()
+You can see the full code for the example [here](https://github.com/gdotdesign/elm-ui-examples/tree/master/drag-and-drop).

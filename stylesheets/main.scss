@@ -343,9 +343,25 @@ ui-docs-entity {
 }
 
 ui-footer {
-  height: 300px;
-  display: block;
+  justify-content: center;
+  align-items: center;
   background: #333;
+  display: flex;
+  height: 50px;
+  color: #FFF;
+
+  a {
+    color: #FFF;
+    border: 0;
+  }
+
+  div > span:first-of-type {
+    margin: 0 10px;
+  }
+
+  ui-icon {
+    margin-right: 7px;
+  }
 }
 
 ui-documentation {
@@ -420,5 +436,27 @@ test-box {
 .notification-center-demo {
   ui-input {
     margin-right: 10px;
+  }
+}
+
+.cta {
+  background: $input;
+  padding: 100px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+
+  background: repeating-linear-gradient(
+    -45deg,
+    $input,
+    $input 10px,
+    dampen($input, 1.5%) 10px,
+    dampen($input, 1.5%) 20px
+  );
+
+  span {
+    margin-bottom: 30px;
   }
 }

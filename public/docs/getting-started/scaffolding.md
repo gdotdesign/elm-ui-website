@@ -21,7 +21,7 @@ my-awesome-app
 └── elm-package.json
 ```
 
-* **config** - This directory contains the files for the [environment variables](https://en.wikipedia.org/wiki/Environment_variable).
+* **config** - This directory contains the files for the [environment variables](https://en.wikipedia.org/wiki/Deployment_environment).
 <br> The application have access to them and they are generally have different values for development, production, etc...
 * **source** - This directory contains the source (.elm) files for the application.
 <br>The **Main.elm** is the file that runs and imports all other modules.
