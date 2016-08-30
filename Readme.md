@@ -13,3 +13,7 @@ Everything is set up with Npm:
 The documentation is generated from the Elm-UI source code and copied over
 to `public/documentation.json`, so if you find a typo it needs to be fixed
 there.
+
+## Hosting
+The website is hosted in the repository in the `gh-pages` branch using
+https://github.com/rafrex/spa-github-pages.
