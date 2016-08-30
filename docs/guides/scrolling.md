@@ -29,6 +29,8 @@ In the source you need to import the `Dom.Scroll` module:
 
 ```
 import Dom.Scroll
+import Task
+import Dom
 
 type alias Model =
   {}
@@ -45,11 +47,16 @@ for this we will add a `Ui.Button`:
 type Msg
   = ToTop
   | Scrolled ()
+  | NotFound Dom.Error
 
 view : Model -> Html.Html Msg
 view model =
   div
-    [ style [ ( "padding-top", "1000px" ) ] ]
+    [ style
+        [ ( "margin", "40px" )
+        , ( "padding-top", "1000px" )
+        ]
+    ]
     [ Ui.Button.primary "To Top!" ToTop
     ]
 ```
@@ -62,12 +69,16 @@ update msg model =
   case msg of
     ToTop ->
       let
-        task = Dom.Scroll.toTop
+        task =
+          Dom.Scroll.toTop "body"
       in
         ( model, Task.perform NotFound Scrolled task )
 
     Scrolled () ->
       ( model, Cmd.none )
+
+    NotFound _ ->
+      ( model, Cmd.none )
 ```
 
-You can see the full code for the example [here]().
+You can see the full code for the example [here](https://github.com/gdotdesign/elm-ui-examples/tree/master/scroll-to-top).
