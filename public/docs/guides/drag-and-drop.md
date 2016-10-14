@@ -34,7 +34,7 @@ init =
 
 ## Lift - The start of a drag
 To start a **drag** you will need to call the `lift` function which takes the
-start mouse position, the dimensions of the elment and the model.
+start mouse position, the dimensions of the element and the model.
 
 There is a decoder to get these from an event `onWithDimensions` from the
 `Html.Events.Geometry` module:
