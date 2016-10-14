@@ -1,6 +1,6 @@
 # Guides
 
-This chapter contindains patterns and solutions for common problems encountered
+This chapter contains patterns and solutions for common problems encountered
 when building web applications.
 
 The problems include:
