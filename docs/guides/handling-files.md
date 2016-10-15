@@ -56,7 +56,7 @@ div
 
 ## Reading Files
 After selecting a file you might want to read that as a string or as a
-[Data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). There are conviniece
+[Data URI](https://en.wikipedia.org/wiki/Data_URI_scheme). There are convenience
 functions for these: `readAsString` and `readAsDataURL` that will return a task.
 
 Examples of reading a file:

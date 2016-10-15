@@ -4,7 +4,7 @@ application. The main reason for focusing a component is to guide the user
 to a specific part of the application that requires user input.
 
 ## HTML Elements
-Focusing HTML elemenst is done via the official [Dom package](http://package.elm-lang.org/packages/elm-lang/dom).
+Focusing HTML elements is done via the official [Dom package](http://package.elm-lang.org/packages/elm-lang/dom).
 You can focus any HTML element that has an **id attribute** using the
 [Dom.focus](http://package.elm-lang.org/packages/elm-lang/dom/1.1.0/Dom#focus)
 function which returns a task, when run, it will focus the element and if it's
