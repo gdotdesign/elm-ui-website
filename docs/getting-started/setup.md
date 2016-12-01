@@ -1,5 +1,5 @@
 ## Prerequisites
-You should have a basic knowlege of **Elm** and of **The Elm Architecture**. Here are
+You should have a basic knowledge of **Elm** and of **The Elm Architecture**. Here are
 some resources to get you up to speed:
 * [Elm](http://elm-lang.org) - The official website of Elm
 * [Elm Guide](http://guide.elm-lang.org) - The official Elm guide
@@ -27,7 +27,7 @@ Elm-UI uses the following technologies:
 * Elm - The frontend language via [elm](https://www.npmjs.com/package/elm)
 * Sass - The CSS preprocessor using [node-sass](https://www.npmjs.com/package/node-sass)
 * Autoprefixer - Automatically add browser prefixes when needed via [autoprefixer](https://www.npmjs.com/package/autoprefixer)
-* Browsersync - Live reload functionanilty via [browser-sync](https://www.npmjs.com/package/browser-sync)
+* Browsersync - Live reload functionality via [browser-sync](https://www.npmjs.com/package/browser-sync)
 
 ## Command line tool
 Similarly to many frameworks, Elm-UI comes with a
