@@ -32,7 +32,7 @@ my-awesome-app
 <br>The **index.html** in this directory is your main file that is displayed.
 * **elm-package.json** - It is your standard Elm package configuration file
 
-## Installing dependecies
+## Installing dependencies
 Any Elm-UI application will have dependencies such as **gdotdesign/elm-ui**,
 **elm-lang/core** and **other packages**.
 
