@@ -100,7 +100,18 @@ updateForm ( model, effect ) =
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
-  ( model, effect )
+  let
+    toggleFunction =
+      if Form.valueOfCheckbox "open" False model.form then
+        Ui.Helpers.Dropdown.open
+      else
+        Ui.Helpers.Dropdown.close
+
+    dropdownMenu =
+      model.dropdownMenu
+        |> toggleFunction
+  in
+    ( { model | dropdownMenu = dropdownMenu }, effect )
   {-let
     -- sides =
     --  model.dropdownMenu.favoredSides
@@ -112,7 +123,7 @@ updateState ( model, effect ) =
 
     updatedComponent dropdown =
       { dropdown
-        | open = Form.valueOfCheckbox "open" False model.form
+        | open =
       }
   in
     ( { model | dropdownMenu = updatedComponent model.dropdownMenu }, effect )

@@ -168,8 +168,7 @@ navItems =
 
 components =
   Dict.fromList
-    [ ("app", ("Ui.App", False))
-    , ("button", ("Ui.Button", True))
+    [ ("button", ("Ui.Button", True))
     , ("button-group", ("Ui.ButtonGroup", True))
     , ("calendar", ("Ui.Calendar", True))
     , ("checkbox", ("Ui.Checkbox", True))

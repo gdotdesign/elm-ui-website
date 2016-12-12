@@ -78,15 +78,18 @@ updateForm ( model, effect ) =
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
+    ( input, cmd ) =
+      updatedComponent model.input
+
     updatedComponent input =
       { input
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , placeholder = Form.valueOfInput "placeholder" "" model.form
-        , value = Form.valueOfInput "value" "" model.form
       }
+        |> Ui.Input.setValue (Form.valueOfInput "value" "" model.form)
   in
-    ( { model | input = updatedComponent model.input }, effect )
+    ( { model | input = input }, Cmd.batch [ effect, Cmd.map Input cmd ] )
 
 
 view : Model -> Html.Html Msg
