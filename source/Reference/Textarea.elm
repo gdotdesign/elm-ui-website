@@ -7,7 +7,6 @@ import Ui.Textarea
 
 import Ext.Date
 
-import Html.App
 import Html
 
 
@@ -24,7 +23,9 @@ type alias Model =
 
 init : Model
 init =
-  { textarea = Ui.Textarea.init "Some content..." "Placeholder..."
+  { textarea =
+      Ui.Textarea.init ()
+        |> Ui.Textarea.placeholder "Placeholder..."
   , form =
       Form.init
         { checkboxes =
@@ -97,6 +98,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Textarea (Ui.Textarea.view model.textarea)
+      Html.map Textarea (Ui.Textarea.view model.textarea)
   in
     Components.Reference.view demo form

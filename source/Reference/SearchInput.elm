@@ -7,7 +7,6 @@ import Ui.SearchInput
 
 import Ext.Date
 
-import Html.App
 import Html
 
 
@@ -25,9 +24,12 @@ type alias Model =
 init : Model
 init =
   let
-    input = Ui.SearchInput.init 0 "Placeholder..."
+    input =
+      Ui.SearchInput.init ()
+        |> Ui.SearchInput.placeholder "Placeholder..."
+        -- |> Ui.SearchInput.setValue "Some content..."
   in
-    { input = Ui.SearchInput.setValue "Some content..." input
+    { input = input
     , form =
         Form.init
           { checkboxes =
@@ -79,6 +81,9 @@ updateForm ( model, effect ) =
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
+    ( input, cmd ) =
+      updatedComponent model.input
+
     updatedComponent input =
       let
         updatedInput subInput =
@@ -90,7 +95,7 @@ updateState ( model, effect ) =
           , input = updatedInput input.input
         } |> Ui.SearchInput.setValue (Form.valueOfInput "value" "" model.form)
   in
-    ( { model | input = updatedComponent model.input }, effect )
+    ( { model | input = input }, Cmd.batch [ effect, Cmd.map SearchInput cmd ] )
 
 
 view : Model -> Html.Html Msg
@@ -100,6 +105,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map SearchInput (Ui.SearchInput.view model.input)
+      Html.map SearchInput (Ui.SearchInput.view model.input)
   in
     Components.Reference.view demo form

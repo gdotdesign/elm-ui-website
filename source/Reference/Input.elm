@@ -7,7 +7,6 @@ import Ui.Input
 
 import Ext.Date
 
-import Html.App
 import Html
 
 
@@ -24,7 +23,10 @@ type alias Model =
 
 init : Model
 init =
-  { input = Ui.Input.init "Some content..." "Placeholder..."
+  { input =
+      Ui.Input.init ()
+        |> Ui.Input.placeholder "Placeholder..."
+        -- |> Ui.Input.setValue "Some content..."
   , form =
       Form.init
         { checkboxes =
@@ -94,6 +96,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Input (Ui.Input.view model.input)
+      Html.map Input (Ui.Input.view model.input)
   in
     Components.Reference.view demo form

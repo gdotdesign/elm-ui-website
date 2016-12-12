@@ -8,7 +8,6 @@ import Components.Reference
 import Ui.ButtonGroup
 import Ui.Chooser
 
-import Html.App
 import Html
 
 

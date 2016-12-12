@@ -7,7 +7,6 @@ import Ui.Calendar
 
 import Ext.Date
 
-import Html.App
 import Html
 
 
@@ -27,7 +26,9 @@ init =
   let
     date = Ext.Date.createDate 1977 5 25
   in
-    { calendar = Ui.Calendar.init date
+    { calendar =
+        Ui.Calendar.init ()
+          |> Ui.Calendar.setValue date
     , form =
         Form.init
           { checkboxes =
@@ -103,6 +104,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Calendar (Ui.Calendar.view "en_us" model.calendar)
+      Html.map Calendar (Ui.Calendar.view "en_us" model.calendar)
   in
     Components.Reference.view demo form

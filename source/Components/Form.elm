@@ -3,7 +3,6 @@ module Components.Form exposing (..)
 import Html exposing (node, text)
 import Html.Keyed
 import Html.Lazy
-import Html.App
 
 import Ext.Color exposing (Hsv)
 import Dict exposing (Dict)
@@ -59,36 +58,67 @@ init : TempModel -> Model msg
 init data =
   let
     initDatePickers ( name, index, value ) =
-      ( name, ( index, Ui.DatePicker.init value ) )
+      let
+        datePicker =
+          Ui.DatePicker.init ()
+            |> Ui.DatePicker.setValue value
+      in
+        ( name, ( index, datePicker ) )
 
     initCheckbox ( name, index, value ) =
-      ( name, ( index, Ui.Checkbox.init value ) )
+      let
+        checkbox =
+          Ui.Checkbox.init ()
+            |> Ui.Checkbox.setValue value
+      in
+        ( name, ( index, checkbox ) )
 
     initChooser ( name, index, data, placeholder, value ) =
-      ( name, ( index, Ui.Chooser.init data placeholder value ) )
+      let
+        chooser =
+          Ui.Chooser.init ()
+            |> Ui.Chooser.items data
+            |> Ui.Chooser.placeholder placeholder
+            |> Ui.Chooser.setValue value
+      in
+        ( name, ( index, chooser ) )
 
     initInput ( name, index, placeholder, value ) =
-      ( name, ( index, Ui.Input.init value placeholder ) )
+      let
+        ( input, inputCmd ) =
+          Ui.Input.init ()
+            |> Ui.Input.placeholder placeholder
+            |> Ui.Input.setValue value
+      in
+        ( name, ( index, input ) )
 
     initColors ( name, index, value ) =
-      ( name, ( index, Ui.ColorPicker.init value ) )
+      let
+        ( colorPicker, colorPickerCmd ) =
+          Ui.ColorPicker.init ()
+            |> Ui.ColorPicker.setValue value
+      in
+        ( name, ( index, colorPicker ) )
 
     initTextarea ( name, index, placeholder, value ) =
-      ( name, ( index, Ui.Textarea.init value placeholder ) )
+      let
+        ( textarea, textareaCmd ) =
+          Ui.Textarea.init ()
+            |> Ui.Textarea.placeholder placeholder
+            |> Ui.Textarea.setValue value
+      in
+        ( name, ( index, textarea ) )
 
     initNumberRange ( name, index, value, affix, min, max, round, step) =
       let
-        baseNumberRange =
-          Ui.NumberRange.init value
-
-        numberRange =
-          { baseNumberRange
-            | affix = affix
-            , round = round
-            , step = step
-            , max = max
-            , min = min
-          }
+        ( numberRange, numberRangeCmd ) =
+          Ui.NumberRange.init ()
+           |> Ui.NumberRange.affix affix
+           |> Ui.NumberRange.round round
+           |> Ui.NumberRange.dragStep step
+           |> Ui.NumberRange.min min
+           |> Ui.NumberRange.max max
+           |> Ui.NumberRange.setValue value
       in
         ( name, ( index, numberRange ) )
   in
@@ -157,7 +187,7 @@ valueOfSimple :
   -> value
 valueOfSimple name default accessor dict =
   Dict.get name dict
-    |> Maybe.map snd
+    |> Maybe.map Tuple.second
     |> Maybe.map accessor
     |> Maybe.withDefault default
 
@@ -207,7 +237,11 @@ updateColor name value model =
     updatedColor item =
       case item of
         Just ( index, colorPicker ) ->
-          Just ( index, Ui.ColorPicker.setValue value colorPicker )
+          let
+            ( updatedColorPicker, colorPickerCmd ) =
+              Ui.ColorPicker.setValue value colorPicker
+          in
+            Just ( index, updatedColorPicker )
 
         _ ->
           item
@@ -235,7 +269,11 @@ updateTextarea name value model =
     updatedTextarea item =
       case item of
         Just ( index, input ) ->
-          Just ( index, Ui.Textarea.setValue value input )
+          let
+            ( updatedInput, textareaCmd ) =
+              Ui.Textarea.setValue value input
+          in
+            Just ( index, updatedInput )
 
         _ ->
           item
@@ -249,7 +287,11 @@ updateInput name value model =
     updatedInput item =
       case item of
         Just ( index, input ) ->
-          Just ( index, Ui.Input.setValue value input )
+          let
+            ( updatedInput, textareaCmd ) =
+              Ui.Input.setValue value input
+          in
+            Just ( index, updatedInput )
 
         _ ->
           item
@@ -263,7 +305,11 @@ updateNumberRange name value model =
     updatedNumberRange item =
       case item of
         Just ( index, numberRange ) ->
-          Just ( index, Ui.NumberRange.setValue value numberRange )
+          let
+            ( updatedInput, textareaCmd ) =
+              Ui.NumberRange.setValue value numberRange
+          in
+            Just ( index, updatedInput )
 
         _ ->
           item
@@ -376,31 +422,31 @@ view address fields =
   let
     renderDatePicker name data =
       blockField name
-        (Html.App.map (address << (DatePickers name)) (Ui.DatePicker.view "en_us" data))
+        (Html.map (address << (DatePickers name)) (Ui.DatePicker.view "en_us" data))
 
     renderCheckbox name data =
       inlineField name
-        (Html.App.map (address << (Checkboxes name)) (Ui.Checkbox.view data))
+        (Html.map (address << (Checkboxes name)) (Ui.Checkbox.view data))
 
     renderChooser name data =
       blockField name
-        (Html.App.map (address << (Choosers name)) (Ui.Chooser.view data))
+        (Html.map (address << (Choosers name)) (Ui.Chooser.view data))
 
     renderInput name data =
       blockField name
-        (Html.App.map (address << (Inputs name)) (Ui.Input.view data))
+        (Html.map (address << (Inputs name)) (Ui.Input.view data))
 
     renderColorPicker name data =
       blockField name
-        (Html.App.map (address << (Colors name)) (Ui.ColorPicker.view data))
+        (Html.map (address << (Colors name)) (Ui.ColorPicker.view data))
 
     renderTextarea name data =
       blockField name
-        (Html.App.map (address << (Textareas name)) (Ui.Textarea.view data))
+        (Html.map (address << (Textareas name)) (Ui.Textarea.view data))
 
     renderNumberRange name data =
       blockField name
-        (Html.App.map (address << (NumberRanges name)) (Ui.NumberRange.view data))
+        (Html.map (address << (NumberRanges name)) (Ui.NumberRange.view data))
 
     blockField name child =
       node "ui-form-block"

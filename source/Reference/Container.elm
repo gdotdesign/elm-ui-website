@@ -8,7 +8,6 @@ import Ui.Chooser
 
 import Html.Attributes exposing (id)
 import Html exposing (node)
-import Html.App
 
 
 type Msg

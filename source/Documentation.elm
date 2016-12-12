@@ -2,7 +2,6 @@ module Documentation exposing (..)
 
 import Html.Events exposing (onClick)
 import Html exposing (node, text)
-import Html.App
 import Http
 import Task
 
@@ -16,8 +15,7 @@ type alias Model =
 
 type Msg
   = Load String
-  | Loaded String
-  | Error Http.Error
+  | Loaded (Result Http.Error String)
   | List NavList.Msg
 
 pages : List (String, String)
@@ -60,7 +58,7 @@ setContents contents model =
 
 load : String -> Cmd Msg
 load page =
-  Task.perform (\_ -> Debug.crash "") (\_-> Load page) (Task.succeed "")
+  Task.perform (\_-> Load page) (Task.succeed "")
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -68,18 +66,17 @@ update msg model =
     Load page ->
       let
         cmd =
-          Task.perform
-            Error
-            Loaded
-            (Http.getString ("/docs/" ++ page ++ ".md"))
+          Http.getString ("/docs/" ++ page ++ ".md")
+            |> Http.send Loaded
       in
         (model, cmd)
 
-    Loaded contents ->
-      (setContents contents model, Cmd.none)
-
-    Error _ ->
-      (model, Cmd.none)
+    Loaded result ->
+      case result of
+        Ok contents ->
+          (setContents contents model, Cmd.none)
+        Err _ ->
+          (model, Cmd.none)
 
     List act ->
       let
@@ -90,6 +87,6 @@ update msg model =
 view : String -> Model -> Html.Html Msg
 view active model =
   node "ui-documentation" []
-    [ Html.App.map List (NavList.view active model.list)
+    [ Html.map List (NavList.view active model.list)
     , Markdown.view model.contents
     ]

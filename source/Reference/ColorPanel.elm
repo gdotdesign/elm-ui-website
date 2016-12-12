@@ -9,7 +9,6 @@ import Ui
 import Ext.Color exposing (Hsv)
 import Color
 
-import Html.App
 import Html
 
 
@@ -31,7 +30,9 @@ hsvColor =
 
 init : Model
 init =
-  { colorPanel = Ui.ColorPanel.init Color.yellow
+  { colorPanel =
+      Ui.ColorPanel.init ()
+        -- |> Ui.ColorPanel.setValue Color.yellow
   , form =
       Form.init
         { checkboxes =
@@ -105,7 +106,7 @@ view : Model -> Html.Html Msg
 view model =
   let
     demo =
-      Html.App.map ColorPanel (Ui.ColorPanel.view model.colorPanel)
+      Html.map ColorPanel (Ui.ColorPanel.view model.colorPanel)
 
     form =
       Form.view Form model.form

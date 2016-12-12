@@ -5,7 +5,6 @@ import Components.Reference
 
 import Ui.Chooser
 
-import Html.App
 import Html
 
 
@@ -38,7 +37,10 @@ init =
     placeholder =
       "Select a movie you will..."
   in
-    { chooser = Ui.Chooser.init data placeholder ""
+    { chooser =
+        Ui.Chooser.init ()
+          |> Ui.Chooser.placeholder placeholder
+          |> Ui.Chooser.items data
     , form =
         Form.init
           { inputs =
@@ -86,7 +88,7 @@ updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, effect ) =
   let
     updatedForm =
-      Form.updateCheckbox "open" model.chooser.open model.form
+      Form.updateCheckbox "open" model.chooser.dropdown.open model.form
   in
     ( { model | form = updatedForm }, effect )
 
@@ -103,7 +105,7 @@ updateState ( model, effect ) =
         , disabled = Form.valueOfCheckbox "disabled" False model.form
         , multiple = Form.valueOfCheckbox "multiple" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
-        , open = Form.valueOfCheckbox "open" False model.form
+        -- , open = Form.valueOfCheckbox "open" False model.form
       }
   in
     ( { model | chooser = updatedComponent model.chooser }, effect )
@@ -113,7 +115,7 @@ view : Model -> Html.Html Msg
 view model =
   let
     demo =
-      Html.App.map Chooser (Ui.Chooser.view model.chooser)
+      Html.map Chooser (Ui.Chooser.view model.chooser)
 
     form =
       Form.view Form model.form

@@ -4,7 +4,6 @@ import Html exposing (div, span, strong, text, node, a)
 import Html.Attributes exposing (classList, class)
 import Html.Events exposing (onClick)
 import Html.Lazy
-import Html.App
 
 import List.Extra
 import String
@@ -14,7 +13,6 @@ import Dict
 import Ui.Helpers.Emitter as Emitter
 import Ui.Container
 import Ui.Button
-import Ui.App
 import Ui
 
 import Reference.NotificationCenter as NotificationCenter
@@ -540,63 +538,63 @@ view model active =
     componentView =
       case active of
         "button" ->
-          Html.App.map ButtonAction (Button.view model.button)
+          Html.map ButtonAction (Button.view model.button)
         "chooser" ->
-          Html.App.map ChooserAction (Chooser.view model.chooser)
+          Html.map ChooserAction (Chooser.view model.chooser)
         "calendar" ->
-          Html.App.map CalendarAction (Calendar.view model.calendar)
+          Html.map CalendarAction (Calendar.view model.calendar)
         "color-panel" ->
-          Html.App.map ColorPanelAction (ColorPanel.view model.colorPanel)
+          Html.map ColorPanelAction (ColorPanel.view model.colorPanel)
         "color-picker" ->
-          Html.App.map ColorPickerAction (ColorPicker.view model.colorPicker)
+          Html.map ColorPickerAction (ColorPicker.view model.colorPicker)
         "file-input" ->
-          Html.App.map FileInputAction (FileInput.view model.fileInput)
+          Html.map FileInputAction (FileInput.view model.fileInput)
         "button-group" ->
-          Html.App.map ButtonGroupAction (ButtonGroup.view model.buttonGroup)
+          Html.map ButtonGroupAction (ButtonGroup.view model.buttonGroup)
         "checkbox" ->
-          Html.App.map Checkbox (Checkbox.view model.checkbox)
+          Html.map Checkbox (Checkbox.view model.checkbox)
         "container" ->
-          Html.App.map Container (Container.view model.container)
+          Html.map Container (Container.view model.container)
         "date-picker" ->
-          Html.App.map DatePicker (DatePicker.view model.datePicker)
+          Html.map DatePicker (DatePicker.view model.datePicker)
         "dropdown-menu" ->
-          Html.App.map DropdownMenu (DropdownMenu.view model.dropdownMenu)
+          Html.map DropdownMenu (DropdownMenu.view model.dropdownMenu)
         "icon-button" ->
-          Html.App.map IconButton (IconButton.view model.iconButton)
+          Html.map IconButton (IconButton.view model.iconButton)
         "inplace-input" ->
-          Html.App.map InplaceInput (InplaceInput.view model.inplaceInput)
+          Html.map InplaceInput (InplaceInput.view model.inplaceInput)
         "input" ->
-          Html.App.map Input (Input.view model.input)
+          Html.map Input (Input.view model.input)
         "number-pad" ->
-          Html.App.map NumberPad (NumberPad.view model.numberPad)
+          Html.map NumberPad (NumberPad.view model.numberPad)
         "number-range" ->
-          Html.App.map NumberRange (NumberRange.view model.numberRange)
+          Html.map NumberRange (NumberRange.view model.numberRange)
         "layout" ->
-          Html.App.map Layout (Layout.view model.layout)
+          Html.map Layout (Layout.view model.layout)
         "loader" ->
-          Html.App.map Loader (Loader.view model.loader)
+          Html.map Loader (Loader.view model.loader)
         "header" ->
           Header.view Noop
         "modal" ->
-          Html.App.map Modal (Modal.view model.modal)
+          Html.map Modal (Modal.view model.modal)
         "pager" ->
-          Html.App.map Pager (Pager.view model.pager)
+          Html.map Pager (Pager.view model.pager)
         "ratings" ->
-          Html.App.map Ratings (Ratings.view model.ratings)
+          Html.map Ratings (Ratings.view model.ratings)
         "slider" ->
-          Html.App.map Slider (Slider.view model.slider)
+          Html.map Slider (Slider.view model.slider)
         "search-input" ->
-          Html.App.map SearchInput (SearchInput.view model.searchInput)
+          Html.map SearchInput (SearchInput.view model.searchInput)
         "textarea" ->
-          Html.App.map Textarea (Textarea.view model.textarea)
+          Html.map Textarea (Textarea.view model.textarea)
         "notification-center" ->
-          Html.App.map NotificationCenter (NotificationCenter.view model.notificationCenter)
+          Html.map NotificationCenter (NotificationCenter.view model.notificationCenter)
         "time" ->
-          Html.App.map Time (Time.view model.time)
+          Html.map Time (Time.view model.time)
         "tabs" ->
-          Html.App.map Tabs (Tabs.view model.tabs)
+          Html.map Tabs (Tabs.view model.tabs)
         "tagger" ->
-          Html.App.map Tagger (Tagger.view model.tagger)
+          Html.map Tagger (Tagger.view model.tagger)
         _ ->
           text ""
 
@@ -629,6 +627,6 @@ view model active =
           [ text "No component is selected!" ]
   in
     node "ui-reference" []
-      [ Html.App.map List (NavList.view active model.list)
+      [ Html.map List (NavList.view active model.list)
       , node "ui-reference-content" [] (content ++ docs)
       ]

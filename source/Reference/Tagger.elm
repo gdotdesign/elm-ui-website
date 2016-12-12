@@ -6,7 +6,6 @@ import Components.Reference
 import Ui.Native.Uid as Uid
 import Ui.Tagger
 
-import Html.App
 import Html
 
 
@@ -26,7 +25,9 @@ type alias Model =
 
 init : Model
 init =
-  { tagger = Ui.Tagger.init "Add a tag.."
+  { tagger =
+      Ui.Tagger.init ()
+        |> Ui.Tagger.placeholder "Add a tag.."
   , tags =
       [ { label = "Vader", id = "vader" }
       , { label = "Luke", id = "luke" }
@@ -50,7 +51,10 @@ init =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Ui.Tagger.subscribe AddTag RemoveTag model.tagger
+  Sub.batch
+    [ Ui.Tagger.onCreate AddTag model.tagger
+    , Ui.Tagger.onRemove RemoveTag model.tagger
+    ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -73,6 +77,9 @@ update action model =
 
     AddTag value ->
       let
+        ( tagger, cmd ) =
+          Ui.Tagger.setValue "" model.tagger
+
         tag =
           { label = value
           , id = Uid.uid ()
@@ -80,9 +87,9 @@ update action model =
       in
         ( { model
             | tags = tag :: model.tags
-            , tagger = Ui.Tagger.setValue "" model.tagger
+            , tagger = tagger
           }
-        , Cmd.none
+        , Cmd.map Tagger cmd
         )
 
     RemoveTag id ->
@@ -111,6 +118,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Tagger (Ui.Tagger.view model.tags model.tagger)
+      Html.map Tagger (Ui.Tagger.view model.tags model.tagger)
   in
     Components.Reference.view demo form

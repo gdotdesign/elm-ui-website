@@ -5,7 +5,7 @@
   "scripts": {
     "start": "elm-ui server",
     "deploy": "gulp deploy",
-    "predeploy": "npm run build",
+    "predeploy": "yarn run build",
     "install": "elm-ui install",
     "build": "elm-ui build"
   },

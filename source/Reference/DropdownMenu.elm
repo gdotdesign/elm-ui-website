@@ -3,6 +3,7 @@ module Reference.DropdownMenu exposing (..)
 import Components.Form as Form
 import Components.Reference
 
+import Ui.Helpers.Dropdown
 import Ui.DropdownMenu
 import Ui.IconButton
 import Ui.Chooser
@@ -10,7 +11,6 @@ import Ui
 
 import Html.Events exposing (onClick)
 import Html exposing (node, text)
-import Html.App
 
 
 type Msg
@@ -42,7 +42,7 @@ verticalData =
 
 init : Model
 init =
-  { dropdownMenu = Ui.DropdownMenu.init
+  { dropdownMenu = Ui.DropdownMenu.init ()
   , form =
       Form.init
         { checkboxes =
@@ -81,7 +81,8 @@ update action model =
           |> updateForm
 
     CloseMenu ->
-      ( { model | dropdownMenu = Ui.DropdownMenu.close model.dropdownMenu }, Cmd.none )
+      ( { model | dropdownMenu = Ui.Helpers.Dropdown.close model.dropdownMenu }
+      , Cmd.none )
         |> updateForm
 
     _ ->
@@ -92,29 +93,30 @@ updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, effect ) =
   let
     updatedForm =
-      Form.updateCheckbox "open" model.dropdownMenu.open model.form
+      Form.updateCheckbox "open" model.dropdownMenu.dropdown.open model.form
   in
     ( { model | form = updatedForm }, effect )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
-  let
-    sides =
-      model.dropdownMenu.favoredSides
+  ( model, effect )
+  {-let
+    -- sides =
+    --  model.dropdownMenu.favoredSides
 
-    updatedSides =
-      { horizontal = Form.valueOfChooser "horizontal" "left" model.form
-      , vertical = Form.valueOfChooser "vertical" "bottom" model.form
-      }
+    -- updatedSides =
+    --  { horizontal = Form.valueOfChooser "horizontal" "left" model.form
+    --  , vertical = Form.valueOfChooser "vertical" "bottom" model.form
+    --  }
 
-    updatedComponent dropdownMenu =
-      { dropdownMenu
-        | favoredSides = updatedSides
-        , open = Form.valueOfCheckbox "open" False model.form
+    updatedComponent dropdown =
+      { dropdown
+        | open = Form.valueOfCheckbox "open" False model.form
       }
   in
     ( { model | dropdownMenu = updatedComponent model.dropdownMenu }, effect )
+  -}
 
 
 subscriptions : Model -> Sub Msg
@@ -131,6 +133,8 @@ viewModel =
         "chevron-down"
         "right"
         Nothing
+  , address =
+      DropdownMenu
   , items =
       [ Ui.DropdownMenu.item [ onClick CloseMenu ]
           [ Ui.icon "android-download" True []
@@ -151,8 +155,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Ui.DropdownMenu.view viewModel
-        DropdownMenu
-        model.dropdownMenu
+      Ui.DropdownMenu.view viewModel model.dropdownMenu
   in
     Components.Reference.view demo form

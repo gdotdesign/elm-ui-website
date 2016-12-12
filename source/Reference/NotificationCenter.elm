@@ -10,7 +10,6 @@ import Ui.Input
 
 import Html.Attributes exposing (class)
 import Html exposing (div, text)
-import Html.App
 
 
 type alias Model =
@@ -27,7 +26,9 @@ type Msg
 
 init : Model
 init =
-  { input = Ui.Input.init "" "Message..."
+  { input =
+      Ui.Input.init ()
+        |> Ui.Input.placeholder "Message..."
   , notifications = Notifications.init 5000 400
   }
 
@@ -53,12 +54,18 @@ update msg model =
       let
         ( notifications, cmd ) =
           Notifications.notify (text model.input.value) model.notifications
+
+        ( input, inputCmd ) =
+          Ui.Input.setValue "" model.input
       in
         ( { model
-            | input = Ui.Input.setValue "" model.input
-            , notifications = notifications
+            | notifications = notifications
+            , input = input
           }
-        , Cmd.map Notifications cmd
+        , Cmd.batch
+          [ Cmd.map Notifications cmd
+          , Cmd.map Input inputCmd
+          ]
         )
 
 
@@ -69,7 +76,7 @@ view model =
       div [ class "notification-center-demo"
           , onEnter False Notify
           ]
-        [ Html.App.map Input (Ui.Input.view model.input)
+        [ Html.map Input (Ui.Input.view model.input)
         , Ui.Button.primary "Send" Notify
         , Notifications.view Notifications model.notifications
         ]

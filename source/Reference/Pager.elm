@@ -7,7 +7,6 @@ import Ui.Pager
 
 import Html.Attributes exposing (class)
 import Html exposing (div, text)
-import Html.App
 
 
 type Msg

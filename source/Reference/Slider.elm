@@ -6,7 +6,6 @@ import Components.Reference
 import Ui.Slider
 
 import Html exposing (text)
-import Html.App
 
 
 type Msg
@@ -22,7 +21,9 @@ type alias Model =
 
 init : Model
 init =
-  { slider = Ui.Slider.init 50
+  { slider =
+      Ui.Slider.init ()
+        |> Ui.Slider.setValue 50
   , form =
       Form.init
         { numberRanges =
@@ -102,6 +103,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Slider (Ui.Slider.view model.slider)
+      Html.map Slider (Ui.Slider.view model.slider)
   in
     Components.Reference.view demo form

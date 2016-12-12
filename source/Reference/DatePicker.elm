@@ -7,7 +7,6 @@ import Ui.DatePicker
 
 import Ext.Date
 
-import Html.App
 import Html
 
 
@@ -29,7 +28,7 @@ init =
       Ext.Date.createDate 1980 5 17
 
     datePicker =
-      Ui.DatePicker.init date
+      Ui.DatePicker.init ()
   in
     { datePicker = { datePicker | format = "%B %e, %Y" }
     , form =
@@ -112,6 +111,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map DatePicker (Ui.DatePicker.view "en_us" model.datePicker)
+      Html.map DatePicker (Ui.DatePicker.view "en_us" model.datePicker)
   in
     Components.Reference.view demo form

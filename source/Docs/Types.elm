@@ -41,7 +41,7 @@ type alias Function =
 
 decodeDocumentation : Decoder Documentation
 decodeDocumentation =
-  Json.Decode.object1 Documentation (list decodeModule)
+  Json.Decode.map Documentation (list decodeModule)
 
 
 decodeModule : Decoder Module

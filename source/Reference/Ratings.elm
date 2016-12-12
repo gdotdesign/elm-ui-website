@@ -6,7 +6,6 @@ import Components.Reference
 import Ui.Ratings
 
 import Html exposing (text)
-import Html.App
 
 
 type Msg
@@ -22,7 +21,7 @@ type alias Model =
 
 init : Model
 init =
-  { ratings = Ui.Ratings.init 5 0.5
+  { ratings = Ui.Ratings.init ()
   , form =
       Form.init
         { numberRanges =
@@ -105,6 +104,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Ratings (Ui.Ratings.view model.ratings)
+      Html.map Ratings (Ui.Ratings.view model.ratings)
   in
     Components.Reference.view demo form

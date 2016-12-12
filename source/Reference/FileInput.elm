@@ -6,7 +6,6 @@ import Components.Reference
 import Ui.FileInput
 
 import Html exposing (div)
-import Html.App
 
 
 type Msg
@@ -22,7 +21,7 @@ type alias Model =
 
 init : Model
 init =
-  { fileInput = Ui.FileInput.init "*"
+  { fileInput = Ui.FileInput.init ()
   , form =
       Form.init
         { checkboxes =
@@ -83,8 +82,8 @@ view model =
 
     demo =
       div []
-        [ Html.App.map FileInput (Ui.FileInput.view model.fileInput)
-        , Html.App.map FileInput (Ui.FileInput.viewDetails model.fileInput)
+        [ Html.map FileInput (Ui.FileInput.view model.fileInput)
+        , Html.map FileInput (Ui.FileInput.viewDetails model.fileInput)
         ]
   in
     Components.Reference.view demo form

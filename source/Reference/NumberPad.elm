@@ -6,7 +6,6 @@ import Components.Reference
 import Ui.NumberPad
 
 import Html exposing (text)
-import Html.App
 
 
 type Msg
@@ -22,7 +21,9 @@ type alias Model =
 
 init : Model
 init =
-  { numberPad = Ui.NumberPad.init 42
+  { numberPad =
+      Ui.NumberPad.init ()
+        |> Ui.NumberPad.setValue 42
   , form =
       Form.init
         { numberRanges =
@@ -106,8 +107,7 @@ view model =
 
     demo =
       Ui.NumberPad.view
-        { bottomLeft = text "", bottomRight = text "" }
-        NumberPad
+        { bottomLeft = text "", bottomRight = text "", address = NumberPad }
         model.numberPad
   in
     Components.Reference.view demo form

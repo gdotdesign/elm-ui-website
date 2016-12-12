@@ -8,7 +8,6 @@ import Ui.Checkbox
 
 import Html.Attributes exposing (style)
 import Html exposing (div)
-import Html.App
 
 
 type Msg
@@ -24,7 +23,9 @@ type alias Model =
 
 init : Model
 init =
-  { checkbox = Ui.Checkbox.init True
+  { checkbox =
+      Ui.Checkbox.init ()
+        |> Ui.Checkbox.setValue True
   , form =
       Form.init
         { checkboxes =
@@ -92,9 +93,9 @@ view model =
 
     demo =
       Ui.Container.row []
-        [ Html.App.map Checkbox (Ui.Checkbox.view model.checkbox)
-        , Html.App.map Checkbox (Ui.Checkbox.viewRadio model.checkbox)
-        , Html.App.map Checkbox (Ui.Checkbox.viewToggle model.checkbox)
+        [ Html.map Checkbox (Ui.Checkbox.view model.checkbox)
+        , Html.map Checkbox (Ui.Checkbox.viewRadio model.checkbox)
+        , Html.map Checkbox (Ui.Checkbox.viewToggle model.checkbox)
         ]
   in
     Components.Reference.view demo form

@@ -8,7 +8,6 @@ import Ui.ColorPicker
 import Ext.Color exposing (Hsv)
 import Color
 
-import Html.App
 import Html
 
 
@@ -30,7 +29,9 @@ hsvColor =
 
 init : Model
 init =
-  { colorPicker = Ui.ColorPicker.init Color.yellow
+  { colorPicker =
+      Ui.ColorPicker.init ()
+        -- |> Ui.ColorPicker.setValue Color.yellow
   , form =
       Form.init
         { checkboxes =
@@ -113,6 +114,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map ColorPicker (Ui.ColorPicker.view model.colorPicker)
+      Html.map ColorPicker (Ui.ColorPicker.view model.colorPicker)
   in
     Components.Reference.view demo form

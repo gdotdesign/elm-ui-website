@@ -4,7 +4,6 @@ import Html.Attributes exposing (classList, href)
 import Html.Events exposing (onClick)
 import Html exposing (node, text)
 import Html.Lazy
-import Html.App
 
 import Ui.Helpers.Emitter as Emitter
 import Ui.SearchInput
@@ -36,7 +35,9 @@ type Msg
 
 init : String -> String -> List Category -> Model
 init prefix placeholder items =
-  { input = Ui.SearchInput.init 0 placeholder
+  { input =
+      Ui.SearchInput.init ()
+        |> Ui.SearchInput.placeholder placeholder
   , prefix = prefix
   , items = items
   }
@@ -81,7 +82,7 @@ render active model =
   in
     node "ui-nav-list"
       []
-      [ Html.App.map Input (Ui.SearchInput.view model.input)
+      [ Html.map Input (Ui.SearchInput.view model.input)
       , node "ui-nav-list-items" [] items
       ]
 

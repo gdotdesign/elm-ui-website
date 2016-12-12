@@ -8,7 +8,6 @@ import Ui.Button
 import Ui.Modal
 
 import Html exposing (text)
-import Html.App
 
 
 type alias Model =
@@ -30,7 +29,7 @@ init =
   , form =
       Form.init
         { checkboxes =
-            [ ( "closeable", 1, True )
+            [ ( "closable", 1, True )
             , ( "backdrop", 2, True )
             , ( "open", 3, False )
             ]
@@ -82,7 +81,7 @@ updateState ( model, effect ) =
   let
     updatedComponent modal =
       { modal
-        | closeable = Form.valueOfCheckbox "closeable" False model.form
+        | closable = Form.valueOfCheckbox "closable" False model.form
         , backdrop = Form.valueOfCheckbox "backdrop" False model.form
         , open = Form.valueOfCheckbox "open" False model.form
       }
@@ -99,6 +98,7 @@ view model =
     viewModel =
       { content = [ text "This is the content of the modal..." ]
       , title = "Modal"
+      , address = Modal
       , footer =
           [ Ui.Container.rowEnd [] [ Ui.Button.primary "Close" Close ]
           ]
@@ -106,7 +106,7 @@ view model =
 
     demo =
       Html.div []
-        [ Ui.Modal.view Modal viewModel model.modal
+        [ Ui.Modal.view viewModel model.modal
         , Ui.Button.primary "Open Modal" Open
         ]
   in

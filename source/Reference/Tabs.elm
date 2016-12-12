@@ -7,7 +7,6 @@ import Ui.Tabs
 import Ui
 
 import Html exposing (text)
-import Html.App
 
 
 type Msg

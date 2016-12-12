@@ -6,7 +6,6 @@ import Ui.Header
 import Ui
 
 import Html exposing (text)
-import Html.App
 
 
 view : msg -> Html.Html msg

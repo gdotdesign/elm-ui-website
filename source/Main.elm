@@ -1,20 +1,17 @@
 module Main exposing (..)
 
-import Hop.Matchers exposing (match1, match2)
-import Hop.Types
-import Hop
-
-import Combine exposing (Parser)
+import UrlParser exposing (Parser, (</>))
 import Navigation
+
+import Ext.Date
 import Task
 import Date
-import Ext.Date
 import Dict
 
+import Html exposing (node, div, span, strong, text, a, img)
 import Html.Attributes exposing (href, class, src, target)
 import Html.Events exposing (onClick)
-import Html exposing (node, div, span, strong, text, a, img)
-import Html.App
+import Html
 import Dom.Scroll
 import Dom
 
@@ -23,7 +20,6 @@ import Ui.Native.Browser as Browser
 import Ui.Container
 import Ui.Header
 import Ui.Button
-import Ui.App
 import Ui
 
 import Reference
@@ -39,24 +35,21 @@ import Animation
 import Ease
 
 type alias Model =
-  { app : Ui.App.Model
-  , page : String
+  { page : String
   , reference : Reference.Model
   , docs : Documentation.Model
   , route : Route
-  , location : Hop.Types.Location
   , scrollToTop : Utils.ScrollToTop.Model
   }
 
 
 type Msg
-  = App Ui.App.Msg
-  | Navigate String
+  = Navigate String
   | Reference Reference.Msg
-  | Failed Http.Error
-  | Loaded Docs.Types.Documentation
+  | Loaded (Result Http.Error Docs.Types.Documentation)
   | Docs Documentation.Msg
   | ScrollToTop Utils.ScrollToTop.Msg
+  | Navigation Navigation.Location
   | NoOp
 
 
@@ -67,55 +60,17 @@ type Msg
 type Route
   = Component String
   | Home
-  | DocumentationPage String
+  | DocumentationPage String String
   | ReferencePage
 
-
-all : Parser String
-all =
-  Combine.regex ".+"
-
-matchers : List (Hop.Types.PathMatcher Route)
-matchers =
-  [ match1 Home ""
-  , match2 Component "/reference/" all
-  , match2 DocumentationPage "/documentation/" all
-  , match1 ReferencePage "/reference"
-  ]
-
-
-urlParser : Navigation.Parser ( Route, Hop.Types.Location )
-urlParser =
-  Navigation.makeParser (.href >> Hop.matchUrl routerConfig)
-
-
-urlUpdate : ( Route, Hop.Types.Location ) -> Model -> ( Model, Cmd Msg )
-urlUpdate ( route, location ) model =
-  let
-    updatedModel =
-      { model | route = route, location = location }
-
-    cmd =
-      case route of
-        DocumentationPage page ->
-          Cmd.map Docs (Documentation.load page)
-
-        _ -> Cmd.none
-  in
-    ( updatedModel, Cmd.batch [ cmd
-                              , Cmd.map ScrollToTop Utils.ScrollToTop.start
-                              ] )
-
-
-routerConfig : Hop.Types.Config Route
-routerConfig =
-  { hash = False
-  , basePath = ""
-  , matchers = matchers
-  , notFound = Home
-  }
-
-
+routes : Parser (Route -> msg) msg
+routes =
+  UrlParser.oneOf
+    [ UrlParser.map Component (UrlParser.s "reference" </> UrlParser.string)
+    , UrlParser.map DocumentationPage (UrlParser.s "documentation" </> UrlParser.string </> UrlParser.string)
+    , UrlParser.map ReferencePage (UrlParser.s "reference")
+    , UrlParser.map Home UrlParser.top
+    ]
 
 --------------------------------------------------------------------------------
 
@@ -127,26 +82,28 @@ pages =
   ]
 
 
-init : ( Route, Hop.Types.Location ) -> ( Model, Cmd Msg )
-init ( route, location ) =
+init : Navigation.Location -> (Model, Cmd Msg)
+init data =
   let
     setupAnimation animation =
       Animation.duration 500 animation
       |> Animation.ease Ease.outCubic
 
     (mod, effect) =
-      { app = Ui.App.init
-      , page = "reference"
+      { page = "reference"
       , reference = Reference.init
-      , route = route
+      , route = Home
       , docs = Documentation.init
-      , location = location
       , scrollToTop = Utils.ScrollToTop.init setupAnimation
       }
-      |> urlUpdate (route, location)
+      |> update (Navigation data)
+
+    cmd =
+      Http.get "/documentation.json" Docs.Types.decodeDocumentation
+      |> Http.send Loaded
   in
     ( mod
-    , Cmd.batch [Task.perform Failed Loaded (Http.get Docs.Types.decodeDocumentation "/documentation.json")
+    , Cmd.batch [cmd
                 ,effect]
     )
 
@@ -160,17 +117,37 @@ component payload =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
   case action of
-    Failed _ ->
-      (model, Cmd.none)
+    Navigation location ->
+      case UrlParser.parsePath routes location of
+        Just route ->
+          let
+            updatedModel =
+              { model | route = route }
 
-    Loaded docs ->
-      ({ model | reference = Reference.setDocumentation docs model.reference }, Cmd.none)
+            cmd =
+              case route of
+                DocumentationPage category page ->
+                  Cmd.map Docs (Documentation.load (category ++ "/" ++ page))
+
+                _ -> Cmd.none
+          in
+            ( updatedModel, Cmd.batch [ cmd
+                                      , Cmd.map ScrollToTop Utils.ScrollToTop.start
+                                      ] )
+        Nothing ->
+          ( model, Cmd.none )
+
+    Loaded result ->
+      case result of
+        Ok docs ->
+          ({ model | reference = Reference.setDocumentation docs model.reference }, Cmd.none)
+        Err _ ->
+          (model, Cmd.none)
 
     Navigate path ->
       let
         command =
-          Hop.makeUrl routerConfig path
-            |> Navigation.newUrl
+          Navigation.newUrl path
       in
         ( model, command )
 
@@ -188,13 +165,6 @@ update action model =
       in
         ( { model | docs = docs }, Cmd.map Docs effect )
 
-    App act ->
-      let
-        ( app, effect ) =
-          Ui.App.update act model.app
-      in
-        ( { model | app = app }, Cmd.map App effect )
-
     ScrollToTop act ->
       let
         (scrollToTop, cmd) = Utils.ScrollToTop.update act model.scrollToTop
@@ -210,19 +180,18 @@ content model =
       Pages.Index.view Navigate NoOp
 
     ReferencePage ->
-      Html.App.map Reference (Reference.viewLazy model.reference "app")
+      Html.map Reference (Reference.viewLazy model.reference "app")
 
     Component comp ->
-      Html.App.map Reference (Reference.viewLazy model.reference comp)
+      Html.map Reference (Reference.viewLazy model.reference comp)
 
-    DocumentationPage page ->
-      Html.App.map Docs (Documentation.view page model.docs)
+    DocumentationPage category page ->
+      Html.map Docs (Documentation.view (category ++ "/" ++ page) model.docs)
 
 
 view : Model -> Html.Html Msg
 view model =
-  Ui.App.view App
-    model.app
+  node "ui-app" []
     [ Ui.Header.view
         ([ img [src "/images/logo-small.svg"
                , onClick (Navigate "/")] []
@@ -277,11 +246,10 @@ view model =
     ]
 
 main =
-  Navigation.program urlParser
+  Navigation.program Navigation
     { init = init
     , view = view
     , update = update
-    , urlUpdate = urlUpdate
     , subscriptions =
         \model ->
           Sub.batch

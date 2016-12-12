@@ -7,7 +7,6 @@ import Ui.Chooser
 import Ui.Layout
 
 import Html exposing (text)
-import Html.App
 
 
 type Msg

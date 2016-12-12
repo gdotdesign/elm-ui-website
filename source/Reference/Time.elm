@@ -9,7 +9,6 @@ import Ext.Date exposing (now, previousMonth)
 
 import Html.Attributes exposing (id)
 import Html exposing (div)
-import Html.App
 
 
 type Msg

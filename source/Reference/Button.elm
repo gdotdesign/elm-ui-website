@@ -6,7 +6,6 @@ import Components.Reference
 import Ui.Chooser
 import Ui.Button
 
-import Html.App
 import Html
 
 

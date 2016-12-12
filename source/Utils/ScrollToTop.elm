@@ -15,10 +15,9 @@ type alias Model =
 
 
 type Msg
-  = StartAnimation ( Time, Float )
-  | NotFound Dom.Error
+  = StartAnimation (Result Dom.Error ( Time, Float ))
   | Animate Time
-  | NoOp ()
+  | NoOp (Result Dom.Error ())
 
 
 init : (Animation -> Animation) -> Model
@@ -34,7 +33,7 @@ start =
     task =
       Task.map2 (,) (Time.now) (Dom.Scroll.y "body")
   in
-    Task.perform NotFound StartAnimation task
+    Task.attempt StartAnimation task
 
 
 subscriptions : Model -> Sub Msg
@@ -57,22 +56,27 @@ update msg model =
             |> Maybe.withDefault 0
 
         scrollTask =
-          Task.perform NotFound NoOp (Dom.Scroll.toY "body" position)
+          Task.attempt NoOp (Dom.Scroll.toY "body" position)
       in
         if position == 0 then
           ( { model | animation = Nothing }, Cmd.none )
         else
           ( model, scrollTask )
 
-    StartAnimation ( time, position ) ->
-      let
-        animation =
-          Animation.animation time
-            |> Animation.from position
-            |> Animation.to 0
-            |> model.setup
-      in
-        ( { model | animation = Just animation }, Cmd.none )
+    StartAnimation result ->
+      case result of
+        Ok ( time, position ) ->
+          let
+            animation =
+              Animation.animation time
+                |> Animation.from position
+                |> Animation.to 0
+                |> model.setup
+          in
+            ( { model | animation = Just animation }, Cmd.none )
+
+        Err _ ->
+          ( model, Cmd.none )
 
     _ ->
       ( model, Cmd.none )

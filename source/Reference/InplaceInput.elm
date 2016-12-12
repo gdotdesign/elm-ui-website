@@ -9,7 +9,6 @@ import Ext.Date
 
 import Html.Attributes exposing (class)
 import Html exposing (div, span, text)
-import Html.App
 
 
 type Msg
@@ -25,7 +24,10 @@ type alias Model =
 
 init : Model
 init =
-  { inplaceInput = Ui.InplaceInput.init "Some content..." "Placeholder..."
+  { inplaceInput =
+      Ui.InplaceInput.init ()
+        |> Ui.InplaceInput.placeholder "Placeholder..."
+        -- |> Ui.InplaceInput.setValue "Some content..."
   , form =
       Form.init
         { checkboxes =
@@ -79,6 +81,9 @@ updateForm ( model, effect ) =
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
+    ( inplaceInput, cmd ) =
+      updatedComponent model.inplaceInput
+
     updatedComponent inplaceInput =
       { inplaceInput
         | disabled = Form.valueOfCheckbox "disabled" False model.form
@@ -90,7 +95,7 @@ updateState ( model, effect ) =
       |> Ui.InplaceInput.setValue (Form.valueOfTextarea "value" "" model.form)
 
   in
-    ( { model | inplaceInput = updatedComponent model.inplaceInput }, effect )
+    ( { model | inplaceInput = inplaceInput }, Cmd.batch [ effect, Cmd.map InplaceInput cmd ] )
 
 
 view : Model -> Html.Html Msg
@@ -103,7 +108,7 @@ view model =
       div
         [ class "inplace-input" ]
         [ span [] [ text "Click on the content below to edit." ]
-        , Html.App.map InplaceInput (Ui.InplaceInput.view model.inplaceInput)
+        , Html.map InplaceInput (Ui.InplaceInput.view model.inplaceInput)
         ]
   in
     Components.Reference.view demo form
