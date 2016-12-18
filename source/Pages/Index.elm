@@ -78,7 +78,7 @@ Elm-UI gives you the perfect tools, so you can focus on your code instead of the
 componentLibraryContent : String
 componentLibraryContent =
   """
-With a plethora of components you can build a wide variaty of single-page
+With a plethora of components you can build a wide variety of single-page
 apps.
 - They have **disabled** and **readonly** states
 - They can be controlled by **keyboard**
@@ -95,7 +95,7 @@ view navigateMsg noop =
     , section "Component Library" componentLibraryContent "/images/components.png"
     , node "div"
       [ class "cta" ]
-      [ node "span" [] [ text "Interesed?" ]
+      [ node "span" [] [ text "Interested?" ]
       , Ui.Button.primaryBig "Get Started" (navigateMsg "/documentation/getting-started/setup")
       ]
     ]
