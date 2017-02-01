@@ -9,7 +9,6 @@ import Ui.Chooser
 import Html.Attributes exposing (id)
 import Html exposing (node)
 
-
 type Msg
   = Form Form.Msg
   | Nothing
@@ -23,18 +22,18 @@ type alias Model =
 
 directionData : List Ui.Chooser.Item
 directionData =
-  [ { id = "row", label = "row", value = "row" }
+  [ { id = "row",    label = "row",    value = "row"    }
   , { id = "column", label = "column", value = "column" }
   ]
 
 
 alignData : List Ui.Chooser.Item
 alignData =
-  [ { id = "start", label = "start", value = "start" }
-  , { id = "center", label = "center", value = "center" }
+  [ { id = "start",   label = "start",         value = "start"         }
+  , { id = "center",  label = "center",        value = "center"        }
   , { id = "between", label = "space-between", value = "space-between" }
-  , { id = "around", label = "space-around", value = "space-around" }
-  , { id = "end", label = "end", value = "end" }
+  , { id = "around",  label = "space-around",  value = "space-around"  }
+  , { id = "end",     label = "end",           value = "end"           }
   ]
 
 
@@ -42,8 +41,8 @@ init : Model
 init =
   { container =
       { direction = "row"
-      , align = "start"
       , compact = False
+      , align = "start"
       }
   , form =
       Form.init
@@ -51,8 +50,8 @@ init =
             [ ( "compact", 2, False )
             ]
         , choosers =
-            [ ( "direction", 0, directionData, "", "row" )
-            , ( "align", 1, alignData, "", "start" )
+            [ ( "direction", 0, directionData, "", "row"   )
+            , ( "align",     1, alignData,     "", "start" )
             ]
         , numberRanges = []
         , textareas = []

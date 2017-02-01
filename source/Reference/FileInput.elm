@@ -7,7 +7,6 @@ import Ui.FileInput
 
 import Html exposing (div)
 
-
 type Msg
   = FileInput Ui.FileInput.Msg
   | Form Form.Msg
@@ -39,31 +38,26 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    FileInput act ->
+    FileInput msg ->
       let
-        ( fileInput, effect ) =
-          Ui.FileInput.update act model.fileInput
+        ( fileInput, cmd ) =
+          Ui.FileInput.update msg model.fileInput
       in
-        ( { model | fileInput = fileInput }, Cmd.map FileInput effect )
-
-
-updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
-  ( model, effect )
+        ( { model | fileInput = fileInput }, Cmd.map FileInput cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent component =
       { component
@@ -71,7 +65,7 @@ updateState ( model, effect ) =
         , readonly = Form.valueOfCheckbox "readonly" False model.form
       }
   in
-    ( { model | fileInput = updatedComponent model.fileInput }, effect )
+    ( { model | fileInput = updatedComponent model.fileInput }, cmd )
 
 
 view : Model -> Html.Html Msg

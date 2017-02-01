@@ -13,7 +13,6 @@ import Ui
 import Html.Events exposing (onClick)
 import Html exposing (node, text)
 
-
 type Msg
   = DropdownMenu Ui.DropdownMenu.Msg
   | Form Form.Msg
@@ -29,14 +28,14 @@ type alias Model =
 
 horizontalData : List Ui.Chooser.Item
 horizontalData =
-  [ { id = "left", label = "left", value = "left" }
+  [ { id = "left",  label = "left",  value = "left"  }
   , { id = "right", label = "right", value = "right" }
   ]
 
 
 verticalData : List Ui.Chooser.Item
 verticalData =
-  [ { id = "top", label = "top", value = "top" }
+  [ { id = "top",    label = "top",    value = "top"    }
   , { id = "bottom", label = "bottom", value = "bottom" }
   ]
 
@@ -50,8 +49,8 @@ init =
             [ ( "open", 2, False )
             ]
         , choosers =
-            [ ( "horizontal", 0, horizontalData, "", "left" )
-            , ( "vertical", 1, verticalData, "", "bottom" )
+            [ ( "horizontal", 0, horizontalData, "", "left"   )
+            , ( "vertical",   1, verticalData,   "", "bottom" )
             ]
         , numberRanges = []
         , textareas = []
@@ -63,20 +62,20 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    DropdownMenu act ->
+    DropdownMenu msg ->
       let
         dropdownMenu =
-          Ui.DropdownMenu.update act model.dropdownMenu
+          Ui.DropdownMenu.update msg model.dropdownMenu
       in
         ( { model | dropdownMenu = dropdownMenu }, Cmd.none )
           |> updateForm
@@ -91,16 +90,16 @@ update action model =
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateCheckbox "open" model.dropdownMenu.dropdown.open model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     toggleFunction =
       if Form.valueOfCheckbox "open" False model.form then
@@ -112,23 +111,7 @@ updateState ( model, effect ) =
       model.dropdownMenu
         |> toggleFunction
   in
-    ( { model | dropdownMenu = dropdownMenu }, effect )
-  {-let
-    -- sides =
-    --  model.dropdownMenu.favoredSides
-
-    -- updatedSides =
-    --  { horizontal = Form.valueOfChooser "horizontal" "left" model.form
-    --  , vertical = Form.valueOfChooser "vertical" "bottom" model.form
-    --  }
-
-    updatedComponent dropdown =
-      { dropdown
-        | open =
-      }
-  in
-    ( { model | dropdownMenu = updatedComponent model.dropdownMenu }, effect )
-  -}
+    ( { model | dropdownMenu = dropdownMenu }, cmd )
 
 
 subscriptions : Model -> Sub Msg
@@ -140,17 +123,16 @@ subscriptions model =
 
 viewModel : Ui.DropdownMenu.ViewModel Msg
 viewModel =
-  { element =
+  { address = DropdownMenu
+  , element =
       Ui.Button.view
         Nothing
-        { text = "Open"
-        , disabled = False
+        { disabled = False
         , readonly = False
         , kind = "primary"
         , size = "medium"
+        , text = "Open"
         }
-  , address =
-      DropdownMenu
   , items =
       [ Ui.DropdownMenu.item [ onClick CloseMenu ]
           [ Ui.Icons.calendar []

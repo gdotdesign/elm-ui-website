@@ -19,6 +19,7 @@ import Ui.Helpers.Emitter as Emitter
 import Ui.Container
 import Ui.Header
 import Ui.Button
+import Ui.Layout
 import Ui
 
 import Documentation
@@ -66,7 +67,8 @@ type Route
 routes : Parser (Route -> msg) msg
 routes =
   UrlParser.oneOf
-    [ UrlParser.map Component (UrlParser.s "reference" </> UrlParser.string)
+    [ UrlParser.map (\a b -> Component (a ++ "/" ++ b)) (UrlParser.s "reference" </> UrlParser.string </> UrlParser.string)
+    , UrlParser.map Component (UrlParser.s "reference" </> UrlParser.string)
     , UrlParser.map DocumentationPage (UrlParser.s "documentation" </> UrlParser.string </> UrlParser.string)
     , UrlParser.map ReferencePage (UrlParser.s "reference")
     , UrlParser.map Home UrlParser.top
@@ -180,7 +182,7 @@ content model =
       Pages.Index.view Navigate NoOp
 
     ReferencePage ->
-      Html.map Reference (Reference.viewLazy model.reference "app")
+      Html.map Reference (Reference.viewLazy model.reference "breadcrumbs")
 
     Component comp ->
       Html.map Reference (Reference.viewLazy model.reference comp)
@@ -191,47 +193,47 @@ content model =
 
 view : Model -> Html.Html Msg
 view model =
-  node "ui-app" []
+  Ui.Layout.website
     [ Ui.Header.view
-        ([ img [src "/images/logo-small.svg"
-               , onClick (Navigate "/")] []
-         , Ui.Header.title
-            { text = "Elm-UI"
-            , action = Just (Navigate "/")
-            , link = Just "/"
-            , target = "_self"
-            }
-         , Ui.Header.spacer
-         , Ui.Header.iconItem
-            { text = "Documentation"
-            , action = Just (Navigate "/documentation/getting-started/setup")
-            , link = Just "/documentation/getting-started/setup"
-            , glyph = Icons.bookmark []
-            , side = "left"
-            , target = "_self"
-            }
-         , Ui.Header.separator
-         , Ui.Header.iconItem
-            { text = "Reference"
-            , action = Just (Navigate "/reference")
-            , link = Just "/reference"
-            , glyph = Icons.code []
-            , side = "left"
-            , target = "_self"
-            }
-         , Ui.Header.separator
-         , Ui.Header.iconItem
-            { text = "Github"
-            , action = Nothing
-            , glyph = Icons.github []
-            , link = Just "https://github.com/gdotdesign/elm-ui"
-            , target = "_blank"
-            , side = "left"
-            }
-         ]
-        )
-    , content model
-    , node "ui-footer" []
+      [ img [src "/images/logo-small.svg"
+            , onClick (Navigate "/")] []
+      , Ui.Header.title
+         { text = "Elm-UI"
+         , action = Just (Navigate "/")
+         , link = Just "/"
+         , target = "_self"
+         }
+      , Ui.Header.spacer
+      , Ui.Header.iconItem
+         { text = "Documentation"
+         , action = Just (Navigate "/documentation/getting-started/setup")
+         , link = Just "/documentation/getting-started/setup"
+         , glyph = Icons.bookmark []
+         , side = "left"
+         , target = "_self"
+         }
+      , Ui.Header.separator
+      , Ui.Header.iconItem
+         { text = "Reference"
+         , action = Just (Navigate "/reference")
+         , link = Just "/reference"
+         , glyph = Icons.code []
+         , side = "left"
+         , target = "_self"
+         }
+      , Ui.Header.separator
+      , Ui.Header.iconItem
+         { text = "Github"
+         , action = Nothing
+         , glyph = Icons.github []
+         , link = Just "https://github.com/gdotdesign/elm-ui"
+         , target = "_blank"
+         , side = "left"
+         }
+      ]
+    ]
+    [ content model ]
+    [ node "ui-footer" []
       [ node "div"
         []
         [ node "a" [ href "https://github.com/gdotdesign/elm-ui" ]

@@ -6,9 +6,7 @@ import Components.Reference
 import Ui.DatePicker
 
 import Ext.Date
-
 import Html
-
 
 type Msg
   = DatePicker Ui.DatePicker.Msg
@@ -29,12 +27,14 @@ init =
 
     datePicker =
       Ui.DatePicker.init ()
+      |> Ui.DatePicker.setValue date
   in
     { datePicker = { datePicker | format = "%B %e, %Y" }
     , form =
         Form.init
           { checkboxes =
-              [ ( "disabled", 2, False )
+              [ ( "close on select", 1, False )
+              , ( "disabled", 2, False )
               , ( "readonly", 3, False )
               ]
           , dates =
@@ -49,36 +49,36 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    DatePicker act ->
+    DatePicker msg ->
       let
-        ( datePicker, effect ) =
-          Ui.DatePicker.update act model.datePicker
+        ( datePicker, cmd ) =
+          Ui.DatePicker.update msg model.datePicker
       in
-        ( { model | datePicker = datePicker }, Cmd.map DatePicker effect )
+        ( { model | datePicker = datePicker }, Cmd.map DatePicker cmd )
           |> updateForm
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateDate "value" model.datePicker.calendar.value model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     calendar =
       model.datePicker.calendar
@@ -88,12 +88,13 @@ updateState ( model, effect ) =
 
     updatedComponent datePicker =
       { datePicker
-        | disabled = Form.valueOfCheckbox "disabled" False model.form
+        | closeOnSelect = Form.valueOfCheckbox "close on select" False model.form
+        , disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , calendar = updatedCalendar
       }
   in
-    ( { model | datePicker = updatedComponent model.datePicker }, effect )
+    ( { model | datePicker = updatedComponent model.datePicker }, cmd )
 
 
 subscriptions : Model -> Sub Msg

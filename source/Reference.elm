@@ -21,6 +21,7 @@ import Reference.DropdownMenu as DropdownMenu
 import Reference.NumberRange as NumberRange
 import Reference.Breadcrumbs as Breadcrumbs
 import Reference.ButtonGroup as ButtonGroup
+import Reference.ColorFields as ColorFields
 import Reference.ColorPicker as ColorPicker
 import Reference.SearchInput as SearchInput
 import Reference.IconButton as IconButton
@@ -56,6 +57,7 @@ type alias Model =
   { notificationCenter : NotificationCenter.Model
   , inplaceInput : InplaceInput.Model
   , dropdownMenu : DropdownMenu.Model
+  , colorFields : ColorFields.Model
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
   , numberRange : NumberRange.Model
@@ -96,6 +98,7 @@ type Msg
   | CalendarAction Calendar.Msg
   | NumberRange NumberRange.Msg
   | SearchInput SearchInput.Msg
+  | ColorFields ColorFields.Msg
   | IconButton IconButton.Msg
   | DatePicker DatePicker.Msg
   | ChooserAction Chooser.Msg
@@ -124,6 +127,7 @@ init =
   , inplaceInput = InplaceInput.init
   , dropdownMenu = DropdownMenu.init
   , numberRange = NumberRange.init
+  , colorFields = ColorFields.init
   , colorPicker = ColorPicker.init
   , buttonGroup = ButtonGroup.init
   , searchInput = SearchInput.init
@@ -169,25 +173,28 @@ navItems =
 
 components =
   Dict.fromList
-    [ ("breadcrumbs", ("Ui.Breadcrumbs", True))
-    , ("button", ("Ui.Button", True))
-    , ("button-group", ("Ui.ButtonGroup", True))
-    , ("calendar", ("Ui.Calendar", True))
-    , ("checkbox", ("Ui.Checkbox", True))
-    , ("chooser", ("Ui.Chooser", True))
-    , ("color-fields", ("Ui.ColorFields", True))
-    , ("color-panel", ("Ui.ColorPanel", True))
-    , ("color-picker", ("Ui.ColorPicker", True))
-    , ("container", ("Ui.Container", True))
-    , ("date-picker", ("Ui.DatePicker", True))
+    [ ("breadcrumbs",   ("Ui.Breadcrumbs",  True))
+    , ("button",        ("Ui.Button",       True))
+    , ("button-group",  ("Ui.ButtonGroup",  True))
+    , ("calendar",      ("Ui.Calendar",     True))
+    , ("checkbox",      ("Ui.Checkbox",     True))
+    , ("chooser",       ("Ui.Chooser",      True))
+    , ("color-fields",  ("Ui.ColorFields",  True))
+    , ("color-panel",   ("Ui.ColorPanel",   True))
+    , ("color-picker",  ("Ui.ColorPicker",  True))
+    , ("container",     ("Ui.Container",    True))
+    , ("date-picker",   ("Ui.DatePicker",   True))
     , ("dropdown-menu", ("Ui.DropdownMenu", True))
-    , ("file-input", ("Ui.FileInput", True))
+    , ("fab",           ("Ui.Fab",          False))
+    , ("file-input",    ("Ui.FileInput",    True))
     , ("header", ("Ui.Header", True))
     , ("icon-button", ("Ui.IconButton", True))
+    , ("icons", ("Ui.Icons", False))
     , ("image", ("Ui.Image", False))
     , ("inplace-input", ("Ui.InplaceInput", True))
     , ("input", ("Ui.Input", True))
     , ("layout", ("Ui.Layout", True))
+    , ("link", ("Ui.Link", False))
     , ("loader", ("Ui.Loader", True))
     , ("modal", ("Ui.Modal", True))
     , ("notification-center", ("Ui.NotificationCenter", True))
@@ -195,8 +202,9 @@ components =
     , ("number-range", ("Ui.NumberRange", True))
     , ("pager", ("Ui.Pager", True))
     , ("ratings", ("Ui.Ratings", True))
-    , ("slider", ("Ui.Slider", True))
+    , ("scrolled-panel", ("Ui.ScrolledPanel", True))
     , ("search-input", ("Ui.SearchInput", True))
+    , ("slider", ("Ui.Slider", True))
     , ("tabs", ("Ui.Tabs", True))
     , ("tagger", ("Ui.Tagger", True))
     , ("textarea", ("Ui.Textarea", True))
@@ -216,19 +224,20 @@ nativeModules =
 helpers =
   Dict.fromList
     [ ("helpers/drag", ("Ui.Helpers.Drag", False))
+    , ("helpers/dropdown", ("Ui.Helpers.Dropdown", False))
     , ("helpers/emitter", ("Ui.Helpers.Emitter", False))
     , ("helpers/env", ("Ui.Helpers.Env", False))
-    , ("helpers/dropdown", ("Ui.Helpers.Dropdown", False))
-    , ("helpers/ripple", ("Ui.Helpers.Ripple", False))
     , ("helpers/intendable", ("Ui.Helpers.Intendable", False))
+    , ("helpers/periodic-update", ("Ui.Helpers.PeriodicUpdate", False))
+    , ("helpers/picker", ("Ui.Helpers.Picker", False))
+    , ("helpers/ripple", ("Ui.Helpers.Ripple", False))
     ]
 
 extensions =
   Dict.fromList
-    [ ("ext-color", ("Ext.Color", False))
-    , ("ext-number", ("Ext.Number", False))
-    , ("ext-date", ("Ext.Date", False))
-    , ("html/events/geometry", ("Html.Events.Geometry", False))
+    [ ("ext/color", ("Ext.Color", False))
+    , ("ext/number", ("Ext.Number", False))
+    , ("ext/date", ("Ext.Date", False))
     , ("html/events/extra", ("Html.Events.Extra", False))
     , ("html/events/options", ("Html.Events.Options", False))
     ]
@@ -256,6 +265,12 @@ update action model =
         (colorPicker, effect) = ColorPicker.update act model.colorPicker
       in
         ({ model | colorPicker = colorPicker }, Cmd.map ColorPickerAction effect)
+
+    ColorFields msg ->
+      let
+        ( colorFields, cmd ) = ColorFields.update msg model.colorFields
+      in
+        ( { model | colorFields = colorFields }, Cmd.map ColorFields cmd )
 
     CalendarAction act ->
       let
@@ -422,6 +437,8 @@ subscriptions model =
   , Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
   , Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
   , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
+  , Sub.map DatePicker (DatePicker.subscriptions model.datePicker)
+  , Sub.map ColorFields (ColorFields.subscriptions model.colorFields)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
   , Sub.map ChooserAction (Chooser.subscriptions model.chooser)
   , Sub.map Ratings (Ratings.subscriptions model.ratings)
@@ -548,6 +565,8 @@ view model active =
           Html.map ChooserAction (Chooser.view model.chooser)
         "calendar" ->
           Html.map CalendarAction (Calendar.view model.calendar)
+        "color-fields" ->
+          Html.map ColorFields (ColorFields.view model.colorFields)
         "color-panel" ->
           Html.map ColorPanelAction (ColorPanel.view model.colorPanel)
         "color-picker" ->

@@ -1,21 +1,21 @@
-module Reference.ColorPicker exposing (..)
+module Reference.ColorFields exposing (..)
 
 import Components.Form as Form
 import Components.Reference
 
-import Ui.ColorPicker
+import Ui.ColorFields
 
 import Ext.Color exposing (Hsv)
 import Color
 import Html
 
 type Msg
-  = ColorPicker Ui.ColorPicker.Msg
+  = ColorFields Ui.ColorFields.Msg
   | Form Form.Msg
 
 
 type alias Model =
-  { colorPicker : Ui.ColorPicker.Model
+  { colorFields : Ui.ColorFields.Model
   , form : Form.Model Msg
   }
 
@@ -27,12 +27,12 @@ hsvColor =
 
 init : Model
 init =
-  { colorPicker = Ui.ColorPicker.init ()
+  { colorFields = Ui.ColorFields.init ()
   , form =
       Form.init
         { checkboxes =
-            [ ( "disabled", 2, False )
-            , ( "readonly", 3, False )
+            [ ( "disabled", 1, False )
+            , ( "readonly", 2, False )
             ]
         , colors =
             [ ( "value", 0, Color.black ) ]
@@ -56,12 +56,12 @@ update msg_ model =
         ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    ColorPicker msg ->
+    ColorFields msg ->
       let
-        ( colorPicker, cmd ) =
-          Ui.ColorPicker.update msg model.colorPicker
+        ( colorFields, cmd ) =
+          Ui.ColorFields.update msg model.colorFields
       in
-        ( { model | colorPicker = colorPicker }, Cmd.map ColorPicker cmd )
+        ( { model | colorFields = colorFields }, Cmd.map ColorFields cmd )
           |> updateForm
 
 
@@ -70,7 +70,7 @@ updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateColor "value"
-        (Ext.Color.hsvToRgb model.colorPicker.colorPanel.value)
+        (Ext.Color.hsvToRgb model.colorFields.value)
         model.form
   in
     ( { model | form = updatedForm }, cmd )
@@ -81,20 +81,19 @@ updateState ( model, cmd ) =
   let
     color =
       Form.valueOfColor "value" hsvColor model.form
-        |> Ext.Color.hsvToRgb
 
-    ( updatedColorPicker, setCmd ) =
-      Ui.ColorPicker.setValue color model.colorPicker
+    ( updatedComponent, setCmd ) =
+      Ui.ColorFields.setValue color model.colorFields
 
-    updatedComponent =
-      { updatedColorPicker
+    finalComponent =
+      { updatedComponent
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
       }
   in
-    ( { model | colorPicker = updatedComponent }
+    ( { model | colorFields = finalComponent }
     , Cmd.batch
-      [ Cmd.map ColorPicker setCmd
+      [ Cmd.map ColorFields setCmd
       , cmd
       ]
     )
@@ -103,18 +102,17 @@ updateState ( model, cmd ) =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ Sub.map ColorPicker (Ui.ColorPicker.subscriptions model.colorPicker)
-    , Sub.map Form (Form.subscriptions model.form)
+    [ Sub.map Form (Form.subscriptions model.form)
     ]
 
 
 view : Model -> Html.Html Msg
 view model =
   let
+    demo =
+      Html.map ColorFields (Ui.ColorFields.view model.colorFields)
+
     form =
       Form.view Form model.form
-
-    demo =
-      Html.map ColorPicker (Ui.ColorPicker.view model.colorPicker)
   in
     Components.Reference.view demo form

@@ -169,11 +169,11 @@ ui-reference-demo {
       border: 1px dashed rgba(0,0,0,0.4);
       padding: 20px;
 
-      &.direction-row {
+      &[direction=row] {
         width: 500px;
       }
 
-      &.direction-column {
+      &[direction=column] {
         height: 500px;
       }
     }
@@ -278,6 +278,14 @@ ui-reference-demo {
 
     ui-date-picker {
       min-width: 210px;
+    }
+
+    > ui-color-fields {
+      border: 1px solid rgba(#000, 0.1);
+      border-radius: $border-radius;
+      background: $input;
+      padding: 20px;
+      width: 450px;
     }
 
     ui-color-panel {
