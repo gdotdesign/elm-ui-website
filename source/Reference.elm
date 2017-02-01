@@ -19,6 +19,7 @@ import Reference.NotificationCenter as NotificationCenter
 import Reference.InplaceInput as InplaceInput
 import Reference.DropdownMenu as DropdownMenu
 import Reference.NumberRange as NumberRange
+import Reference.Breadcrumbs as Breadcrumbs
 import Reference.ButtonGroup as ButtonGroup
 import Reference.ColorPicker as ColorPicker
 import Reference.SearchInput as SearchInput
@@ -168,11 +169,13 @@ navItems =
 
 components =
   Dict.fromList
-    [ ("button", ("Ui.Button", True))
+    [ ("breadcrumbs", ("Ui.Breadcrumbs", True))
+    , ("button", ("Ui.Button", True))
     , ("button-group", ("Ui.ButtonGroup", True))
     , ("calendar", ("Ui.Calendar", True))
     , ("checkbox", ("Ui.Checkbox", True))
     , ("chooser", ("Ui.Chooser", True))
+    , ("color-fields", ("Ui.ColorFields", True))
     , ("color-panel", ("Ui.ColorPanel", True))
     , ("color-picker", ("Ui.ColorPicker", True))
     , ("container", ("Ui.Container", True))
@@ -420,6 +423,7 @@ subscriptions model =
   , Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
   , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
+  , Sub.map ChooserAction (Chooser.subscriptions model.chooser)
   , Sub.map Ratings (Ratings.subscriptions model.ratings)
   , Sub.map Tagger (Tagger.subscriptions model.tagger)
   , Sub.map Slider (Slider.subscriptions model.slider)
@@ -536,6 +540,8 @@ view model active =
 
     componentView =
       case active of
+        "breadcrumbs" ->
+          Breadcrumbs.view Noop
         "button" ->
           Html.map ButtonAction (Button.view model.button)
         "chooser" ->

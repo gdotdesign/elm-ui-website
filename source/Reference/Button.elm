@@ -8,7 +8,6 @@ import Ui.Button
 
 import Html
 
-
 type Msg
   = Form Form.Msg
   | Nothing
@@ -23,18 +22,18 @@ type alias Model =
 sizeData : List Ui.Chooser.Item
 sizeData =
   [ { id = "medium", label = "Medium", value = "medium" }
-  , { id = "small", label = "Small", value = "small" }
-  , { id = "big", label = "Big", value = "big" }
+  , { id = "small",  label = "Small",  value = "small"  }
+  , { id = "big",    label = "Big",    value = "big"    }
   ]
 
 
 kindData : List Ui.Chooser.Item
 kindData =
   [ { id = "secondary", label = "Secondary", value = "secondary" }
-  , { id = "primary", label = "Primary", value = "primary" }
-  , { id = "sucess", label = "Success", value = "success" }
-  , { id = "warning", label = "Warning", value = "warning" }
-  , { id = "danger", label = "Danger", value = "danger" }
+  , { id = "primary",   label = "Primary",   value = "primary"   }
+  , { id = "sucess",    label = "Success",   value = "success"   }
+  , { id = "warning",   label = "Warning",   value = "warning"   }
+  , { id = "danger",    label = "Danger",    value = "danger"    }
   ]
 
 
@@ -62,21 +61,21 @@ init =
             ]
         , choosers =
             [ ( "kind", 0, kindData, "", "primary" )
-            , ( "size", 1, sizeData, "", "medium" )
+            , ( "size", 1, sizeData, "", "medium"  )
             ]
         }
   }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     _ ->
@@ -84,7 +83,7 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent button =
       { button
@@ -95,7 +94,7 @@ updateState ( model, effect ) =
         , text = Form.valueOfInput "text" "Test" model.form
       }
   in
-    ( { model | button = updatedComponent model.button }, effect )
+    ( { model | button = updatedComponent model.button }, cmd )
 
 
 view : Model -> Html.Html Msg

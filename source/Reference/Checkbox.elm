@@ -9,7 +9,6 @@ import Ui.Checkbox
 import Html.Attributes exposing (style)
 import Html exposing (div)
 
-
 type Msg
   = Checkbox Ui.Checkbox.Msg
   | Form Form.Msg
@@ -29,7 +28,7 @@ init =
   , form =
       Form.init
         { checkboxes =
-            [ ( "value", 1, True )
+            [ ( "value",    1, True  )
             , ( "disabled", 2, False )
             , ( "readonly", 3, False )
             ]

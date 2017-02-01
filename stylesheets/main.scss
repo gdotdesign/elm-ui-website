@@ -26,7 +26,7 @@ body {
   background: $background;
   overflow-y: scroll;
   overflow-x: hidden;
-  color: #626262;
+  color: #707070;
   margin: 0;
 }
 
@@ -241,11 +241,13 @@ ui-reference-demo {
     ui-layout-website,
     ui-layout-app,
     ui-layout-sidebar {
-      border: 1px solid rgba(#000, 0.4);
-      background: $input;
-      min-height: 0;
-      height: 300px;
-      width: 600px;
+      &[style-id] {
+        border: 1px solid rgba(#000, 0.4);
+        background: $input;
+        min-height: 0;
+        height: 300px;
+        width: 600px;
+      }
     }
 
     ui-layout-website > *,
@@ -278,6 +280,10 @@ ui-reference-demo {
       min-width: 210px;
     }
 
+    ui-color-panel {
+      height: 330px;
+    }
+
     ui-color-picker {
       min-width: 240px;
     }
@@ -287,7 +293,12 @@ ui-reference-demo {
     }
 
     ui-chooser {
-      min-width: 300px;
+      width: 300px;
+
+      ui-dropdown-panel {
+        box-sizing: border-box;
+        width: inherit;
+      }
     }
   }
 }
