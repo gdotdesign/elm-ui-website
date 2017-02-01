@@ -1,5 +1,14 @@
 @import 'fonts';
-@import 'ui';
+
+$primary: #158DD8;
+$background: #F5F5F5;
+$input: #FDFDFD;
+$focus: cyan;
+$success: green;
+$warning: red;
+$danger: orange;
+$border-radius: 2px;
+$secondary: gray;
 
 $code-font: Source Code Pro, serif;
 $title-font: Abel, Open Sans;
@@ -13,15 +22,19 @@ $title-font: Abel, Open Sans;
 @import 'parts/hero.scss';
 
 body {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+  background: $background;
   overflow-y: scroll;
   overflow-x: hidden;
+  color: #626262;
+  margin: 0;
 }
 
-a {
+/*a {
   color: $primary;
   text-decoration: none;
   border-bottom: 1px solid rgba($primary, 0.5);
-}
+}*/
 
 ui-playground {
   flex-direction: row;

@@ -6,7 +6,7 @@
     "start": "elm-ui server",
     "deploy": "gulp deploy",
     "predeploy": "yarn run build",
-    "install": "elm-ui install",
+    "install": "elm-install",
     "build": "elm-ui build"
   },
   "homepage": "https://github.com/gdotdesign/elm-ui-website",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "gulp-gh-pages": "0.5.4",
+    "elm-github-install": "^0.3.0",
     "elm-ui": "0.4.0",
     "gulp": "3.9.1"
   },

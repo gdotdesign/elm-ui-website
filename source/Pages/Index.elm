@@ -7,6 +7,7 @@ import Components.Terminal as Terminal
 import Components.Markdown as Markdown
 
 import Ui.Button
+import Ui.Link
 import Ui
 
 hero : (String -> msg) -> msg -> Html.Html msg
@@ -24,8 +25,21 @@ hero msg noop =
       , node "ui-hero-subtitle"
           []
           [ text "A user interface library and framework for Elm!" ]
-      , Ui.link (Just (msg url)) (Just url) "_self"
-          [ Ui.Button.primaryBig "Get Started" noop ]
+      , Ui.Link.view
+          { msg = Just (msg url)
+          , url = Just url
+          , target = Nothing
+          , contents =
+            [ Ui.Button.view
+              noop
+              { size = "big"
+              , text = "Get Started"
+              , kind = "primary"
+              , disabled = False
+              , readonly = False
+              }
+            ]
+          }
       , Terminal.view
           [ "npm install elm-ui -g"
           , "----------------------------------"
@@ -96,6 +110,13 @@ view navigateMsg noop =
     , node "div"
       [ class "cta" ]
       [ node "span" [] [ text "Interesed?" ]
-      , Ui.Button.primaryBig "Get Started" (navigateMsg "/documentation/getting-started/setup")
+      , Ui.Button.view
+        (navigateMsg "/documentation/getting-started/setup")
+        { size = "big"
+        , text = "Get Started"
+        , kind = "primary"
+        , disabled = False
+        , readonly = False
+        }
       ]
     ]

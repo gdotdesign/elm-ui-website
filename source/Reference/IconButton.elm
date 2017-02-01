@@ -7,6 +7,7 @@ import Components.Reference
 
 import Ui.IconButton
 import Ui.Chooser
+import Ui.Icons
 
 import Html
 
@@ -17,22 +18,22 @@ type Msg
 
 
 type alias Model =
-  { iconButton : Ui.IconButton.Model
+  { iconButton : Ui.IconButton.Model Msg
   , form : Form.Model Msg
   }
 
 glyphData : List Ui.Chooser.Item
 glyphData =
-  [ { label = "Plus", value = "plus" }
-  , { label = "Checkmark", value = "checkmark" }
-  , { label = "Close Circled", value = "close-circled" }
-  , { label = "Heart", value = "heart" }
+  [ { id = "plus", label = "Plus", value = "plus" }
+  , { id = "checkmark", label = "Checkmark", value = "checkmark" }
+  , { id = "close", label = "Close", value = "close" }
+  , { id = "star", label = "Star", value = "star" }
   ]
 
 sideData : List Ui.Chooser.Item
 sideData =
-  [ { label = "Left", value = "left" }
-  , { label = "Right", value = "right" }
+  [ { id = "left", label = "Left", value = "left" }
+  , { id = "right", label = "Right", value = "right" }
   ]
 
 init : Model
@@ -43,7 +44,7 @@ init =
       , readonly = False
       , kind = "primary"
       , size = "medium"
-      , glyph = "plus"
+      , glyph = Ui.Icons.plus []
       , side = "left"
       }
   , form =
@@ -87,15 +88,22 @@ update action model =
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateState ( model, effect ) =
   let
+    glyph =
+      case Form.valueOfChooser "glyph" "plus" model.form of
+        "checkmark" -> Ui.Icons.checkmark []
+        "star" -> Ui.Icons.starFull []
+        "close" -> Ui.Icons.close []
+        _ -> Ui.Icons.plus []
+
     updatedComponent iconButton =
       { iconButton
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , kind = Form.valueOfChooser "kind" "primary" model.form
         , size = Form.valueOfChooser "size" "medium" model.form
-        , glyph = Form.valueOfChooser "glyph" "plus" model.form
         , side = Form.valueOfChooser "side" "left" model.form
         , text = Form.valueOfInput "text" "Test" model.form
+        , glyph = glyph
       }
   in
     ( { model | iconButton = updatedComponent model.iconButton }, effect )

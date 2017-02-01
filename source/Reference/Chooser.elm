@@ -21,13 +21,13 @@ type alias Model =
 
 data : List Ui.Chooser.Item
 data =
-  [ { label = "I - The Phantom Menace", value = "star_wars_1" }
-  , { label = "II - Attack of the Clones", value = "star_wars_2" }
-  , { label = "III - Revenge of the Sith", value = "star_wars_3" }
-  , { label = "IV - A New Hope", value = "star_wars_4" }
-  , { label = "V - The Empire Strikes Back", value = "star_wars_5" }
-  , { label = "VI - Return of the Jedi", value = "star_wars_6" }
-  , { label = "VII - The Force Awakens", value = "star_wars_7" }
+  [ { id = "1", label = "I - The Phantom Menace", value = "star_wars_1" }
+  , { id = "2", label = "II - Attack of the Clones", value = "star_wars_2" }
+  , { id = "3", label = "III - Revenge of the Sith", value = "star_wars_3" }
+  , { id = "4", label = "IV - A New Hope", value = "star_wars_4" }
+  , { id = "5", label = "V - The Empire Strikes Back", value = "star_wars_5" }
+  , { id = "6", label = "VI - Return of the Jedi", value = "star_wars_6" }
+  , { id = "7", label = "VII - The Force Awakens", value = "star_wars_7" }
   ]
 
 

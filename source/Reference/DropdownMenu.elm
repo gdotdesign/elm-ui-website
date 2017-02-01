@@ -5,8 +5,9 @@ import Components.Reference
 
 import Ui.Helpers.Dropdown
 import Ui.DropdownMenu
-import Ui.IconButton
 import Ui.Chooser
+import Ui.Button
+import Ui.Icons
 import Ui
 
 import Html.Events exposing (onClick)
@@ -28,15 +29,15 @@ type alias Model =
 
 horizontalData : List Ui.Chooser.Item
 horizontalData =
-  [ { label = "left", value = "left" }
-  , { label = "right", value = "right" }
+  [ { id = "left", label = "left", value = "left" }
+  , { id = "right", label = "right", value = "right" }
   ]
 
 
 verticalData : List Ui.Chooser.Item
 verticalData =
-  [ { label = "top", value = "top" }
-  , { label = "bottom", value = "bottom" }
+  [ { id = "top", label = "top", value = "top" }
+  , { id = "bottom", label = "bottom", value = "bottom" }
   ]
 
 
@@ -140,20 +141,24 @@ subscriptions model =
 viewModel : Ui.DropdownMenu.ViewModel Msg
 viewModel =
   { element =
-      Ui.IconButton.secondary "Open"
-        "chevron-down"
-        "right"
+      Ui.Button.view
         Nothing
+        { text = "Open"
+        , disabled = False
+        , readonly = False
+        , kind = "primary"
+        , size = "medium"
+        }
   , address =
       DropdownMenu
   , items =
       [ Ui.DropdownMenu.item [ onClick CloseMenu ]
-          [ Ui.icon "android-download" True []
-          , node "span" [] [ text "Download" ]
+          [ Ui.Icons.calendar []
+          , node "span" [] [ text "Calendar" ]
           ]
       , Ui.DropdownMenu.item [ onClick CloseMenu ]
-          [ Ui.icon "trash-b" True []
-          , node "span" [] [ text "Delete" ]
+          [ Ui.Icons.search []
+          , node "span" [] [ text "Search" ]
           ]
       ]
   }

@@ -29,7 +29,10 @@ init =
   { input =
       Ui.Input.init ()
         |> Ui.Input.placeholder "Message..."
-  , notifications = Notifications.init 5000 400
+  , notifications =
+      Notifications.init ()
+        |> Notifications.timeout 5000
+        |> Notifications.duration 500
   }
 
 
@@ -77,7 +80,14 @@ view model =
           , onEnter False Notify
           ]
         [ Html.map Input (Ui.Input.view model.input)
-        , Ui.Button.primary "Send" Notify
+        , Ui.Button.view
+          Notify
+          { kind = "primary"
+          , text = "Send"
+          , size = "medium"
+          , disabled = False
+          , readonly = False
+          }
         , Notifications.view Notifications model.notifications
         ]
   in

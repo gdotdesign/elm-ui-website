@@ -7,6 +7,7 @@ import Html.Lazy
 
 import Ui.Helpers.Emitter as Emitter
 import Ui.SearchInput
+import Ui.Link
 import Ui
 
 import String
@@ -37,6 +38,7 @@ init : String -> String -> List Category -> Model
 init prefix placeholder items =
   { input =
       Ui.SearchInput.init ()
+        |> Ui.SearchInput.timeout 0
         |> Ui.SearchInput.placeholder placeholder
   , prefix = prefix
   , items = items
@@ -110,5 +112,10 @@ renderItem active model item =
     node "ui-nav-list-item"
       [ classList [ ( "active", active == item.href ) ]
       ]
-      [ Ui.link (Just (Navigate url)) (Just url) "_self" [ text item.label ]
+      [ Ui.Link.view
+        { msg = Just (Navigate url)
+        , url = Just url
+        , target = Nothing
+        , contents = [ text item.label ]
+        }
       ]

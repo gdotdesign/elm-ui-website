@@ -24,27 +24,20 @@ type alias Model =
 
 init : Model
 init =
-  let
-    pager = Ui.Pager.init 0
-  in
-    { pager = {
-        pager
-        | width = "460px"
-        , height = "200px"
-      }
-    , form =
-        Form.init
-          { numberRanges = []
-          , checkboxes = []
-          , textareas = []
-          , choosers = []
-          , colors = []
-          , inputs = []
-          , dates = []
-          }
-        |> Form.button "Next Page" "primary" Next
-        |> Form.button "Previous Page" "primary" Previous
-    }
+  { pager = Ui.Pager.init ()
+  , form =
+      Form.init
+        { numberRanges = []
+        , checkboxes = []
+        , textareas = []
+        , choosers = []
+        , colors = []
+        , inputs = []
+        , dates = []
+        }
+      |> Form.button "Next Page" "primary" Next
+      |> Form.button "Previous Page" "primary" Previous
+  }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -95,12 +88,14 @@ view model =
 
     demo =
       Ui.Pager.view
-        Pager
-        [ div [ class "demo-page-1" ] [ text "Page 1" ]
-        , div [ class "demo-page-2" ] [ text "Page 2" ]
-        , div [ class "demo-page-3" ] [ text "Page 3" ]
-        , div [ class "demo-page-4" ] [ text "Page 4" ]
-        ]
+        { address = Pager
+        , pages =
+          [ div [ class "demo-page-1" ] [ text "Page 1" ]
+          , div [ class "demo-page-2" ] [ text "Page 2" ]
+          , div [ class "demo-page-3" ] [ text "Page 3" ]
+          , div [ class "demo-page-4" ] [ text "Page 4" ]
+          ]
+        }
         model.pager
   in
     Components.Reference.view demo form

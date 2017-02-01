@@ -20,9 +20,9 @@ type alias Model =
 
 viewData : List Ui.Chooser.Item
 viewData =
-  [ { label = "App", value = "app" }
-  , { label = "Website", value = "website" }
-  , { label = "Sidebar", value = "sidebar" }
+  [ { id = "app", label = "App", value = "app" }
+  , { id = "website", label = "Website", value = "website" }
+  , { id = "sidebar", label = "Sidebar", value = "sidebar" }
   ]
 
 

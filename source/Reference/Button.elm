@@ -22,19 +22,19 @@ type alias Model =
 
 sizeData : List Ui.Chooser.Item
 sizeData =
-  [ { label = "Medium", value = "medium" }
-  , { label = "Small", value = "small" }
-  , { label = "Big", value = "big" }
+  [ { id = "medium", label = "Medium", value = "medium" }
+  , { id = "small", label = "Small", value = "small" }
+  , { id = "big", label = "Big", value = "big" }
   ]
 
 
 kindData : List Ui.Chooser.Item
 kindData =
-  [ { label = "Secondary", value = "secondary" }
-  , { label = "Primary", value = "primary" }
-  , { label = "Success", value = "success" }
-  , { label = "Warning", value = "warning" }
-  , { label = "Danger", value = "danger" }
+  [ { id = "secondary", label = "Secondary", value = "secondary" }
+  , { id = "primary", label = "Primary", value = "primary" }
+  , { id = "sucess", label = "Success", value = "success" }
+  , { id = "warning", label = "Warning", value = "warning" }
+  , { id = "danger", label = "Danger", value = "danger" }
   ]
 
 

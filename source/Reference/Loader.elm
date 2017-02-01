@@ -24,7 +24,8 @@ init : Model
 init =
   let
     loader =
-      Ui.Loader.init 200
+      Ui.Loader.init ()
+      |> Ui.Loader.timeout 200
   in
     { loader = { loader | loading = True, shown = True }
     , form =
@@ -44,8 +45,8 @@ init =
 
 viewData : List Ui.Chooser.Item
 viewData =
-  [ { label = "Bar", value = "bar" }
-  , { label = "Overlay", value = "overlay" }
+  [ { id = "bar", label = "Bar", value = "bar" }
+  , { id = "overlay", label = "Overlay", value = "overlay" }
   ]
 
 

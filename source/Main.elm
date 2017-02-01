@@ -16,14 +16,14 @@ import Dom.Scroll
 import Dom
 
 import Ui.Helpers.Emitter as Emitter
-import Ui.Native.Browser as Browser
 import Ui.Container
 import Ui.Header
 import Ui.Button
 import Ui
 
-import Reference
 import Documentation
+import Reference
+import Icons
 
 import Pages.Index
 
@@ -201,12 +201,12 @@ view model =
             , link = Just "/"
             , target = "_self"
             }
-         , Ui.spacer
+         , Ui.Header.spacer
          , Ui.Header.iconItem
             { text = "Documentation"
             , action = Just (Navigate "/documentation/getting-started/setup")
             , link = Just "/documentation/getting-started/setup"
-            , glyph = "bookmark"
+            , glyph = Icons.bookmark []
             , side = "left"
             , target = "_self"
             }
@@ -215,7 +215,7 @@ view model =
             { text = "Reference"
             , action = Just (Navigate "/reference")
             , link = Just "/reference"
-            , glyph = "code"
+            , glyph = Icons.code []
             , side = "left"
             , target = "_self"
             }
@@ -223,7 +223,7 @@ view model =
          , Ui.Header.iconItem
             { text = "Github"
             , action = Nothing
-            , glyph = "social-github"
+            , glyph = Icons.github []
             , link = Just "https://github.com/gdotdesign/elm-ui"
             , target = "_blank"
             , side = "left"
@@ -235,7 +235,7 @@ view model =
       [ node "div"
         []
         [ node "a" [ href "https://github.com/gdotdesign/elm-ui" ]
-          [ Ui.icon "social-github" False []
+          [ Icons.github []
           , span [] [ text "Code on Github" ]
           ]
         , node "span" [] [ text "|" ]

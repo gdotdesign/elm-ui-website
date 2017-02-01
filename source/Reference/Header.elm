@@ -7,6 +7,7 @@ import Ui
 
 import Html exposing (text)
 
+import Icons
 
 view : msg -> Html.Html msg
 view msg =
@@ -19,7 +20,7 @@ view msg =
           , link = Nothing
           , target = ""
           }
-        , Ui.spacer
+        , Ui.Header.spacer
         , Ui.Header.item
           { text = "Home"
           , action = Just msg
@@ -32,12 +33,12 @@ view msg =
           , action = Just msg
           , link = Nothing
           , target = ""
-          , glyph = "social-github"
+          , glyph = Icons.github []
           , side = "left"
           }
         , Ui.Header.separator
         , Ui.Header.icon
-          { glyph = "navicon-round"
+          { glyph = Icons.navicon []
           , action = Just msg
           , link = Nothing
           , target = ""

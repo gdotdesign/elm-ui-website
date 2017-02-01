@@ -22,7 +22,7 @@ type alias Model =
 
 init : Model
 init =
-  { tabs = Ui.Tabs.init 0
+  { tabs = Ui.Tabs.init ()
   , form =
       Form.init
         { checkboxes =
@@ -95,15 +95,12 @@ view model =
       Form.view Form model.form
 
     tabs =
-      [ ( "Tab 1", Ui.panel [] [ text "Tab 1 Contents" ] )
-      , ( "Tab 2", Ui.panel [] [ text "Tab 2 Contents" ] )
-      , ( "Tab 3", Ui.panel [] [ text "Tab 3 Contents" ] )
+      [ ( "Tab 1", text "Tab 1 Contents" )
+      , ( "Tab 2", text "Tab 2 Contents" )
+      , ( "Tab 3", text "Tab 3 Contents" )
       ]
 
     demo =
-      Ui.Tabs.view
-        tabs
-        Tabs
-        model.tabs
+      Ui.Tabs.view { address = Tabs, contents = tabs } model.tabs
   in
     Components.Reference.view demo form

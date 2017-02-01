@@ -23,18 +23,18 @@ type alias Model =
 
 directionData : List Ui.Chooser.Item
 directionData =
-  [ { label = "row", value = "row" }
-  , { label = "column", value = "column" }
+  [ { id = "row", label = "row", value = "row" }
+  , { id = "column", label = "column", value = "column" }
   ]
 
 
 alignData : List Ui.Chooser.Item
 alignData =
-  [ { label = "start", value = "start" }
-  , { label = "center", value = "center" }
-  , { label = "space-between", value = "space-between" }
-  , { label = "space-around", value = "space-around" }
-  , { label = "end", value = "end" }
+  [ { id = "start", label = "start", value = "start" }
+  , { id = "center", label = "center", value = "center" }
+  , { id = "between", label = "space-between", value = "space-between" }
+  , { id = "around", label = "space-around", value = "space-around" }
+  , { id = "end", label = "end", value = "end" }
   ]
 
 

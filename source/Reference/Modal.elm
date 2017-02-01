@@ -96,18 +96,32 @@ view model =
       Form.view Form model.form
 
     viewModel =
-      { content = [ text "This is the content of the modal..." ]
+      { contents = [ text "This is the content of the modal..." ]
       , title = "Modal"
       , address = Modal
       , footer =
-          [ Ui.Container.rowEnd [] [ Ui.Button.primary "Close" Close ]
+          [ Ui.Container.rowEnd []
+            [ Ui.Button.view Close
+              { disabled = False
+              , readonly = False
+              , kind = "primary"
+              , size = "medium"
+              , text = "Close"
+              }
+            ]
           ]
       }
 
     demo =
       Html.div []
         [ Ui.Modal.view viewModel model.modal
-        , Ui.Button.primary "Open Modal" Open
+        , Ui.Button.view Open
+          { disabled = False
+          , readonly = False
+          , text = "Open Modal"
+          , kind = "primary"
+          , size = "medium"
+          }
         ]
   in
     Components.Reference.view demo form
