@@ -135,8 +135,8 @@ subscriptions model =
 {-| Updates the main.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
+update msg_ model =
+  case Debug.log "" msg_ of
     Navigation location ->
       case UrlParser.parsePath routes location of
         Just route ->

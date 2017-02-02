@@ -70,11 +70,14 @@ update msg_ model =
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, cmd ) =
   let
-    updatedForm =
-      Form.updateNumberRange "value" model.numberRange.value model.form
+    ( updatedForm, formCmd ) =
+      model.form
         |> Form.updateCheckbox "editing" model.numberRange.editing
+        |> Form.updateNumberRange "value" model.numberRange.value
   in
-    ( { model | form = updatedForm }, cmd )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )

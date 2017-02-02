@@ -263,58 +263,31 @@ updateDate name value model =
     { model | dates = Dict.update name updatedDate model.dates }
 
 
-updateTextarea : String -> String -> Model msg -> Model msg
+updateTextarea : String -> String -> Model msg -> ( Model msg, Cmd Msg )
 updateTextarea name value model =
   let
-    updatedTextarea item =
-      case item of
-        Just ( index, input ) ->
-          let
-            ( updatedInput, textareaCmd ) =
-              Ui.Textarea.setValue value input
-          in
-            Just ( index, updatedInput )
-
-        _ ->
-          item
+    ( textareas, cmd ) =
+      updateDict name (Ui.Textarea.setValue value) model.textareas
   in
-    { model | textareas = Dict.update name updatedTextarea model.textareas }
+    ( { model | textareas = textareas }, Cmd.map (Textareas name) cmd )
 
 
-updateInput : String -> String -> Model msg -> Model msg
+updateInput : String -> String -> Model msg -> ( Model msg, Cmd Msg )
 updateInput name value model =
   let
-    updatedInput item =
-      case item of
-        Just ( index, input ) ->
-          let
-            ( updatedInput, textareaCmd ) =
-              Ui.Input.setValue value input
-          in
-            Just ( index, updatedInput )
-
-        _ ->
-          item
+    ( inputs, cmd ) =
+      updateDict name (Ui.Input.setValue value) model.inputs
   in
-    { model | inputs = Dict.update name updatedInput model.inputs }
+    ( { model | inputs = inputs }, Cmd.map (Inputs name) cmd )
 
 
-updateNumberRange : String -> Float -> Model msg -> Model msg
+updateNumberRange : String -> Float -> Model msg -> ( Model msg, Cmd Msg )
 updateNumberRange name value model =
   let
-    updatedNumberRange item =
-      case item of
-        Just ( index, numberRange ) ->
-          let
-            ( updatedInput, textareaCmd ) =
-              Ui.NumberRange.setValue value numberRange
-          in
-            Just ( index, updatedInput )
-
-        _ ->
-          item
+    ( numberRanges, cmd ) =
+      updateDict name (Ui.NumberRange.setValue value) model.numberRanges
   in
-    { model | numberRanges = Dict.update name updatedNumberRange model.numberRanges }
+    ( { model | numberRanges = numberRanges }, Cmd.map (NumberRanges name) cmd )
 
 
 updateCheckbox : String -> Bool -> Model msg -> Model msg
@@ -333,21 +306,20 @@ updateCheckbox name value model =
 
 updateDict :
   String
-  -> msg
-  -> (msg -> model -> ( model, Cmd msg ))
+  -> (model -> ( model, Cmd msg ))
   -> Dict String ( Int, model )
-  -> ( Cmd msg, Dict String ( Int, model ) )
-updateDict name act fn dict =
+  -> ( Dict String ( Int, model ), Cmd msg )
+updateDict name fn dict =
   case Dict.get name dict of
     Just ( index, value ) ->
       let
-        ( updateValue, effect ) =
-          fn act value
+        ( updateValue, cmd ) =
+          fn value
       in
-        ( effect, Dict.insert name ( index, updateValue ) dict )
+        ( Dict.insert name ( index, updateValue ) dict, cmd )
 
     Nothing ->
-      ( Cmd.none, dict )
+      ( dict, Cmd.none )
 
 
 update : Msg -> Model msg -> ( Model msg, Cmd Msg )
@@ -355,65 +327,65 @@ update action model =
   case action of
     DatePickers name act ->
       let
-        ( effect, updatedDatePickers ) =
-          updateDict name act Ui.DatePicker.update model.dates
+        ( updatedDatePickers, cmd ) =
+          updateDict name (Ui.DatePicker.update act) model.dates
       in
         ( { model | dates = updatedDatePickers }
-        , Cmd.map (DatePickers name) effect
+        , Cmd.map (DatePickers name) cmd
         )
 
     Checkboxes name act ->
       let
-        ( effect, updatedCheckboxes ) =
-          updateDict name act Ui.Checkbox.update model.checkboxes
+        ( updatedCheckboxes, cmd ) =
+          updateDict name (Ui.Checkbox.update act) model.checkboxes
       in
         ( { model | checkboxes = updatedCheckboxes }
-        , Cmd.map (Checkboxes name) effect
+        , Cmd.map (Checkboxes name) cmd
         )
 
     Choosers name act ->
       let
-        ( effect, updatedChoosers ) =
-          updateDict name act Ui.Chooser.update model.choosers
+        ( updatedChoosers, cmd ) =
+          updateDict name (Ui.Chooser.update act) model.choosers
       in
         ( { model | choosers = updatedChoosers }
-        , Cmd.map (Choosers name) effect
+        , Cmd.map (Choosers name) cmd
         )
 
     Inputs name act ->
       let
-        ( effect, updatedInputs ) =
-          updateDict name act Ui.Input.update model.inputs
+        ( updatedInputs, cmd ) =
+          updateDict name (Ui.Input.update act) model.inputs
       in
         ( { model | inputs = updatedInputs }
-        , Cmd.map (Inputs name) effect
+        , Cmd.map (Inputs name) cmd
         )
 
     Colors name act ->
       let
-        ( effect, updatedColors ) =
-          updateDict name act Ui.ColorPicker.update model.colors
+        ( updatedColors, cmd ) =
+          updateDict name (Ui.ColorPicker.update act) model.colors
       in
         ( { model | colors = updatedColors }
-        , Cmd.map (Colors name) effect
+        , Cmd.map (Colors name) cmd
         )
 
     Textareas name act ->
       let
-        ( effect, updatedTextareas ) =
-          updateDict name act Ui.Textarea.update model.textareas
+        ( updatedTextareas, cmd ) =
+          updateDict name (Ui.Textarea.update act) model.textareas
       in
         ( { model | textareas = updatedTextareas }
-        , Cmd.map (Textareas name) effect
+        , Cmd.map (Textareas name) cmd
         )
 
     NumberRanges name act ->
       let
-        ( effect, updatedNumberRanges ) =
-          updateDict name act Ui.NumberRange.update model.numberRanges
+        ( updatedNumberRanges, cmd ) =
+          updateDict name (Ui.NumberRange.update act) model.numberRanges
       in
         ( { model | numberRanges = updatedNumberRanges }
-        , Cmd.map (NumberRanges name) effect
+        , Cmd.map (NumberRanges name) cmd
         )
 
 

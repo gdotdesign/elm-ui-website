@@ -69,12 +69,14 @@ update msg_ model =
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, cmd ) =
   let
-    updatedForm =
+    ( updatedForm, formCmd ) =
       Form.updateNumberRange "value"
         (toFloat model.numberPad.value)
         model.form
   in
-    ( { model | form = updatedForm }, cmd )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
@@ -84,8 +86,8 @@ updateState ( model, cmd ) =
       { numberPad
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
-        , format = Form.valueOfCheckbox "format" False model.form
         , value = round (Form.valueOfNumberRange "value" 0 model.form)
+        , format = Form.valueOfCheckbox "format" False model.form
         , prefix = Form.valueOfInput "prefix" "" model.form
         , affix = Form.valueOfInput "affix" "" model.form
       }

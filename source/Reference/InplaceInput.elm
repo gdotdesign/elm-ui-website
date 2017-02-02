@@ -67,11 +67,13 @@ update msg_ model =
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, cmd ) =
   let
-    updatedForm =
+    ( updatedForm, formCmd ) =
       Form.updateCheckbox "open" model.inplaceInput.open model.form
       |> Form.updateTextarea "value" model.inplaceInput.value
   in
-    ( { model | form = updatedForm }, cmd )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )

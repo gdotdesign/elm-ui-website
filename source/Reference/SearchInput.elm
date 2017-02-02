@@ -68,10 +68,12 @@ update msg_ model =
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 updateForm ( model, cmd ) =
   let
-    updatedForm =
+    ( updatedForm, formCmd ) =
       Form.updateInput "value" model.input.value model.form
   in
-    ( { model | form = updatedForm }, cmd )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
