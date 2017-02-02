@@ -35,20 +35,20 @@ init =
           , choosers = []
           , colors = []
           , inputs = []
-          , dates = [( "date", 0, date )]
+          , dates = [ ( "date", 0, date ) ]
           }
     }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     _ ->
@@ -56,14 +56,14 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent time =
       { time
         | date = Form.valueOfDate "date" (now ()) model.form
       }
   in
-    ( { model | time = updatedComponent model.time }, effect )
+    ( { model | time = updatedComponent model.time }, cmd )
 
 
 view : Model -> Html.Html Msg

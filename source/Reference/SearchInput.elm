@@ -5,10 +5,7 @@ import Components.Reference
 
 import Ui.SearchInput
 
-import Ext.Date
-
 import Html
-
 
 type Msg
   = SearchInput Ui.SearchInput.Msg
@@ -27,7 +24,6 @@ init =
     input =
       Ui.SearchInput.init ()
         |> Ui.SearchInput.placeholder "Placeholder..."
-        -- |> Ui.SearchInput.setValue "Some content..."
   in
     { input = input
     , form =
@@ -37,7 +33,7 @@ init =
               , ( "readonly", 4, False )
               ]
           , inputs =
-              [ ( "value", 0, "Value...", "Some content..." )
+              [ ( "value",       0, "Value...",       ""               )
               , ( "placeholder", 0, "Placeholder...", "Placeholder..." )
               ]
           , numberRanges = []
@@ -50,38 +46,38 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    SearchInput act ->
+update msg_ model =
+  case msg_ of
+    SearchInput msg ->
       let
-        ( input, effect ) =
-          Ui.SearchInput.update act model.input
+        ( input, cmd ) =
+          Ui.SearchInput.update msg model.input
       in
-        ( { model | input = input }, Cmd.map SearchInput effect )
+        ( { model | input = input }, Cmd.map SearchInput cmd )
           |> updateForm
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateInput "value" model.input.value model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
-    ( input, cmd ) =
+    ( input, setCmd ) =
       updatedComponent model.input
 
     updatedComponent input =
@@ -95,7 +91,9 @@ updateState ( model, effect ) =
           , input = updatedInput input.input
         } |> Ui.SearchInput.setValue (Form.valueOfInput "value" "" model.form)
   in
-    ( { model | input = input }, Cmd.batch [ effect, Cmd.map SearchInput cmd ] )
+    ( { model | input = input }
+    , Cmd.batch [ cmd, Cmd.map SearchInput setCmd ]
+    )
 
 
 view : Model -> Html.Html Msg

@@ -7,7 +7,6 @@ import Ui.NumberRange
 
 import Html exposing (text)
 
-
 type Msg
   = NumberRange Ui.NumberRange.Msg
   | Form Form.Msg
@@ -25,11 +24,11 @@ init =
   , form =
       Form.init
         { numberRanges =
-            [ ( "value", 1, 42, "", 0, (1 / 0), 0, 1 )
-            , ( "drag step", 3, 1, "", 0, (1 / 0), 2, 0.1 )
-            , ( "round", 4, 0, "", 0, 20, 0, 1 )
-            , ( "min", 5, 0, "", -(1 / 0), 0, 0, 1 )
-            , ( "max", 6, 1000, "", 0, (1 / 0), 0, 1 )
+            [ ( "value",     1, 42,   "", 0,        (1 / 0), 0, 1   )
+            , ( "drag step", 3, 1,    "", 0,        (1 / 0), 2, 0.1 )
+            , ( "round",     4, 0,    "", 0,        20,      0, 1   )
+            , ( "min",       5, 0,    "", -(1 / 0), 0,       0, 1   )
+            , ( "max",       6, 1000, "", 0,        (1 / 0), 0, 1   )
             ]
         , textareas = []
         , colors = []
@@ -40,7 +39,7 @@ init =
         , checkboxes =
             [ ( "disabled", 7, False )
             , ( "readonly", 8, False )
-            , ( "editing", 9, False )
+            , ( "editing",  9, False )
             ]
         , choosers =
             []
@@ -49,39 +48,39 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    NumberRange act ->
+    NumberRange msg ->
       let
-        ( numberRange, effect ) =
-          Ui.NumberRange.update act model.numberRange
+        ( numberRange, cmd ) =
+          Ui.NumberRange.update msg model.numberRange
       in
-        ( { model | numberRange = numberRange }, Cmd.map NumberRange effect )
+        ( { model | numberRange = numberRange }, Cmd.map NumberRange cmd )
           |> updateForm
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateNumberRange "value" model.numberRange.value model.form
         |> Form.updateCheckbox "editing" model.numberRange.editing
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
-    ( numberRange, cmd ) =
+    ( numberRange, setCmd ) =
       updatedComponent model.numberRange
 
     updatedComponent numberRange =
@@ -97,7 +96,9 @@ updateState ( model, effect ) =
       }
       |> Ui.NumberRange.setValue (Form.valueOfNumberRange "value" 0 model.form)
   in
-    ( { model | numberRange = numberRange }, Cmd.batch [ effect, Cmd.map NumberRange cmd ] )
+    ( { model | numberRange = numberRange }
+    , Cmd.batch [ cmd, Cmd.map NumberRange setCmd ]
+    )
 
 
 subscriptions : Model -> Sub Msg

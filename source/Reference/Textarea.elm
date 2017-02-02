@@ -5,8 +5,6 @@ import Components.Reference
 
 import Ui.Textarea
 
-import Ext.Date
-
 import Html
 
 
@@ -29,17 +27,17 @@ init =
   , form =
       Form.init
         { checkboxes =
-            [ ( "disabled", 4, False )
-            , ( "readonly", 5, False )
-            , ( "enter allowed", 3, True)
+            [ ( "disabled", 4,      False )
+            , ( "readonly", 5,      False )
+            , ( "enter allowed", 3, True  )
             ]
         , inputs =
             [ ( "placeholder", 1, "Placeholder...", "Placeholder..." )
             ]
-        , numberRanges = []
         , textareas =
-            [ ( "value", 2, "Value...", "Some content..." )
+            [ ( "value", 2, "Value...", "" )
             ]
+        , numberRanges = []
         , choosers = []
         , colors = []
         , dates = []
@@ -48,47 +46,52 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Textarea act ->
+update msg_ model =
+  case msg_ of
+    Textarea msg ->
       let
-        ( textarea, effect ) =
-          Ui.Textarea.update act model.textarea
+        ( textarea, cmd ) =
+          Ui.Textarea.update msg model.textarea
       in
-        ( { model | textarea = textarea }, Cmd.map Textarea effect )
+        ( { model | textarea = textarea }, Cmd.map Textarea cmd )
           |> updateForm
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateTextarea "value" model.textarea.value model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( ({ textarea } as model), cmd ) =
   let
-    updatedComponent textarea =
+    value =
+      Form.valueOfTextarea "value" "" model.form
+
+    ( updatedComponent, setCmd ) =
       { textarea
-        | disabled = Form.valueOfCheckbox "disabled" False model.form
+        | enterAllowed = Form.valueOfCheckbox "enter allowed" False model.form
+        , disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , placeholder = Form.valueOfInput "placeholder" "" model.form
-        , enterAllowed = Form.valueOfCheckbox "enter allowed" False model.form
-        , value = Form.valueOfTextarea "value" "" model.form
       }
+      |> Ui.Textarea.setValue value
   in
-    ( { model | textarea = updatedComponent model.textarea }, effect )
+    ( { model | textarea = updatedComponent }
+    , Cmd.batch [ Cmd.map Textarea setCmd, cmd ]
+    )
 
 
 view : Model -> Html.Html Msg

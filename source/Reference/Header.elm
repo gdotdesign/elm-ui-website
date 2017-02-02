@@ -1,13 +1,12 @@
 module Reference.Header exposing (..)
 
 import Components.Reference
+import Icons
 
 import Ui.Header
 import Ui
 
 import Html exposing (text)
-
-import Icons
 
 view : msg -> Html.Html msg
 view msg =

@@ -11,7 +11,6 @@ import Ui.Icons
 
 import Html
 
-
 type Msg
   = Form Form.Msg
   | Nothing
@@ -22,6 +21,7 @@ type alias Model =
   , form : Form.Model Msg
   }
 
+
 glyphData : List Ui.Chooser.Item
 glyphData =
   [ { id = "plus", label = "Plus", value = "plus" }
@@ -30,21 +30,23 @@ glyphData =
   , { id = "star", label = "Star", value = "star" }
   ]
 
+
 sideData : List Ui.Chooser.Item
 sideData =
   [ { id = "left", label = "Left", value = "left" }
   , { id = "right", label = "Right", value = "right" }
   ]
 
+
 init : Model
 init =
   { iconButton =
-      { text = "Add Document"
+      { glyph = Ui.Icons.plus []
+      , text = "Add Document"
       , disabled = False
       , readonly = False
       , kind = "primary"
       , size = "medium"
-      , glyph = Ui.Icons.plus []
       , side = "left"
       }
   , form =
@@ -57,10 +59,10 @@ init =
             , ( "readonly", 4, False )
             ]
         , choosers =
-            [ ( "kind", 0, kindData, "", "primary" )
-            , ( "size", 1, sizeData, "", "medium" )
-            , ( "glyph", 2, glyphData, "", "plus")
-            , ( "side", 2, sideData, "", "left")
+            [ ( "kind",  0, kindData,  "", "primary" )
+            , ( "size",  1, sizeData,  "", "medium"  )
+            , ( "glyph", 2, glyphData, "", "plus"    )
+            , ( "side",  2, sideData,  "", "left"    )
             ]
         , numberRanges = []
         , textareas = []
@@ -71,14 +73,14 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     _ ->
@@ -86,7 +88,7 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     glyph =
       case Form.valueOfChooser "glyph" "plus" model.form of
@@ -106,7 +108,7 @@ updateState ( model, effect ) =
         , glyph = glyph
       }
   in
-    ( { model | iconButton = updatedComponent model.iconButton }, effect )
+    ( { model | iconButton = updatedComponent model.iconButton }, cmd )
 
 
 view : Model -> Html.Html Msg

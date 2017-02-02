@@ -7,7 +7,6 @@ import Ui.Slider
 
 import Html exposing (text)
 
-
 type Msg
   = Slider Ui.Slider.Msg
   | Form Form.Msg
@@ -44,36 +43,36 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    Slider act ->
+    Slider msg ->
       let
-        ( slider, effect ) =
-          Ui.Slider.update act model.slider
+        ( slider, cmd ) =
+          Ui.Slider.update msg model.slider
       in
-        ( { model | slider = slider }, Cmd.map Slider effect )
+        ( { model | slider = slider }, Cmd.map Slider cmd )
           |> updateForm
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateNumberRange "value" model.slider.value model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     value =
       Form.valueOfNumberRange "value" 0 model.form
@@ -85,7 +84,7 @@ updateState ( model, effect ) =
       }
       |> Ui.Slider.setValue value
   in
-    ( { model | slider = updatedComponent model.slider }, effect )
+    ( { model | slider = updatedComponent model.slider }, cmd )
 
 
 subscriptions : Model -> Sub Msg

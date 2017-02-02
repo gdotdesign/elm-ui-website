@@ -7,7 +7,6 @@ import Ui.NumberPad
 
 import Html exposing (text)
 
-
 type Msg
   = NumberPad Ui.NumberPad.Msg
   | Form Form.Msg
@@ -34,12 +33,12 @@ init =
         , dates = []
         , inputs =
             [ ( "prefix", 1, "Prefix...", "" )
-            , ( "affix", 2, "Affix...", "" )
+            , ( "affix",  2, "Affix...",  "" )
             ]
         , checkboxes =
             [ ( "disabled", 4, False )
             , ( "readonly", 5, False )
-            , ( "format", 3, True)
+            , ( "format",   3, True  )
             ]
         , choosers =
             []
@@ -48,38 +47,38 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    NumberPad act ->
+    NumberPad msg ->
       let
-        ( numberPad, effect ) =
-          Ui.NumberPad.update act model.numberPad
+        ( numberPad, cmd ) =
+          Ui.NumberPad.update msg model.numberPad
       in
-        ( { model | numberPad = numberPad }, Cmd.map NumberPad effect )
+        ( { model | numberPad = numberPad }, Cmd.map NumberPad cmd )
         |> updateForm
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateNumberRange "value"
         (toFloat model.numberPad.value)
         model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent numberPad =
       { numberPad
@@ -91,7 +90,7 @@ updateState ( model, effect ) =
         , affix = Form.valueOfInput "affix" "" model.form
       }
   in
-    ( { model | numberPad = updatedComponent model.numberPad }, effect )
+    ( { model | numberPad = updatedComponent model.numberPad }, cmd )
 
 
 subscriptions : Model -> Sub Msg

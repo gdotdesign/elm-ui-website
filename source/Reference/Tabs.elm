@@ -8,7 +8,6 @@ import Ui
 
 import Html exposing (text)
 
-
 type Msg
   = Tabs Ui.Tabs.Msg
   | Form Form.Msg
@@ -42,36 +41,36 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Tabs act ->
+update msg_ model =
+  case msg_ of
+    Tabs msg ->
       let
-        ( tabs, effect ) =
-          Ui.Tabs.update act model.tabs
+        ( tabs, cmd ) =
+          Ui.Tabs.update msg model.tabs
       in
-        ( { model | tabs = tabs }, Cmd.map Tabs effect )
+        ( { model | tabs = tabs }, Cmd.map Tabs cmd )
           |> updateForm
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateNumberRange "selected" (toFloat model.tabs.selected) model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent tabs =
       { tabs
@@ -80,7 +79,7 @@ updateState ( model, effect ) =
         , selected = round (Form.valueOfNumberRange "selected" 0 model.form)
       }
   in
-    ( { model | tabs = updatedComponent model.tabs }, effect )
+    ( { model | tabs = updatedComponent model.tabs }, cmd )
 
 
 subscriptions : Model -> Sub Msg

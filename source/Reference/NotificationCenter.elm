@@ -37,19 +37,19 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-  case msg of
-    Input subMsg ->
+update msg_ model =
+  case msg_ of
+    Input msg ->
       let
         ( input, cmd ) =
-          Ui.Input.update subMsg model.input
+          Ui.Input.update msg model.input
       in
         ( { model | input = input }, Cmd.map Input cmd )
 
-    Notifications subMsg ->
+    Notifications msg ->
       let
         ( notifications, cmd ) =
-          Notifications.update subMsg model.notifications
+          Notifications.update msg model.notifications
       in
         ( { model | notifications = notifications }, Cmd.map Notifications cmd )
 

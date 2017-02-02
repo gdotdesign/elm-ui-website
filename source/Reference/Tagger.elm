@@ -8,7 +8,6 @@ import Ui.Tagger
 
 import Html
 
-
 type Msg
   = Tagger Ui.Tagger.Msg
   | RemoveTag String
@@ -30,14 +29,14 @@ init =
         |> Ui.Tagger.placeholder "Add a tag.."
   , tags =
       [ { label = "Vader", id = "vader" }
-      , { label = "Luke", id = "luke" }
+      , { label = "Luke",  id = "luke"  }
       ]
   , form =
       Form.init
         { checkboxes =
-            [ ( "disabled", 1, False )
-            , ( "readonly", 2, False )
-            , ( "removeable", 3, True )
+            [ ( "disabled",   1, False )
+            , ( "readonly",   2, False )
+            , ( "removeable", 3, True  )
             ]
         , numberRanges = []
         , textareas = []
@@ -58,21 +57,21 @@ subscriptions model =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Tagger act ->
+update msg model =
+  case msg of
+    Tagger msg ->
       let
-        ( tagger, effect ) =
-          Ui.Tagger.update act model.tagger
+        ( tagger, cmd ) =
+          Ui.Tagger.update msg model.tagger
       in
-        ( { model | tagger = tagger }, Cmd.map Tagger effect )
+        ( { model | tagger = tagger }, Cmd.map Tagger cmd )
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     AddTag value ->
@@ -99,16 +98,16 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent tagger =
       { tagger
-        | disabled = Form.valueOfCheckbox "disabled" False model.form
+        | removeable = Form.valueOfCheckbox "removeable" False model.form
+        , disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
-        , removeable = Form.valueOfCheckbox "removeable" False model.form
       }
   in
-    ( { model | tagger = updatedComponent model.tagger }, effect )
+    ( { model | tagger = updatedComponent model.tagger }, cmd )
 
 
 view : Model -> Html.Html Msg

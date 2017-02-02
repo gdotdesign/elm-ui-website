@@ -8,7 +8,6 @@ import Ui.Pager
 import Html.Attributes exposing (class)
 import Html exposing (div, text)
 
-
 type Msg
   = Pager Ui.Pager.Msg
   | Form Form.Msg
@@ -35,22 +34,22 @@ init =
         , inputs = []
         , dates = []
         }
-      |> Form.button "Next Page" "primary" Next
+      |> Form.button "Next Page"     "primary" Next
       |> Form.button "Previous Page" "primary" Previous
   }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Pager act ->
-      ( { model | pager = Ui.Pager.update act model.pager }, Cmd.none )
+update msg_ model =
+  case msg_ of
+    Pager msg ->
+      ( { model | pager = Ui.Pager.update msg model.pager }, Cmd.none )
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) = Form.update act model.form
+        ( form, cmd ) = Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     Next ->
@@ -67,12 +66,12 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent pager =
       pager
   in
-    ( { model | pager = updatedComponent model.pager }, effect )
+    ( { model | pager = updatedComponent model.pager }, cmd )
 
 
 subscriptions : Model -> Sub Msg

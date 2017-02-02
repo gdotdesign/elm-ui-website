@@ -5,11 +5,8 @@ import Components.Reference
 
 import Ui.InplaceInput
 
-import Ext.Date
-
 import Html.Attributes exposing (class)
 import Html exposing (div, span, text)
-
 
 type Msg
   = InplaceInput Ui.InplaceInput.Msg
@@ -27,7 +24,6 @@ init =
   { inplaceInput =
       Ui.InplaceInput.init ()
         |> Ui.InplaceInput.placeholder "Placeholder..."
-        -- |> Ui.InplaceInput.setValue "Some content..."
   , form =
       Form.init
         { checkboxes =
@@ -38,7 +34,7 @@ init =
             , ( "open", 6, False )
             ]
         , textareas =
-            [ ( "value", 0, "Placeholder...", "Some content..." )]
+            [ ( "value", 0, "Placeholder...", "" ) ]
         , numberRanges = []
         , choosers = []
         , inputs = []
@@ -49,39 +45,39 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    InplaceInput act ->
+update msg_ model =
+  case msg_ of
+    InplaceInput msg ->
       let
-        ( inplaceInput, effect ) =
-          Ui.InplaceInput.update act model.inplaceInput
+        ( inplaceInput, cmd ) =
+          Ui.InplaceInput.update msg model.inplaceInput
       in
-        ( { model | inplaceInput = inplaceInput }, Cmd.map InplaceInput effect )
+        ( { model | inplaceInput = inplaceInput }, Cmd.map InplaceInput cmd )
           |> updateForm
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateCheckbox "open" model.inplaceInput.open model.form
       |> Form.updateTextarea "value" model.inplaceInput.value
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
-    ( inplaceInput, cmd ) =
+    ( inplaceInput, setCmd ) =
       updatedComponent model.inplaceInput
 
     updatedComponent inplaceInput =
@@ -95,7 +91,9 @@ updateState ( model, effect ) =
       |> Ui.InplaceInput.setValue (Form.valueOfTextarea "value" "" model.form)
 
   in
-    ( { model | inplaceInput = inplaceInput }, Cmd.batch [ effect, Cmd.map InplaceInput cmd ] )
+    ( { model | inplaceInput = inplaceInput }
+    , Cmd.batch [ cmd, Cmd.map InplaceInput setCmd ]
+    )
 
 
 view : Model -> Html.Html Msg

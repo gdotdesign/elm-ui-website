@@ -16,8 +16,8 @@ type alias Model =
 
 type Msg
   = StartAnimation (Result Dom.Error ( Time, Float ))
-  | Animate Time
   | NoOp (Result Dom.Error ())
+  | Animate Time
 
 
 init : (Animation -> Animation) -> Model

@@ -9,7 +9,6 @@ import Ui.Modal
 
 import Html exposing (text)
 
-
 type alias Model =
   { modal : Ui.Modal.Model
   , form : Form.Model Msg
@@ -29,9 +28,9 @@ init =
   , form =
       Form.init
         { checkboxes =
-            [ ( "closable", 1, True )
-            , ( "backdrop", 2, True )
-            , ( "open", 3, False )
+            [ ( "closable", 1, True  )
+            , ( "backdrop", 2, True  )
+            , ( "open",     3, False )
             ]
         , numberRanges = []
         , textareas = []
@@ -44,8 +43,8 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
+update msg_ model =
+  case msg_ of
     Close ->
       ( { model | modal = Ui.Modal.close model.modal }, Cmd.none )
         |> updateForm
@@ -54,30 +53,30 @@ update action model =
       ( { model | modal = Ui.Modal.open model.modal }, Cmd.none )
         |> updateForm
 
-    Modal act ->
-      ( { model | modal = Ui.Modal.update act model.modal }, Cmd.none )
+    Modal msg ->
+      ( { model | modal = Ui.Modal.update msg model.modal }, Cmd.none )
         |> updateForm
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateCheckbox "open" model.modal.open model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent modal =
       { modal
@@ -86,7 +85,7 @@ updateState ( model, effect ) =
         , open = Form.valueOfCheckbox "open" False model.form
       }
   in
-    ( { model | modal = updatedComponent model.modal }, effect )
+    ( { model | modal = updatedComponent model.modal }, cmd )
 
 
 view : Model -> Html.Html Msg
