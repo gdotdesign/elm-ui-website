@@ -20,10 +20,9 @@ type Msg
 
 pages : List (String, String)
 pages =
-  [ ("getting-started/setup", "1.1 Setup & Features")
-  , ("getting-started/scaffolding", "1.2 Scaffolding")
-  , ("getting-started/adding-components", "1.3 Adding Components")
-  , ("getting-started/reacting-to-changes", "1.4 Reacting to Changes")
+  [ ("getting-started/setup",               "1.1 Setup"               )
+  , ("getting-started/adding-components",   "1.2 Adding Components"   )
+  , ("getting-started/reacting-to-changes", "1.4 Reacting to Changes" )
   ]
 
 guidePages : List (String, String)
