@@ -136,7 +136,7 @@ subscriptions model =
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg_ model =
-  case Debug.log "" msg_ of
+  case msg_ of
     Navigation location ->
       case UrlParser.parsePath routes location of
         Just route ->
@@ -206,7 +206,7 @@ content model =
       Html.map Docs (Documentation.view (category ++ "/" ++ page) model.docs)
 
     ReferencePage ->
-      Html.map Reference (Reference.viewLazy model.reference "breadcrumbs")
+      Html.map Reference (Reference.viewLazy model.reference "ui")
 
     ReferenceComponent comp ->
       Html.map Reference (Reference.viewLazy model.reference comp)
@@ -221,39 +221,41 @@ header : Html.Html Msg
 header =
   Html.Lazy.lazy
     Ui.Header.view
-    [ img [src "/images/logo-small.svg"
-          , onClick (Navigate "/")] []
+    [ img
+      [ src "/images/logo-small.svg"
+      , onClick (Navigate "/")
+      ] []
     , Ui.Header.title
-       { text = "Elm-UI"
-       , action = Just (Navigate "/")
-       , link = Just "/"
+       { action = Just (Navigate "/")
        , target = "_self"
+       , link = Just "/"
+       , text = "Elm-UI"
        }
     , Ui.Header.spacer
     , Ui.Header.iconItem
-       { text = "Documentation"
-       , action = Just (Navigate "/documentation/getting-started/setup")
+       { action = Just (Navigate "/documentation/getting-started/setup")
        , link = Just "/documentation/getting-started/setup"
        , glyph = Icons.bookmark []
-       , side = "left"
+       , text = "Documentation"
        , target = "_self"
+       , side = "left"
        }
     , Ui.Header.separator
     , Ui.Header.iconItem
-       { text = "Reference"
-       , action = Just (Navigate "/reference")
+       { action = Just (Navigate "/reference")
        , link = Just "/reference"
        , glyph = Icons.code []
-       , side = "left"
+       , text = "Reference"
        , target = "_self"
+       , side = "left"
        }
     , Ui.Header.separator
     , Ui.Header.iconItem
-       { text = "Github"
-       , action = Nothing
+       { link = Just "https://github.com/gdotdesign/elm-ui"
        , glyph = Icons.github []
-       , link = Just "https://github.com/gdotdesign/elm-ui"
        , target = "_blank"
+       , action = Nothing
+       , text = "Github"
        , side = "left"
        }
     ]

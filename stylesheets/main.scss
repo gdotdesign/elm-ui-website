@@ -26,15 +26,10 @@ body {
   background: $background;
   overflow-y: scroll;
   overflow-x: hidden;
+  font-size: 16px;
   color: #707070;
   margin: 0;
 }
-
-/*a {
-  color: $primary;
-  text-decoration: none;
-  border-bottom: 1px solid rgba($primary, 0.5);
-}*/
 
 ui-playground {
   flex-direction: row;
