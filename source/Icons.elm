@@ -1,8 +1,14 @@
 module Icons exposing (..)
 
+{-| Icons for the site (header, footer maily).
+-}
 import Ui.Icons
 import Html
 
+
+{-| Bookmark icon.
+-}
+bookmark : List (Html.Attribute msg) -> Html.Html msg
 bookmark =
   Ui.Icons.icon
     """
@@ -10,6 +16,9 @@ bookmark =
     7.5H9V36l9-9 9 9
     """
 
+{-| Code icon.
+-}
+code : List (Html.Attribute msg) -> Html.Html msg
 code =
   Ui.Icons.icon
     """
@@ -23,6 +32,8 @@ code =
     1.363.57z
     """
 
+{-| Github icon.
+-}
 github : List (Html.Attribute msg) -> Html.Html msg
 github =
   Ui.Icons.icon
@@ -42,6 +53,9 @@ github =
     36 26.606 36 18.458 36 8.268 27.94 0 18 0z
     """
 
+
+{-| Hamburger icon.
+-}
 navicon : List (Html.Attribute msg) -> Html.Html msg
 navicon =
   Ui.Icons.icon

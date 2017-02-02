@@ -1,79 +1,99 @@
 module Docs.Types exposing (..)
 
+{-| Types for rendering elm documentation.
+-}
 import Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)
 import Json.Decode exposing (string, list, Decoder)
 
-
+{-| Representation of a documentation.
+-}
 type alias Documentation =
   { modules : List Module }
 
 
+{-| Representation a module.
+-}
 type alias Module =
-  { name : String
-  , comment : String
+  { functions : List Function
   , aliases : List Alias
   , types : List Type
-  , functions : List Function
+  , comment : String
+  , name : String
   }
 
 
+{-| Representation of a type alias.
+-}
 type alias Alias =
-  { name : String
-  , comment : String
+  { definition : String
   , args : List String
-  , definition : String
+  , comment : String
+  , name : String
   }
 
 
+{-| Representation of a type.
+-}
 type alias Type =
-  { name : String
+  { args : List String
   , comment : String
-  , args : List String
+  , name : String
   }
 
-
+{-| Representation of a function.
+-}
 type alias Function =
-  { name : String
+  { definition : String
   , comment : String
-  , definition : String
+  , name : String
   }
 
 
+{-| Decodes a documentation.
+-}
 decodeDocumentation : Decoder Documentation
 decodeDocumentation =
   Json.Decode.map Documentation (list decodeModule)
 
 
+{-| Decodes a module.
+-}
 decodeModule : Decoder Module
 decodeModule =
   decode Module
-    |> required "name" string
-    |> required "comment" string
+    |> required "values" (list decodeFunction)
     |> required "aliases" (list decodeAlias)
     |> required "types" (list decodeType)
-    |> required "values" (list decodeFunction)
+    |> required "comment" string
+    |> required "name" string
 
 
+{-| Decodes a type.
+-}
 decodeType : Decoder Type
 decodeType =
   decode Type
-    |> required "name" string
-    |> required "comment" string
     |> required "args" (list string)
+    |> required "comment" string
+    |> required "name" string
 
 
+{-| Decodes a function.
+-}
 decodeFunction : Decoder Function
 decodeFunction =
   decode Function
-    |> required "name" string
-    |> required "comment" string
     |> required "type" string
+    |> required "comment" string
+    |> required "name" string
 
 
+{-| Decodes a type alias.
+-}
 decodeAlias : Decoder Alias
 decodeAlias =
   decode Alias
-    |> required "name" string
-    |> required "comment" string
-    |> required "args" (list string)
     |> required "type" string
+    |> required "args" (list string)
+    |> required "comment" string
+    |> required "name" string

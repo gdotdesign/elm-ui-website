@@ -1,25 +1,36 @@
-module Utils.ScrollToTop exposing (Model, Msg, init, subscriptions, update, start)
+module Utils.ScrollToTop exposing
+  (Model, Msg, init, subscriptions, update, start)
 
-import AnimationFrame
+{-| This module provides the scroll to top functionality when navigating.
+-}
 import Animation exposing (Animation)
+import AnimationFrame
+
 import Time exposing (Time)
 import Task
+
 import Dom.Scroll
 import Dom
 
 
+{-| Model for this module.
+-}
 type alias Model =
-  { animation : Maybe Animation
-  , setup : Animation -> Animation
+  { setup : Animation -> Animation
+  , animation : Maybe Animation
   }
 
 
+{-| Messages for a scroll-to-top instance.
+-}
 type Msg
   = StartAnimation (Result Dom.Error ( Time, Float ))
   | NoOp (Result Dom.Error ())
   | Animate Time
 
 
+{-| Initializes a scroll-to-top instance.
+-}
 init : (Animation -> Animation) -> Model
 init setup =
   { setup = setup
@@ -27,6 +38,8 @@ init setup =
   }
 
 
+{-| Start the scrolling animation.
+-}
 start : Cmd Msg
 start =
   let
@@ -36,6 +49,8 @@ start =
     Task.attempt StartAnimation task
 
 
+{-| Subscriptions for a scrolling animation.
+-}
 subscriptions : Model -> Sub Msg
 subscriptions model =
   case model.animation of
@@ -46,6 +61,8 @@ subscriptions model =
       Sub.none
 
 
+{-| Updates a scroll-to-top instance.
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of

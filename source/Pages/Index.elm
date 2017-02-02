@@ -81,23 +81,23 @@ section title content image =
 worklfowContent : String
 worklfowContent =
   """
-Elm-UI gives you the perfect tools, so you can focus on your code instead of the environment:
-- Colored **error-messages** displayed in the browser
-- Development server with built-in **live reload**
-- **Scaffolding** to quickly start a new projects
-- **Building and minifying** your final files
-- **Environment configurations**
-"""
+  Elm-UI gives you the perfect tools, so you can focus on your code instead of the environment:
+  - Colored **error-messages** displayed in the browser
+  - Development server with built-in **live reload**
+  - **Scaffolding** to quickly start a new projects
+  - **Building and minifying** your final files
+  - **Environment configurations**
+  """
 
 componentLibraryContent : String
 componentLibraryContent =
   """
-With a plethora of components you can build a wide variaty of single-page
-apps.
-- They have **disabled** and **readonly** states
-- They can be controlled by **keyboard**
-- **25+** components
-"""
+  With a plethora of components you can build a wide variaty of single-page
+  apps.
+  - They have **disabled** and **readonly** states
+  - They can be controlled by **keyboard**
+  - **25+** components
+  """
 
 
 view : (String -> msg) -> msg -> Html.Html msg

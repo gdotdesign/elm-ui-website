@@ -1,5 +1,7 @@
 module Reference exposing (..)
 
+{-| This is a component for display reference for components.
+-}
 import Html exposing (div, span, strong, text, node)
 import Html.Attributes exposing (class)
 import Html.Lazy
@@ -49,6 +51,8 @@ import Docs.Types exposing (Documentation, Module)
 import Components.NavList as NavList exposing (Category)
 import Components.Markdown as Markdown
 
+{-| Represenation of a reference.
+-}
 type alias Model =
   { notificationCenter : NotificationCenter.Model
   , inplaceInput : InplaceInput.Model
@@ -84,6 +88,9 @@ type alias Model =
   , list : NavList.Model
   }
 
+
+{-| Messages that a reference can receive.
+-}
 type Msg
   = NotificationCenter NotificationCenter.Msg
   | InplaceInput InplaceInput.Msg
@@ -119,6 +126,9 @@ type Msg
   | Navigate String
   | Noop
 
+
+{-| Initializes a reference.
+-}
 init : Model
 init =
   { notificationCenter = NotificationCenter.init
@@ -157,11 +167,15 @@ init =
   }
 
 
+{-| Sets the documentation of a reference.
+-}
 setDocumentation : Documentation -> Model -> Model
 setDocumentation docs model =
   { model | documentation = docs }
 
 
+{-| Items for the navigation list.
+-}
 navItems : List Category
 navItems =
   let
@@ -176,6 +190,8 @@ navItems =
     ]
 
 
+{-| Component category items.
+-}
 components : Dict String (String, Bool)
 components =
   Dict.fromList
@@ -219,6 +235,8 @@ components =
     ]
 
 
+{-| Native module category items.
+-}
 nativeModules : Dict String (String, Bool)
 nativeModules =
   Dict.fromList
@@ -228,6 +246,8 @@ nativeModules =
     ]
 
 
+{-| Helper category items.
+-}
 helpers : Dict String (String, Bool)
 helpers =
   Dict.fromList
@@ -242,6 +262,8 @@ helpers =
     ]
 
 
+{-| Extension category items.
+-}
 extensions : Dict String (String, Bool)
 extensions =
   Dict.fromList
@@ -253,6 +275,8 @@ extensions =
     ]
 
 
+{-| Updates a reference.
+-}
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg_ model =
   case msg_ of
@@ -446,6 +470,8 @@ update msg_ model =
       ( model, Cmd.none )
 
 
+{-| Subscriptions for a reference.
+-}
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
@@ -465,11 +491,15 @@ subscriptions model =
   ]
 
 
+{-| Finds a module in the documentation with the given name.
+-}
 findDocumentation : String -> Documentation -> Maybe Module
 findDocumentation name docs =
   List.Extra.find (\mod -> mod.name == name) docs.modules
 
 
+{-| Processes a type definition.
+-}
 processType : String -> String
 processType definition =
   let
@@ -482,6 +512,8 @@ processType definition =
     "```\n" ++ code ++ "\n```"
 
 
+{-| Renders documentation for a module.
+-}
 renderDocumentation : Module -> Html.Html Msg
 renderDocumentation mod =
   let
@@ -563,6 +595,8 @@ renderDocumentation mod =
       ([description] ++ aliases ++ types ++ functions)
 
 
+{-| Renders documentation for the given module.
+-}
 documentation : Documentation -> String -> Html.Html Msg
 documentation docs name =
   findDocumentation name docs
@@ -570,11 +604,15 @@ documentation docs name =
   |> Maybe.withDefault (text "")
 
 
+{-| Renders the reference lazily.
+-}
 viewLazy : Model -> String -> Html.Html Msg
 viewLazy model active =
   Html.Lazy.lazy2 view model active
 
 
+{-| Renders the reference.
+-}
 view : Model -> String -> Html.Html Msg
 view model active =
   let
