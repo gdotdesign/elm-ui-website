@@ -7,6 +7,10 @@ ui-cta {
   font-size: 40px;
   display: flex;
 
+  ui-button {
+    text-transform: uppercase;
+  }
+
   > span {
     margin-bottom: 30px;
   }

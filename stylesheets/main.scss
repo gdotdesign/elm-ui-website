@@ -1,23 +1,26 @@
 @import 'fonts';
 
-$primary: #158DD8;
 $background: #F5F5F5;
+$primary: #158DD8;
+$secondary: gray;
 $input: #FDFDFD;
 $focus: #00C0FF;
 $success: green;
-$warning: red;
 $danger: orange;
+$warning: red;
+
 $border-radius: 2px;
-$secondary: gray;
 
 $code-font: Source Code Pro, serif;
 $title-font: Abel, Open Sans;
 
 @import 'components/ui-nav-list';
-@import 'components/ui-terminal';
 @import 'components/markdown';
 @import 'components/ui-form';
 
+@import 'parts/reference-docs.scss';
+@import 'parts/documentation.scss';
+@import 'parts/reference.scss';
 @import 'parts/section.scss';
 @import 'parts/header.scss';
 @import 'parts/footer.scss';
@@ -34,340 +37,17 @@ body {
   margin: 0;
 }
 
-ui-playground {
-  flex-direction: row;
-  display: flex;
-  flex: 1;
-
-  > div {
-    justify-content: center;
-    align-items: flex-start;
-    display: flex;
-    flex: 1;
-  }
-
-  ui-playground-viewport {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    padding: 20px;
-    flex: 1;
-    margin-right: 20px;
-
-  }
-}
-
-ui-reference {
-  min-height: calc(100vh - 60px);
-  display: flex;
-}
-
-ui-browser {
-  border: 1px solid rgba(#000, 0.15);
-  border-radius: 7px;
-  flex: 0 0 auto;
-  width: 600px;
-
-  img {
-    border-radius: 0 0 7px 7px;
-    display: block;
-    width: 100%;
-  }
-
-  ui-browser-title {
-    background: rgba(#000, 0.05);
-    display: block;
-    height: 50px;
-  }
-}
-
-ui-reference-title {
-  font-size: 26px;
-  font-family: $title-font;
-  padding: 12px 20px;
-  border-bottom: 1px solid rgba(#000, 0.1);
-  display: block;
-
-  &.upcase {
-    text-transform: uppercase;
-    font-size: 20px;
-  }
-}
-
-ui-reference-content {
-  flex-direction: column;
-  display: flex;
-  flex: 1;
-}
-
-ui-reference-demo {
-  border-bottom: 1px solid rgba(#000, 0.1);
-  display: flex;
-  min-height: 400px;
-
-  ui-reference-demo-viewport {
-    background: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
-                linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
-    background-position: 0 0, 10px 10px;
-    background-size: 20px 20px;
-
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    padding: 40px;
-    flex: 1;
-
-    #time-demo {
-      background: $input;
-      padding: 15px;
-    }
-
-    #test-container {
-      border: 1px dashed rgba(0,0,0,0.4);
-      padding: 20px;
-
-      &[direction=row] {
-        width: 500px;
-      }
-
-      &[direction=column] {
-        height: 500px;
-      }
-    }
-
-    ui-tabs {
-      width: 400px;
-      height: 150px;
-      display: flex;
-      flex-direction: column;
-
-      ui-panel {
-        padding: 10px;
-      }
-
-      ui-tabs-content {
-        flex: 1;
-      }
-    }
-
-    ui-tagger {
-      background: $background;
-      padding: 20px;
-      width: 300px;
-    }
-
-    ui-pager {
-      border: 3px solid rgba(0,0,0,0.4);
-      height: 300px;
-      width: 400px;
-
-      ui-page > * {
-        justify-content: center;
-        align-items: center;
-        font-size: 30px;
-        display: flex;
-        color: white;
-      }
-
-      .demo-page-1 {
-        background: $primary;
-      }
-
-      .demo-page-2 {
-        background: $success;
-      }
-
-      .demo-page-3 {
-        background: $warning;
-      }
-
-      .demo-page-4 {
-        background: $danger;
-      }
-    }
-
-    > ui-textarea {
-      min-height: 100px;
-      width: 400px;
-    }
-
-    ui-loader {
-      width: 400px;
-      position: relative !important;
-    }
-
-
-    ui-layout-website,
-    ui-layout-app,
-    ui-layout-sidebar {
-      &[style-id] {
-        border: 1px solid rgba(#000, 0.4);
-        background: $input;
-        min-height: 0;
-        height: 300px;
-        width: 600px;
-      }
-    }
-
-    ui-layout-website > *,
-    ui-layout-sidebar > *,
-    ui-layout-app-wrapper > *,
-    ui-layout-app-sidebar {
-      border: 1px dashed rgba(#000, 0.4);
-      margin: 5px;
-      padding: 10px;
-    }
-
-    ui-layout-app-wrapper {
-      min-height: 0;
-      height: inherit;
-    }
-
-    > ui-header {
-      width: 600px;
-    }
-
-    ui-search-input {
-      margin-left: 0;
-    }
-
-    ui-number-pad {
-      min-width: 300px;
-    }
-
-    ui-date-picker {
-      min-width: 210px;
-    }
-
-    > ui-color-fields {
-      border: 1px solid rgba(#000, 0.1);
-      border-radius: $border-radius;
-      background: $input;
-      padding: 20px;
-      width: 450px;
-    }
-
-    ui-color-panel {
-      height: 330px;
-    }
-
-    ui-color-picker {
-      min-width: 240px;
-    }
-
-    ui-file-input {
-      margin-bottom: 10px;
-    }
-
-    ui-chooser {
-      width: 300px;
-
-      ui-dropdown-panel {
-        box-sizing: border-box;
-        width: inherit;
-      }
-    }
-  }
-}
-
-ui-docs {
-  padding: 30px;
-  padding-bottom: 150px;
-  display: block;
-  background: $input;
-  flex: 1 0 auto;
-}
-
-ui-docs-title {
-  border-bottom: 2px solid rgba(#000, 0.1);
-  display: block;
-  margin: 30px 0;
-  margin-top: 40px;
-  font-family: Abel;
-  font-size: 28px;
-  padding-bottom: 10px;
-}
-
-ui-docs-entity {
-  display: block;
-
-  + ui-docs-entity {
-    border-top: 1px dashed rgba(#000, 0.1);
-    padding-top: 30px;
-    margin-top: 30px;
-  }
-
-  ui-docs-entity-description {
-    display: block;
-    margin-left: 20px;
-    margin-top: 20px;
-    font-size: 14px;
-  }
-
-  ui-docs-entity-title {
-    display: flex;
-    font-size: 16px;
-    font-family: $code-font;
-
-    strong {
-      margin-right: 10px;
-      font-weight: normal;
-      color: #df5320;
-    }
-
-    span {
-      white-space: nowrap;
-      display: inline-block;
-      margin-right: 7px;
-    }
-
-    div {
-      &:first-child {
-        color: $primary;
-      }
-
-      &:nth-child(2) {
-        margin: 0 10px;
-      }
-    }
-  }
-}
-
-ui-documentation {
-  min-height: calc(100vh - 110px);
-  background: $input;
-  display: flex;
-
-  div.markdown-medium {
-    padding: 30px;
-    padding-bottom: 100px;
-    max-width: 800px;
-    flex: 1;
-  }
-
-  p {
-    margin: 10px 0;
-  }
-
-  h2 {
-    margin: 0;
-    margin-top: 40px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(#000, 0.1);
-  }
-}
-
 pre {
-  padding: 20px;
-  border-radius: $border-radius;
   border: 1px solid rgba(#000, 0.05);
+  border-radius: $border-radius;
   background: #F7f7f7;
-  overflow: auto;
   line-height: 23px;
+  overflow: auto;
+  padding: 20px;
 }
 
-p code,
-li code {
+li code,
+p code {
   border: 1px solid rgba(#000, 0.05);
   border-radius: $border-radius;
   background: #F7f7f7;
@@ -377,38 +57,3 @@ li code {
 code {
   font-family: $code-font;
 }
-
-test-box {
-  border: 1px solid rgba(#000, 0.1);
-  width: 100px;
-  height: 100px;
-  background: $secondary;
-}
-
-// Inplace input demo.
-.inplace-input {
-  background: $input;
-  padding: 20px;
-  width: 300px;
-
-  > span {
-    border-bottom: 1px solid rgba(#000, 0.05);
-    text-transform: uppercase;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    font-size: 14px;
-    display: block;
-    opacity: 0.8;
-  }
-
-  ui-inplace-input {
-    width: 100%;
-  }
-}
-
-.notification-center-demo {
-  ui-input {
-    margin-right: 10px;
-  }
-}
-
