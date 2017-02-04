@@ -76,6 +76,12 @@ routes : Parser (Route -> msg) msg
 routes =
   UrlParser.oneOf
     [ UrlParser.map
+      (\a b c -> ReferenceComponent (a ++ "/" ++ b ++ "/" ++ c))
+      (UrlParser.s "reference" </> UrlParser.string
+                               </> UrlParser.string
+                               </> UrlParser.string)
+
+    , UrlParser.map
       (\a b -> ReferenceComponent (a ++ "/" ++ b))
       (UrlParser.s "reference" </> UrlParser.string </> UrlParser.string)
 
