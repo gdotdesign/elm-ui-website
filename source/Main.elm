@@ -272,19 +272,12 @@ header =
 footer : Html.Html Msg
 footer =
   Html.Lazy.lazy3
-    node
-    "ui-footer"
-    []
-    [ node "div"
-      []
-      [ node "a" [ href "https://github.com/gdotdesign/elm-ui" ]
-        [ Icons.github []
-        , span [] [ text "Code on Github" ]
-        ]
-      , node "span" [] [ text "|" ]
-      , node "span" []
-        [ text (toString (Date.year (Ext.Date.now ()))) ]
-      ]
+    node "ui-footer" []
+    [ Icons.github []
+    , node "a" [ href "https://github.com/gdotdesign/elm-ui" ]
+      [ text "Code on Github" ]
+    , node "span" [] [ text "|" ]
+    , node "span" [] [ text (toString (Date.year (Ext.Date.now ()))) ]
     ]
 
 

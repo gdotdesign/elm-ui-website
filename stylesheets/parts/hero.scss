@@ -1,10 +1,14 @@
 ui-hero {
-  background: $background;
+  background: radial-gradient(circle 2000px, #2A2A2A, transparent),
+              url('/images/hero.png'),
+              linear-gradient(#333, #222);
   height: calc(100vh - 120px);
+  background-position: center;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   display: flex;
+  color: #EEE;
 
   ui-hero-title {
     font-family: $title-font;
@@ -17,17 +21,22 @@ ui-hero {
     }
   }
 
+  ui-hero-buttons {
+    display: block;
+  }
+
   a {
     text-transform: uppercase;
-    margin-top: 4vh;
+    text-decoration: none;
     border: 0;
 
-    ui-button.ui-button-big {
-      width: 270px;
+    + a {
+      margin-left: 20px;
     }
   }
 
   ui-hero-subtitle {
+    margin-bottom: 4vh;
     margin-top: 1vh;
     font-size: 20px;
     opacity: 0.6;
