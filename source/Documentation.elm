@@ -33,7 +33,7 @@ pages : List (String, String)
 pages =
   [ ( "getting-started/setup",               "1.1 Setup"               )
   , ( "getting-started/using-components",    "1.2 Using Components"    )
-  , ( "getting-started/reacting-to-events",  "1.3 Reacting to Events"  )
+  , ( "getting-started/reacting-to-events",  "1.3 Reacting to events"  )
   ]
 
 
