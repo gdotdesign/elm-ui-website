@@ -73,6 +73,11 @@ updateState ( model, cmd ) =
     ( { model | loader = updatedComponent model.loader }, cmd )
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
+
+
 view : Model -> Html.Html Msg
 view model =
   let

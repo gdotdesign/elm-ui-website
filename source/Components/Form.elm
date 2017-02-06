@@ -169,6 +169,20 @@ subscriptions model =
       Dict.toList model.colors
       |> List.map (\(key, (pos, colorPicker)) -> colorSub key colorPicker)
 
+    chooserSub name chooser =
+      Sub.map (Choosers name) (Ui.Chooser.subscriptions chooser)
+
+    chooserSubs =
+      Dict.toList model.choosers
+      |> List.map (\(key, (pos, chooser)) -> chooserSub key chooser)
+
+    datePickerSub name datepicker =
+      Sub.map (DatePickers name) (Ui.DatePicker.subscriptions datepicker)
+
+    datePickerSubs =
+      Dict.toList model.dates
+      |> List.map (\(key, (pos, datepicker)) -> datePickerSub key datepicker)
+
     numberRangeSub name numberRange =
       Sub.map (NumberRanges name) (Ui.NumberRange.subscriptions numberRange)
 
@@ -177,7 +191,13 @@ subscriptions model =
       |> List.map (\(key, (pos, numberRange)) -> numberRangeSub key numberRange)
 
   in
-    Sub.batch (colorSubs ++ numberRangeSubs)
+    [ colorSubs
+    , numberRangeSubs
+    , datePickerSubs
+    , chooserSubs
+    ]
+      |> List.concat
+      |> Sub.batch
 
 valueOfSimple :
   String

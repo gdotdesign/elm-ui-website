@@ -21,6 +21,7 @@ type alias Model =
   , form : Form.Model Msg
   }
 
+
 init : Model
 init =
   let
@@ -64,6 +65,11 @@ updateState ( model, cmd ) =
       }
   in
     ( { model | time = updatedComponent model.time }, cmd )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg

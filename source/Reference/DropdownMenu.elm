@@ -118,6 +118,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
     [ Sub.map DropdownMenu (Ui.DropdownMenu.subscriptions model.dropdownMenu)
+    , Sub.map Form (Form.subscriptions model.form)
     ]
 
 

@@ -6,7 +6,6 @@ import Components.Form as Form
 import Components.Reference
 
 import Ui.ButtonGroup
-import Ui.Chooser
 
 import Html
 
@@ -89,6 +88,11 @@ updateState ( model, cmd ) =
       }
   in
     ( { model | buttonGroup = updatedComponent model.buttonGroup }, cmd )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg

@@ -479,15 +479,23 @@ subscriptions model =
   , Sub.map ColorPicker (ColorPicker.subscriptions model.colorPicker)
   , Sub.map ColorFields (ColorFields.subscriptions model.colorFields)
   , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
+  , Sub.map ButtonGroup (ButtonGroup.subscriptions model.buttonGroup)
   , Sub.map ColorPanel (ColorPanel.subscriptions model.colorPanel)
   , Sub.map DatePicker (DatePicker.subscriptions model.datePicker)
+  , Sub.map IconButton (IconButton.subscriptions model.iconButton)
+  , Sub.map Container (Container.subscriptions model.container)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
+  , Sub.map Calendar (Calendar.subscriptions model.calendar)
   , Sub.map Chooser (Chooser.subscriptions model.chooser)
   , Sub.map Ratings (Ratings.subscriptions model.ratings)
+  , Sub.map Layout (Layout.subscriptions model.layout)
+  , Sub.map Loader (Loader.subscriptions model.loader)
   , Sub.map Tagger (Tagger.subscriptions model.tagger)
   , Sub.map Slider (Slider.subscriptions model.slider)
+  , Sub.map Button (Button.subscriptions model.button)
   , Sub.map Pager (Pager.subscriptions model.pager)
   , Sub.map Tabs (Tabs.subscriptions model.tabs)
+  , Sub.map Time (Time.subscriptions model.time)
   ]
 
 

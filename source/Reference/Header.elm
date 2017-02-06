@@ -4,7 +4,6 @@ import Components.Reference
 import Icons
 
 import Ui.Header
-import Ui
 
 import Html exposing (text)
 

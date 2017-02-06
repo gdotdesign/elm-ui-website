@@ -101,9 +101,7 @@ updateState ( model, cmd ) =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.batch
-    [ Sub.map Form (Form.subscriptions model.form)
-    ]
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg

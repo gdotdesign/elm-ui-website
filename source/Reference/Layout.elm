@@ -53,6 +53,11 @@ update msg_ model =
         ( { model | form = form }, Cmd.map Form cmd )
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
+
+
 view : Model -> Html.Html Msg
 view model =
   let

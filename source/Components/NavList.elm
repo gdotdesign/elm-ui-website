@@ -4,14 +4,12 @@ module Components.NavList exposing (..)
 categories.
 -}
 import Html.Attributes exposing (classList, href)
-import Html.Events exposing (onClick)
 import Html exposing (node, text)
 import Html.Lazy
 
 import Ui.Helpers.Emitter as Emitter
 import Ui.SearchInput
 import Ui.Link
-import Ui
 
 import String
 import Fuzzy

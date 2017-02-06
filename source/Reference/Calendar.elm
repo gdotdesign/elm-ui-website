@@ -96,6 +96,11 @@ updateState ( model, cmd ) =
     ( { model | calendar = updatedComponent model.calendar }, cmd )
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
+
+
 view : Model -> Html.Html Msg
 view model =
   let

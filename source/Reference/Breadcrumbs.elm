@@ -1,12 +1,8 @@
 module Reference.Breadcrumbs exposing (..)
 
 import Components.Reference
-import Icons
-
 import Html exposing (text)
-
 import Ui.Breadcrumbs
-import Ui
 
 view : msg -> Html.Html msg
 view msg =

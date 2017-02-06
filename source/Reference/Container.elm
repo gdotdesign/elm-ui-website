@@ -90,6 +90,11 @@ updateState ( model, effect ) =
     ( { model | container = updatedComponent model.container }, effect )
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
+
+
 view : Model -> Html.Html Msg
 view model =
   let

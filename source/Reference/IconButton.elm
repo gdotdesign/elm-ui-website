@@ -111,6 +111,11 @@ updateState ( model, cmd ) =
     ( { model | iconButton = updatedComponent model.iconButton }, cmd )
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
+
+
 view : Model -> Html.Html Msg
 view model =
   let
