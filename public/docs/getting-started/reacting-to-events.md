@@ -1,12 +1,12 @@
 # Reacting to events
-In Elm-UI some components broadcast events (change, item added, item removed,
-etc..) which you can subscribe to.
+In Elm-UI some components broadcast events (change, item created, item removed,
+etc...) which you can subscribe to.
 
 For example if you have a `Ui.Ratings` component in your application you can
 subscribe to it's changes with the `Ui.Ratings.onChange` function:
 
 ```elm
--- Add the message that recives the change event to your types
+-- Add the message that receives the change event to your types
 type Msg
   = Ratings Ui.Ratings.Msg
   | Changed Float
@@ -30,3 +30,6 @@ update msg_ model =
       in
         ( { model | ratings = ratings }, Cmd.map Ratings cmd )
 ```
+
+The functions to subscribe to these events are prefixed with **on** (onChange,
+onCreate, onRemove, etc...) so you can find them easily in the reference.

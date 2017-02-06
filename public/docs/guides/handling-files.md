@@ -17,8 +17,8 @@ list of `File`:
 
 ```elm
 type alias File =
-  { name : String
-  , mimeType : String
+  { mimeType : String
+  , name : String
   , size : Float
   , data : Data
   }
@@ -41,10 +41,10 @@ and one for getting the selected file.
 {- In the  update, we handle the two tags.
 -}
 Opened task ->
-  (model, Task.peform (\_ -> Debug.crash "") GetFile task
+  ( model, Task.peform GetFile task )
 
 GetFile file ->
-  ({ model | file = file }, Cmd.none)
+  ( { model | file = file }, Cmd.none )
 
 {- In the view we use the decoder to get the task for
 getting the selected file.
