@@ -8,6 +8,7 @@ module.
 The features / requirements for a drop-down menu are:
 * Open to the side of the screen where are more space
 * Close it when clicking outside of the drop-down
+* Don't close when clicking inside the drop-down
 
 ## Model
 There is two fields that are required for creating a drop-down, so our components
@@ -15,90 +16,73 @@ module will look something like this:
 
 ```
 type alias Model =
-  { dropdownPosition : String
-  , open : Bool
+  { dropdown : Dropdown.Dropdown
+  , uid : String
   }
 
 
 init : Model
 init =
-  { dropdownPosition = "bottom-right"
-  , open = False
+  { dropdown = Dropdown.init
+  , uid = "my-dropdown" -- a unique identifier for your dropdown
   }
 ```
 
-## Opening / Closing
-To open a drop-down you will need the dimensions of the element where you want
-to position around the drop-down and the dimensions of the drop-down. There are
-decoders for this.
-
-We will use the **focus** event to open the dropdown and the **blur event** to
-close it.
-
-To use them we need have tags that handle them:
-
+## Wiring & Opening
+The `Ui.Helpers.Dropdown` handles the positioning of the dropdown so you don't
+need to worry about it, it does this with it's own update function so we need
+a tag for it. Also we need a tag for opening a dropdown:
 ```
 type Msg
-  = Open Ui.Helpers.Dropdown.Dimensions
-  | Close
-  | NoOp -- this is needed to stop the click event inside the dropdown
+  = Dropdown Dropdown.Msg
+  | Open
 ```
 
-Also we need to change our view:
-
-```
-view : Model -> Html.Html Msg
-view model =
-  let
-    classes =
-      classList
-        [ ( "my-dropdown", True )
-        -- this class is required to show the dropdown
-        , ( "dropdown-open", model.open )
-        ]
-  in
-    div [ classes ]
-      [ span
-          [ tabindex 0 -- make sure it's focusable
-          , Ui.Helpers.Dropdown.onWithDimensions "focus" Open
-          , on "blur" (Json.succeed Close)
-          ]
-          [ text "Open" ]
-      , Ui.Helpers.Dropdown.view NoOp
-          model.dropdownPosition
-          [ text "Dropdown Contents" ]
-      ]
-```
-
-Then to actually open the drop-down we need to call the
-`Ui.Helpers.Dropdown.openWithDimensions` function in the update.
-
+Then we need to handle these two tags:
 ```
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
-    Open dimensions ->
-      ( Ui.Helpers.Dropdown.openWithDimensions dimensions model
-      , Cmd.none )
+    Open ->
+      ( Dropdown.open model, Cmd.none )
 
-    Close ->
-      ( Ui.Helpers.Dropdown.close model, Cmd.none )
-
-    NoOp ->
-      ( model, Cmd.none )
+    Dropdown msg ->
+      ( Dropdown.update msg model, Cmd.none )
 ```
 
-The last thing is to make sure that the our component has **relative** or
-**absolute** positioning.
+Our view will look like this:
+```
+view : Model -> Html.Html Msg
+view model =
+  Dropdown.view
+      -- the elements that are displayed and can be used to open the dropdown
+    { children = [ button [ onClick Open ] [ text "Open" ] ]
+      -- the contents of the dropdown
+    , contents = [ text "Contents..." ]
+      -- the address for it's update function
+    , address = Dropdown
+      -- additional attributes to add the wrapper element
+    , attributes = []
+      -- the tag of the wrapper element (the children goes into this)
+    , tag = "span"
+    }
+    model
+```
 
-We can add that to the **stylesheets/main.scss**
+## Subscriptions
+A subscription is needed to handle closing of the dropdown when the user
+clicks outside of the it:
 
-```scss
-@import 'ui';
-
-.my-dropdown {
-  position: relative
-}
+```
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Dropdown (Dropdown.subscriptions model)
 ```
 
 You can see the full code for the example [here](https://github.com/gdotdesign/elm-ui-examples/tree/master/drop-down).
+
+Also you can see how it is used in Elm-UI components:
+* [Ui.Chooser](https://github.com/gdotdesign/elm-ui/blob/development/source/Ui/Chooser.elm)
+* [Ui.ColorPicker](https://github.com/gdotdesign/elm-ui/blob/development/source/Ui/ColorPicker.elm)
+* [Ui.DatePicker](https://github.com/gdotdesign/elm-ui/blob/development/source/Ui/DatePicker.elm)
+* [Ui.DropdownMenu](https://github.com/gdotdesign/elm-ui/blob/development/source/Ui/DropdownMenu.elm)
