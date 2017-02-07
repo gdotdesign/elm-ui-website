@@ -64,6 +64,13 @@ ui-reference-demo {
       }
     }
 
+    ui-scrolled-panel {
+      background: $input;
+      max-width: 300px;
+      height: 300px;
+      padding: 10px;
+    }
+
     ui-tabs {
       width: 400px;
       height: 150px;

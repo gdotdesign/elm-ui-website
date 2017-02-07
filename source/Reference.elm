@@ -14,6 +14,7 @@ import Regex
 import Ui.Helpers.Emitter as Emitter
 
 import Reference.NotificationCenter as NotificationCenter
+import Reference.ScrolledPanel as ScrolledPanel
 import Reference.InplaceInput as InplaceInput
 import Reference.DropdownMenu as DropdownMenu
 import Reference.NumberRange as NumberRange
@@ -714,6 +715,9 @@ view model active =
 
         "tabs" ->
           Html.map Tabs (Tabs.view model.tabs)
+
+        "scrolled-panel" ->
+          ScrolledPanel.view
 
         "breadcrumbs" ->
           Breadcrumbs.view Noop
