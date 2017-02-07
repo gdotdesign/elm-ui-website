@@ -26,17 +26,17 @@ type alias Model =
   }
 
 
-horizontalData : List Ui.Chooser.Item
-horizontalData =
-  [ { id = "left",  label = "left",  value = "left"  }
-  , { id = "right", label = "right", value = "right" }
+directionData : List Ui.Chooser.Item
+directionData =
+  [ { id = "horizontal", label = "horizontal", value = "horizontal"  }
+  , { id = "vertical",   label = "vertical",   value = "vertical"    }
   ]
 
 
-verticalData : List Ui.Chooser.Item
-verticalData =
-  [ { id = "top",    label = "top",    value = "top"    }
-  , { id = "bottom", label = "bottom", value = "bottom" }
+sideData : List Ui.Chooser.Item
+sideData =
+  [ { id = "positive", label = "positive", value = "positive" }
+  , { id = "negative", label = "negative", value = "negative" }
   ]
 
 
@@ -46,11 +46,12 @@ init =
   , form =
       Form.init
         { checkboxes =
-            [ ( "open", 2, False )
+            [ ( "open", 3, False )
             ]
         , choosers =
-            [ ( "horizontal", 0, horizontalData, "", "left"   )
-            , ( "vertical",   1, verticalData,   "", "bottom" )
+            [ ( "direction", 0, directionData, "", "vertical" )
+            , ( "alingTo",   1, sideData,      "", "positive" )
+            , ( "favoring",  2, sideData,      "", "positive" )
             ]
         , numberRanges = []
         , textareas = []
@@ -107,8 +108,26 @@ updateState ( model, cmd ) =
       else
         Ui.Helpers.Dropdown.close
 
+    direction =
+      case Form.valueOfChooser "direction" "vertical" model.form of
+        "horizontal" -> Ui.Helpers.Dropdown.Horizontal
+        _ -> Ui.Helpers.Dropdown.Vertical
+
+    favoring =
+      case Form.valueOfChooser "favoring" "positive" model.form of
+        "negative" -> Ui.Helpers.Dropdown.Top
+        _ -> Ui.Helpers.Dropdown.Bottom
+
+    alignTo =
+      case Form.valueOfChooser "alignTo" "positive" model.form of
+        "negative" -> Ui.Helpers.Dropdown.Top
+        _ -> Ui.Helpers.Dropdown.Bottom
+
     dropdownMenu =
       model.dropdownMenu
+        |> Ui.Helpers.Dropdown.alignTo alignTo
+        |> Ui.Helpers.Dropdown.favoring favoring
+        |> Ui.Helpers.Dropdown.direction direction
         |> toggleFunction
   in
     ( { model | dropdownMenu = dropdownMenu }, cmd )
