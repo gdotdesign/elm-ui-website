@@ -5,11 +5,7 @@ import Components.Reference
 
 import Ui.Input
 
-import Ext.Date
-
-import Html.App
 import Html
-
 
 type Msg
   = Input Ui.Input.Msg
@@ -24,7 +20,9 @@ type alias Model =
 
 init : Model
 init =
-  { input = Ui.Input.init "Some content..." "Placeholder..."
+  { input =
+      Ui.Input.init ()
+        |> Ui.Input.placeholder "Placeholder..."
   , form =
       Form.init
         { checkboxes =
@@ -32,8 +30,8 @@ init =
             , ( "readonly", 4, False )
             ]
         , inputs =
-            [ ( "value", 0, "Value...", "Some content..." )
-            , ( "placeholder", 0, "Placeholder...", "Placeholder..." )
+            [ ( "value",       0, "Value...",       ""               )
+            , ( "placeholder", 1, "Placeholder...", "Placeholder..." )
             ]
         , numberRanges = []
         , textareas = []
@@ -45,46 +43,53 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Input act ->
+update msg_ model =
+  case msg_ of
+    Input msg ->
       let
-        ( input, effect ) =
-          Ui.Input.update act model.input
+        ( input, cmd ) =
+          Ui.Input.update msg model.input
       in
-        ( { model | input = input }, Cmd.map Input effect )
+        ( { model | input = input }, Cmd.map Input cmd )
           |> updateForm
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
-    updatedForm =
+    ( updatedForm, formCmd ) =
       Form.updateInput "value" model.input.value model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
+    ( input, setCmd ) =
+      updatedComponent model.input
+
     updatedComponent input =
       { input
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , placeholder = Form.valueOfInput "placeholder" "" model.form
-        , value = Form.valueOfInput "value" "" model.form
       }
+        |> Ui.Input.setValue (Form.valueOfInput "value" "" model.form)
   in
-    ( { model | input = updatedComponent model.input }, effect )
+    ( { model | input = input }
+    , Cmd.batch [ cmd, Cmd.map Input setCmd ]
+    )
 
 
 view : Model -> Html.Html Msg
@@ -94,6 +99,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Input (Ui.Input.view model.input)
+      Html.map Input (Ui.Input.view model.input)
   in
     Components.Reference.view demo form

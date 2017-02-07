@@ -10,7 +10,6 @@ import Ui.Input
 
 import Html.Attributes exposing (class)
 import Html exposing (div, text)
-import Html.App
 
 
 type alias Model =
@@ -27,25 +26,30 @@ type Msg
 
 init : Model
 init =
-  { input = Ui.Input.init "" "Message..."
-  , notifications = Notifications.init 5000 400
+  { input =
+      Ui.Input.init ()
+        |> Ui.Input.placeholder "Message..."
+  , notifications =
+      Notifications.init ()
+        |> Notifications.timeout 5000
+        |> Notifications.duration 500
   }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-  case msg of
-    Input subMsg ->
+update msg_ model =
+  case msg_ of
+    Input msg ->
       let
         ( input, cmd ) =
-          Ui.Input.update subMsg model.input
+          Ui.Input.update msg model.input
       in
         ( { model | input = input }, Cmd.map Input cmd )
 
-    Notifications subMsg ->
+    Notifications msg ->
       let
         ( notifications, cmd ) =
-          Notifications.update subMsg model.notifications
+          Notifications.update msg model.notifications
       in
         ( { model | notifications = notifications }, Cmd.map Notifications cmd )
 
@@ -53,12 +57,18 @@ update msg model =
       let
         ( notifications, cmd ) =
           Notifications.notify (text model.input.value) model.notifications
+
+        ( input, inputCmd ) =
+          Ui.Input.setValue "" model.input
       in
         ( { model
-            | input = Ui.Input.setValue "" model.input
-            , notifications = notifications
+            | notifications = notifications
+            , input = input
           }
-        , Cmd.map Notifications cmd
+        , Cmd.batch
+          [ Cmd.map Notifications cmd
+          , Cmd.map Input inputCmd
+          ]
         )
 
 
@@ -69,8 +79,15 @@ view model =
       div [ class "notification-center-demo"
           , onEnter False Notify
           ]
-        [ Html.App.map Input (Ui.Input.view model.input)
-        , Ui.Button.primary "Send" Notify
+        [ Html.map Input (Ui.Input.view model.input)
+        , Ui.Button.view
+          Notify
+          { kind = "primary"
+          , text = "Send"
+          , size = "medium"
+          , disabled = False
+          , readonly = False
+          }
         , Notifications.view Notifications model.notifications
         ]
   in

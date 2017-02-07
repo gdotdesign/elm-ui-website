@@ -6,8 +6,6 @@ import Components.Reference
 import Ui.Ratings
 
 import Html exposing (text)
-import Html.App
-
 
 type Msg
   = Ratings Ui.Ratings.Msg
@@ -22,20 +20,20 @@ type alias Model =
 
 init : Model
 init =
-  { ratings = Ui.Ratings.init 5 0.5
+  { ratings = Ui.Ratings.init ()
   , form =
       Form.init
         { numberRanges =
-            [ ( "value", 1, 0.5, "", 0, 1, 2, 0.05 )
-            , ( "size", 2, 5, "", 0, 10, 0, 0.05 )
+            [ ( "value", 1, 0.5, "", 0, 1,  2, 0.05 )
+            , ( "size",  2, 5,   "", 0, 10, 0, 0.05 )
             ]
         , textareas = []
         , colors = []
         , dates = []
         , inputs = []
         , checkboxes =
-            [ ( "disabled", 7, False )
-            , ( "readonly", 8, False )
+            [ ( "disabled",  7, False )
+            , ( "readonly",  8, False )
             , ( "clearable", 9, False )
             ]
         , choosers =
@@ -45,50 +43,52 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    Ratings act ->
+    Ratings msg ->
       let
-        ( ratings, effect ) =
-          Ui.Ratings.update act model.ratings
+        ( ratings, cmd ) =
+          Ui.Ratings.update msg model.ratings
       in
-        ( { model | ratings = ratings }, Cmd.map Ratings effect )
+        ( { model | ratings = ratings }, Cmd.map Ratings cmd )
           |> updateForm
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
-    updatedForm =
+    ( updatedForm, formCmd ) =
       Form.updateNumberRange "value" model.ratings.value model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     value =
       Form.valueOfNumberRange "value" 0 model.form
 
     updatedComponent ratings =
       { ratings
-        | disabled = Form.valueOfCheckbox "disabled" False model.form
+        | clearable = Form.valueOfCheckbox "clearable" False model.form
+        , disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
-        , clearable = Form.valueOfCheckbox "clearable" False model.form
         , size = round (Form.valueOfNumberRange "size" 0 model.form)
       }
       |> Ui.Ratings.setValue value
   in
-    ( { model | ratings = updatedComponent model.ratings }, effect )
+    ( { model | ratings = updatedComponent model.ratings }, cmd )
 
 
 subscriptions : Model -> Sub Msg
@@ -105,6 +105,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Ratings (Ui.Ratings.view model.ratings)
+      Html.map Ratings (Ui.Ratings.view model.ratings)
   in
     Components.Reference.view demo form

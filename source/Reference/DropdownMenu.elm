@@ -3,15 +3,15 @@ module Reference.DropdownMenu exposing (..)
 import Components.Form as Form
 import Components.Reference
 
+import Ui.Helpers.Dropdown
 import Ui.DropdownMenu
-import Ui.IconButton
 import Ui.Chooser
+import Ui.Button
+import Ui.Icons
 import Ui
 
 import Html.Events exposing (onClick)
 import Html exposing (node, text)
-import Html.App
-
 
 type Msg
   = DropdownMenu Ui.DropdownMenu.Msg
@@ -26,31 +26,32 @@ type alias Model =
   }
 
 
-horizontalData : List Ui.Chooser.Item
-horizontalData =
-  [ { label = "left", value = "left" }
-  , { label = "right", value = "right" }
+directionData : List Ui.Chooser.Item
+directionData =
+  [ { id = "horizontal", label = "horizontal", value = "horizontal"  }
+  , { id = "vertical",   label = "vertical",   value = "vertical"    }
   ]
 
 
-verticalData : List Ui.Chooser.Item
-verticalData =
-  [ { label = "top", value = "top" }
-  , { label = "bottom", value = "bottom" }
+sideData : List Ui.Chooser.Item
+sideData =
+  [ { id = "positive", label = "positive", value = "positive" }
+  , { id = "negative", label = "negative", value = "negative" }
   ]
 
 
 init : Model
 init =
-  { dropdownMenu = Ui.DropdownMenu.init
+  { dropdownMenu = Ui.DropdownMenu.init ()
   , form =
       Form.init
         { checkboxes =
-            [ ( "open", 2, False )
+            [ ( "open", 3, False )
             ]
         , choosers =
-            [ ( "horizontal", 0, horizontalData, "", "left" )
-            , ( "vertical", 1, verticalData, "", "bottom" )
+            [ ( "direction", 0, directionData, "", "vertical" )
+            , ( "alingTo",   1, sideData,      "", "positive" )
+            , ( "favoring",  2, sideData,      "", "positive" )
             ]
         , numberRanges = []
         , textareas = []
@@ -62,26 +63,27 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    DropdownMenu act ->
+    DropdownMenu msg ->
       let
         dropdownMenu =
-          Ui.DropdownMenu.update act model.dropdownMenu
+          Ui.DropdownMenu.update msg model.dropdownMenu
       in
         ( { model | dropdownMenu = dropdownMenu }, Cmd.none )
           |> updateForm
 
     CloseMenu ->
-      ( { model | dropdownMenu = Ui.DropdownMenu.close model.dropdownMenu }, Cmd.none )
+      ( { model | dropdownMenu = Ui.Helpers.Dropdown.close model.dropdownMenu }
+      , Cmd.none )
         |> updateForm
 
     _ ->
@@ -89,56 +91,76 @@ update action model =
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
-      Form.updateCheckbox "open" model.dropdownMenu.open model.form
+      Form.updateCheckbox "open" model.dropdownMenu.dropdown.open model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
-    sides =
-      model.dropdownMenu.favoredSides
+    toggleFunction =
+      if Form.valueOfCheckbox "open" False model.form then
+        Ui.Helpers.Dropdown.open
+      else
+        Ui.Helpers.Dropdown.close
 
-    updatedSides =
-      { horizontal = Form.valueOfChooser "horizontal" "left" model.form
-      , vertical = Form.valueOfChooser "vertical" "bottom" model.form
-      }
+    direction =
+      case Form.valueOfChooser "direction" "vertical" model.form of
+        "horizontal" -> Ui.Helpers.Dropdown.Horizontal
+        _ -> Ui.Helpers.Dropdown.Vertical
 
-    updatedComponent dropdownMenu =
-      { dropdownMenu
-        | favoredSides = updatedSides
-        , open = Form.valueOfCheckbox "open" False model.form
-      }
+    favoring =
+      case Form.valueOfChooser "favoring" "positive" model.form of
+        "negative" -> Ui.Helpers.Dropdown.Top
+        _ -> Ui.Helpers.Dropdown.Bottom
+
+    alignTo =
+      case Form.valueOfChooser "alignTo" "positive" model.form of
+        "negative" -> Ui.Helpers.Dropdown.Top
+        _ -> Ui.Helpers.Dropdown.Bottom
+
+    dropdownMenu =
+      model.dropdownMenu
+        |> Ui.Helpers.Dropdown.alignTo alignTo
+        |> Ui.Helpers.Dropdown.favoring favoring
+        |> Ui.Helpers.Dropdown.direction direction
+        |> toggleFunction
   in
-    ( { model | dropdownMenu = updatedComponent model.dropdownMenu }, effect )
+    ( { model | dropdownMenu = dropdownMenu }, cmd )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
     [ Sub.map DropdownMenu (Ui.DropdownMenu.subscriptions model.dropdownMenu)
+    , Sub.map Form (Form.subscriptions model.form)
     ]
 
 
 viewModel : Ui.DropdownMenu.ViewModel Msg
 viewModel =
-  { element =
-      Ui.IconButton.secondary "Open"
-        "chevron-down"
-        "right"
+  { address = DropdownMenu
+  , element =
+      Ui.Button.view
         Nothing
+        { disabled = False
+        , readonly = False
+        , kind = "primary"
+        , size = "medium"
+        , text = "Open"
+        }
   , items =
       [ Ui.DropdownMenu.item [ onClick CloseMenu ]
-          [ Ui.icon "android-download" True []
-          , node "span" [] [ text "Download" ]
+          [ Ui.Icons.calendar []
+          , node "span" [] [ text "Calendar" ]
           ]
       , Ui.DropdownMenu.item [ onClick CloseMenu ]
-          [ Ui.icon "trash-b" True []
-          , node "span" [] [ text "Delete" ]
+          [ Ui.Icons.search []
+          , node "span" [] [ text "Search" ]
           ]
       ]
   }
@@ -151,8 +173,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Ui.DropdownMenu.view viewModel
-        DropdownMenu
-        model.dropdownMenu
+      Ui.DropdownMenu.view viewModel model.dropdownMenu
   in
     Components.Reference.view demo form

@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Website of Elm-UI.",
   "scripts": {
-    "start": "elm-ui server",
+    "start": "elm-dev server",
     "deploy": "gulp deploy",
-    "predeploy": "npm run build",
-    "install": "elm-ui install",
-    "build": "elm-ui build"
+    "predeploy": "yarn run build",
+    "install": "elm-dev install",
+    "build": "elm-dev build"
   },
   "homepage": "https://github.com/gdotdesign/elm-ui-website",
   "repository": {
@@ -20,8 +20,8 @@
     "url": "https://github.com/gdotdesign/elm-ui-website/issues"
   },
   "dependencies": {
+    "elm-dev-env": "1.0.0",
     "gulp-gh-pages": "0.5.4",
-    "elm-ui": "0.3.0",
     "gulp": "3.9.1"
   },
   "engines": {

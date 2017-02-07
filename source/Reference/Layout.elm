@@ -7,8 +7,6 @@ import Ui.Chooser
 import Ui.Layout
 
 import Html exposing (text)
-import Html.App
-
 
 type Msg
   = Form Form.Msg
@@ -21,9 +19,9 @@ type alias Model =
 
 viewData : List Ui.Chooser.Item
 viewData =
-  [ { label = "App", value = "app" }
-  , { label = "Website", value = "website" }
-  , { label = "Sidebar", value = "sidebar" }
+  [ { id = "app",     label = "App",     value = "app"     }
+  , { id = "website", label = "Website", value = "website" }
+  , { id = "sidebar", label = "Sidebar", value = "sidebar" }
   ]
 
 
@@ -45,14 +43,19 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg

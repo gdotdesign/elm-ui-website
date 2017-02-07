@@ -6,8 +6,6 @@ import Components.Reference
 import Ui.NumberRange
 
 import Html exposing (text)
-import Html.App
-
 
 type Msg
   = NumberRange Ui.NumberRange.Msg
@@ -22,15 +20,15 @@ type alias Model =
 
 init : Model
 init =
-  { numberRange = Ui.NumberRange.init 42
+  { numberRange = Ui.NumberRange.init ()
   , form =
       Form.init
         { numberRanges =
-            [ ( "value", 1, 42, "", 0, (1 / 0), 0, 1 )
-            , ( "step", 3, 1, "", 0, (1 / 0), 2, 0.1 )
-            , ( "round", 4, 0, "", 0, 20, 0, 1 )
-            , ( "min", 5, 0, "", -(1 / 0), 0, 0, 1 )
-            , ( "max", 6, 1000, "", 0, (1 / 0), 0, 1 )
+            [ ( "value",     1, 42,   "", 0,        (1 / 0), 0, 1   )
+            , ( "drag step", 3, 1,    "", 0,        (1 / 0), 2, 0.1 )
+            , ( "round",     4, 0,    "", 0,        20,      0, 1   )
+            , ( "min",       5, 0,    "", -(1 / 0), 0,       0, 1   )
+            , ( "max",       6, 1000, "", 0,        (1 / 0), 0, 1   )
             ]
         , textareas = []
         , colors = []
@@ -41,7 +39,7 @@ init =
         , checkboxes =
             [ ( "disabled", 7, False )
             , ( "readonly", 8, False )
-            , ( "editing", 9, False )
+            , ( "editing",  9, False )
             ]
         , choosers =
             []
@@ -50,52 +48,60 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    NumberRange act ->
+    NumberRange msg ->
       let
-        ( numberRange, effect ) =
-          Ui.NumberRange.update act model.numberRange
+        ( numberRange, cmd ) =
+          Ui.NumberRange.update msg model.numberRange
       in
-        ( { model | numberRange = numberRange }, Cmd.map NumberRange effect )
+        ( { model | numberRange = numberRange }, Cmd.map NumberRange cmd )
           |> updateForm
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
-    updatedForm =
-      Form.updateNumberRange "value" model.numberRange.value model.form
+    ( updatedForm, formCmd ) =
+      model.form
         |> Form.updateCheckbox "editing" model.numberRange.editing
+        |> Form.updateNumberRange "value" model.numberRange.value
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
+    ( numberRange, setCmd ) =
+      updatedComponent model.numberRange
+
     updatedComponent numberRange =
       { numberRange
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , editing = Form.valueOfCheckbox "editing" False model.form
-        , value = Form.valueOfNumberRange "value" 0 model.form
         , round = round (Form.valueOfNumberRange "round" 0 model.form)
-        , step = Form.valueOfNumberRange "step" 0 model.form
+        , dragStep = Form.valueOfNumberRange "drag step" 0 model.form
         , min = Form.valueOfNumberRange "min" 0 model.form
         , max = Form.valueOfNumberRange "max" 0 model.form
         , affix = Form.valueOfInput "affix" "" model.form
       }
+      |> Ui.NumberRange.setValue (Form.valueOfNumberRange "value" 0 model.form)
   in
-    ( { model | numberRange = updatedComponent model.numberRange }, effect )
+    ( { model | numberRange = numberRange }
+    , Cmd.batch [ cmd, Cmd.map NumberRange setCmd ]
+    )
 
 
 subscriptions : Model -> Sub Msg
@@ -113,6 +119,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map NumberRange (Ui.NumberRange.view model.numberRange)
+      Html.map NumberRange (Ui.NumberRange.view model.numberRange)
   in
     Components.Reference.view demo form

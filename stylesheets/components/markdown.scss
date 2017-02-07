@@ -14,7 +14,7 @@ div[class^=markdown] {
   b,
   strong {
     font-weight: 600;
-    color: #555;
+    color: #666;
   }
 
   ul {
@@ -45,6 +45,11 @@ div[class^=markdown] {
   .hljs-comment {
     opacity: 0.6;
   }
+
+  a {
+    text-decoration: none;
+    color: $primary;
+  }
 }
 
 div.markdown-small {
@@ -61,10 +66,10 @@ div.markdown-small {
 div.markdown-medium {
   p,
   li {
-    line-height: 32px;
+    line-height: 28px;
   }
 
   ul {
-    padding-left: 30px;
+    padding-left: 28px;
   }
 }

@@ -14,6 +14,15 @@ ui-form {
     display: block;
   }
 
+  ui-chooser[style-id] {
+    width: 280px;
+
+    ui-dropdown-panel {
+      box-sizing: border-box;
+      width: inherit;
+    }
+  }
+
   ui-form-fields {
     > * {
       padding: 10px;
@@ -28,6 +37,7 @@ ui-form {
 
       ui-form-label {
         margin-bottom: 7px;
+        font-size: 14px;
         display: block;
 
         + * {

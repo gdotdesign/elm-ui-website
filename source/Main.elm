@@ -1,33 +1,34 @@
 module Main exposing (..)
 
-import Hop.Matchers exposing (match1, match2)
-import Hop.Types
-import Hop
-
-import Combine exposing (Parser)
+{-| Website for Elm-UI.
+-}
+import UrlParser exposing (Parser, (</>))
 import Navigation
+
+import Ext.Date
 import Task
 import Date
-import Ext.Date
 import Dict
 
-import Html.Attributes exposing (href, class, src, target)
+import Html exposing (node, div, span, text, a, img)
+import Html.Attributes exposing (href, src)
 import Html.Events exposing (onClick)
-import Html exposing (node, div, span, strong, text, a, img)
-import Html.App
+import Html.Lazy
+import Html
+
 import Dom.Scroll
 import Dom
 
 import Ui.Helpers.Emitter as Emitter
-import Ui.Native.Browser as Browser
 import Ui.Container
 import Ui.Header
 import Ui.Button
-import Ui.App
+import Ui.Layout
 import Ui
 
-import Reference
 import Documentation
+import Reference
+import Icons
 
 import Pages.Index
 
@@ -38,255 +39,265 @@ import Utils.ScrollToTop
 import Animation
 import Ease
 
+{-| Model for the main.
+-}
 type alias Model =
-  { app : Ui.App.Model
-  , page : String
-  , reference : Reference.Model
+  { reference : Reference.Model
   , docs : Documentation.Model
   , route : Route
-  , location : Hop.Types.Location
   , scrollToTop : Utils.ScrollToTop.Model
   }
 
 
+{-| Messages that the main can receive.
+-}
 type Msg
-  = App Ui.App.Msg
-  | Navigate String
-  | Reference Reference.Msg
-  | Failed Http.Error
-  | Loaded Docs.Types.Documentation
-  | Docs Documentation.Msg
+  = Loaded (Result Http.Error Docs.Types.Documentation)
   | ScrollToTop Utils.ScrollToTop.Msg
+  | Navigation Navigation.Location
+  | Reference Reference.Msg
+  | Docs Documentation.Msg
+  | Navigate String
   | NoOp
 
 
-
--------------- ROUTING ---------------------------------------------------------
-
-
+{-| Route type.
+-}
 type Route
-  = Component String
-  | Home
-  | DocumentationPage String
+  = DocumentationPage String String
+  | ReferenceComponent String
   | ReferencePage
+  | Home
 
 
-all : Parser String
-all =
-  Combine.regex ".+"
+{-| Route parser.
+-}
+routes : Parser (Route -> msg) msg
+routes =
+  UrlParser.oneOf
+    [ UrlParser.map
+      (\a b c -> ReferenceComponent (a ++ "/" ++ b ++ "/" ++ c))
+      (UrlParser.s "reference" </> UrlParser.string
+                               </> UrlParser.string
+                               </> UrlParser.string)
 
-matchers : List (Hop.Types.PathMatcher Route)
-matchers =
-  [ match1 Home ""
-  , match2 Component "/reference/" all
-  , match2 DocumentationPage "/documentation/" all
-  , match1 ReferencePage "/reference"
-  ]
+    , UrlParser.map
+      (\a b -> ReferenceComponent (a ++ "/" ++ b))
+      (UrlParser.s "reference" </> UrlParser.string </> UrlParser.string)
 
+    , UrlParser.map
+      DocumentationPage
+      (UrlParser.s "documentation" </> UrlParser.string </> UrlParser.string)
 
-urlParser : Navigation.Parser ( Route, Hop.Types.Location )
-urlParser =
-  Navigation.makeParser (.href >> Hop.matchUrl routerConfig)
+    , UrlParser.map
+      ReferenceComponent
+      (UrlParser.s "reference" </> UrlParser.string)
 
+    , UrlParser.map
+      ReferencePage
+      (UrlParser.s "reference")
 
-urlUpdate : ( Route, Hop.Types.Location ) -> Model -> ( Model, Cmd Msg )
-urlUpdate ( route, location ) model =
-  let
-    updatedModel =
-      { model | route = route, location = location }
-
-    cmd =
-      case route of
-        DocumentationPage page ->
-          Cmd.map Docs (Documentation.load page)
-
-        _ -> Cmd.none
-  in
-    ( updatedModel, Cmd.batch [ cmd
-                              , Cmd.map ScrollToTop Utils.ScrollToTop.start
-                              ] )
+    , UrlParser.map
+      Home
+      UrlParser.top
+    ]
 
 
-routerConfig : Hop.Types.Config Route
-routerConfig =
-  { hash = False
-  , basePath = ""
-  , matchers = matchers
-  , notFound = Home
-  }
-
-
-
---------------------------------------------------------------------------------
-
-
-pages : List ( String, String )
-pages =
-  [ ( "/documentation", "Documentation" )
-  , ( "/reference", "Reference" )
-  ]
-
-
-init : ( Route, Hop.Types.Location ) -> ( Model, Cmd Msg )
-init ( route, location ) =
+{-| Initializes the main.
+-}
+init : Navigation.Location -> (Model, Cmd Msg)
+init data =
   let
     setupAnimation animation =
       Animation.duration 500 animation
-      |> Animation.ease Ease.outCubic
+        |> Animation.ease Ease.outCubic
 
-    (mod, effect) =
-      { app = Ui.App.init
-      , page = "reference"
+    ( model, cmd ) =
+      { scrollToTop = Utils.ScrollToTop.init setupAnimation
       , reference = Reference.init
-      , route = route
       , docs = Documentation.init
-      , location = location
-      , scrollToTop = Utils.ScrollToTop.init setupAnimation
+      , route = Home
       }
-      |> urlUpdate (route, location)
+      |> update (Navigation data)
+
+    documentationLoadCmd =
+      Http.get "/documentation.json" Docs.Types.decodeDocumentation
+      |> Http.send Loaded
   in
-    ( mod
-    , Cmd.batch [Task.perform Failed Loaded (Http.get Docs.Types.decodeDocumentation "/documentation.json")
-                ,effect]
-    )
+    ( model, Cmd.batch [ documentationLoadCmd ,cmd ] )
 
 
-component payload =
-  payload.params
-    |> Dict.get "component"
-    |> Maybe.withDefault ""
+{-| Subscriptions for the website.
+-}
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.batch
+    [ Sub.map ScrollToTop (Utils.ScrollToTop.subscriptions model.scrollToTop)
+    , Sub.map Reference (Reference.subscriptions model.reference)
+    , Emitter.listenString "navigation" Navigate
+    ]
 
 
+{-| Updates the main.
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Failed _ ->
-      (model, Cmd.none)
+update msg_ model =
+  case msg_ of
+    Navigation location ->
+      case UrlParser.parsePath routes location of
+        Just route ->
+          let
+            documentationCmd =
+              case route of
+                DocumentationPage category page ->
+                  Cmd.map Docs (Documentation.load (category ++ "/" ++ page))
 
-    Loaded docs ->
-      ({ model | reference = Reference.setDocumentation docs model.reference }, Cmd.none)
+                _ -> Cmd.none
+          in
+            ( { model | route = route }
+            , Cmd.batch
+              [ Cmd.map ScrollToTop Utils.ScrollToTop.start
+              , documentationCmd
+              ]
+            )
+
+        Nothing ->
+          ( model, Cmd.none )
+
+    Loaded result ->
+      case result of
+        Ok docs ->
+          ( { model
+              | reference = Reference.setDocumentation docs model.reference
+            }
+          , Cmd.none
+          )
+
+        Err _ ->
+          ( model, Cmd.none )
 
     Navigate path ->
-      let
-        command =
-          Hop.makeUrl routerConfig path
-            |> Navigation.newUrl
-      in
-        ( model, command )
+      ( model, Navigation.newUrl path )
 
-    Reference act ->
+    Reference msg ->
       let
-        ( reference, effect ) =
-          Reference.update act model.reference
+        ( reference, cmd ) =
+          Reference.update msg model.reference
       in
-        ( { model | reference = reference }, Cmd.map Reference effect )
+        ( { model | reference = reference }, Cmd.map Reference cmd )
 
-    Docs act ->
+    Docs msg ->
       let
-        ( docs, effect ) =
-          Documentation.update act model.docs
+        ( docs, cmd ) =
+          Documentation.update msg model.docs
       in
-        ( { model | docs = docs }, Cmd.map Docs effect )
+        ( { model | docs = docs }, Cmd.map Docs cmd )
 
-    App act ->
+    ScrollToTop msg ->
       let
-        ( app, effect ) =
-          Ui.App.update act model.app
+        ( scrollToTop, cmd ) = Utils.ScrollToTop.update msg model.scrollToTop
       in
-        ( { model | app = app }, Cmd.map App effect )
-
-    ScrollToTop act ->
-      let
-        (scrollToTop, cmd) = Utils.ScrollToTop.update act model.scrollToTop
-      in
-        ({ model | scrollToTop = scrollToTop }, Cmd.map ScrollToTop cmd)
+        ( { model | scrollToTop = scrollToTop }, Cmd.map ScrollToTop cmd )
 
     NoOp ->
-      model ! []
+      ( model, Cmd.none )
 
+
+{-| Content for the main area.
+-}
+content : Model -> Html.Html Msg
 content model =
   case model.route of
+    DocumentationPage category page ->
+      Html.map Docs (Documentation.view (category ++ "/" ++ page) model.docs)
+
+    ReferencePage ->
+      Html.map Reference (Reference.viewLazy model.reference "ui")
+
+    ReferenceComponent comp ->
+      Html.map Reference (Reference.viewLazy model.reference comp)
+
     Home ->
       Pages.Index.view Navigate NoOp
 
-    ReferencePage ->
-      Html.App.map Reference (Reference.viewLazy model.reference "app")
 
-    Component comp ->
-      Html.App.map Reference (Reference.viewLazy model.reference comp)
-
-    DocumentationPage page ->
-      Html.App.map Docs (Documentation.view page model.docs)
-
-
-view : Model -> Html.Html Msg
-view model =
-  Ui.App.view App
-    model.app
-    [ Ui.Header.view
-        ([ img [src "/images/logo-small.svg"
-               , onClick (Navigate "/")] []
-         , Ui.Header.title
-            { text = "Elm-UI"
-            , action = Just (Navigate "/")
-            , link = Just "/"
-            , target = "_self"
-            }
-         , Ui.spacer
-         , Ui.Header.iconItem
-            { text = "Documentation"
-            , action = Just (Navigate "/documentation/getting-started/setup")
-            , link = Just "/documentation/getting-started/setup"
-            , glyph = "bookmark"
-            , side = "left"
-            , target = "_self"
-            }
-         , Ui.Header.separator
-         , Ui.Header.iconItem
-            { text = "Reference"
-            , action = Just (Navigate "/reference")
-            , link = Just "/reference"
-            , glyph = "code"
-            , side = "left"
-            , target = "_self"
-            }
-         , Ui.Header.separator
-         , Ui.Header.iconItem
-            { text = "Github"
-            , action = Nothing
-            , glyph = "social-github"
-            , link = Just "https://github.com/gdotdesign/elm-ui"
-            , target = "_blank"
-            , side = "left"
-            }
-         ]
-        )
-    , content model
-    , node "ui-footer" []
-      [ node "div"
-        []
-        [ node "a" [ href "https://github.com/gdotdesign/elm-ui" ]
-          [ Ui.icon "social-github" False []
-          , span [] [ text "Code on Github" ]
-          ]
-        , node "span" [] [ text "|" ]
-        , node "span" []
-          [ text (toString (Date.year (Ext.Date.now ()))) ]
-        ]
-      ]
+{-| The header.
+-}
+header : Html.Html Msg
+header =
+  Html.Lazy.lazy
+    Ui.Header.view
+    [ img
+      [ src "/images/logo-small.svg"
+      , onClick (Navigate "/")
+      ] []
+    , Ui.Header.title
+       { action = Just (Navigate "/")
+       , target = "_self"
+       , link = Just "/"
+       , text = "Elm-UI"
+       }
+    , Ui.Header.spacer
+    , Ui.Header.iconItem
+       { action = Just (Navigate "/documentation/getting-started/setup")
+       , link = Just "/documentation/getting-started/setup"
+       , glyph = Icons.bookmark []
+       , text = "Documentation"
+       , target = "_self"
+       , side = "left"
+       }
+    , Ui.Header.separator
+    , Ui.Header.iconItem
+       { action = Just (Navigate "/reference")
+       , link = Just "/reference"
+       , glyph = Icons.code []
+       , text = "Reference"
+       , target = "_self"
+       , side = "left"
+       }
+    , Ui.Header.separator
+    , Ui.Header.iconItem
+       { link = Just "https://github.com/gdotdesign/elm-ui"
+       , glyph = Icons.github []
+       , target = "_blank"
+       , action = Nothing
+       , text = "Github"
+       , side = "left"
+       }
     ]
 
+
+{-| The footer.
+-}
+footer : Html.Html Msg
+footer =
+  Html.Lazy.lazy3
+    node "ui-footer" []
+    [ Icons.github []
+    , node "a" [ href "https://github.com/gdotdesign/elm-ui" ]
+      [ text "Code on Github" ]
+    , node "span" [] [ text "|" ]
+    , node "span" [] [ text (toString (Date.year (Ext.Date.now ()))) ]
+    ]
+
+
+{-| Renders the website.
+-}
+view : Model -> Html.Html Msg
+view model =
+  Ui.Layout.website
+    [ header        ]
+    [ content model ]
+    [ footer        ]
+
+
+{-| The main.
+-}
+main : Program Never Model Msg
 main =
-  Navigation.program urlParser
-    { init = init
-    , view = view
+  Navigation.program Navigation
+    { subscriptions = subscriptions
     , update = update
-    , urlUpdate = urlUpdate
-    , subscriptions =
-        \model ->
-          Sub.batch
-            [ Emitter.listenString "navigation" Navigate
-            , Sub.map ScrollToTop (Utils.ScrollToTop.subscriptions model.scrollToTop)
-            , Sub.map Reference (Reference.subscriptions model.reference)
-            ]
+    , init = init
+    , view = view
     }

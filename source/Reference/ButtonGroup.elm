@@ -6,11 +6,8 @@ import Components.Form as Form
 import Components.Reference
 
 import Ui.ButtonGroup
-import Ui.Chooser
 
-import Html.App
 import Html
-
 
 type Msg
   = Form Form.Msg
@@ -27,8 +24,8 @@ init : Model
 init =
   { buttonGroup =
       { items =
-          [ ( "Yoda", Nothing )
-          , ( "Obi-Wan", Nothing )
+          [ ( "Yoda",        Nothing )
+          , ( "Obi-Wan",     Nothing )
           , ( "Darth Vader", Nothing )
           ]
       , disabled = False
@@ -43,9 +40,9 @@ init =
         , colors = []
         , dates = []
         , inputs =
-            [ ( "first", 2, "Text...", "Yoda" )
-            , ( "second", 3, "Text...", "Obi-Wan" )
-            , ( "third", 4, "Text...", "Darth Vader" )
+            [ ( "first",  2, "Text...", "Yoda"        )
+            , ( "second", 3, "Text...", "Obi-Wan"     )
+            , ( "third",  4, "Text...", "Darth Vader" )
             ]
         , checkboxes =
             [ ( "disabled", 5, False )
@@ -53,21 +50,21 @@ init =
             ]
         , choosers =
             [ ( "kind", 0, kindData, "", "primary" )
-            , ( "size", 1, sizeData, "", "medium" )
+            , ( "size", 1, sizeData, "", "medium"  )
             ]
         }
   }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     _ ->
@@ -75,7 +72,7 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent buttonGroup =
       { buttonGroup
@@ -84,13 +81,18 @@ updateState ( model, effect ) =
         , kind = Form.valueOfChooser "kind" "primary" model.form
         , size = Form.valueOfChooser "size" "medium" model.form
         , items =
-            [ ( Form.valueOfInput "first" "" model.form, Nothing )
+            [ ( Form.valueOfInput "first"  "" model.form, Nothing )
             , ( Form.valueOfInput "second" "" model.form, Nothing )
-            , ( Form.valueOfInput "third" "" model.form, Nothing )
+            , ( Form.valueOfInput "third"  "" model.form, Nothing )
             ]
       }
   in
-    ( { model | buttonGroup = updatedComponent model.buttonGroup }, effect )
+    ( { model | buttonGroup = updatedComponent model.buttonGroup }, cmd )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg

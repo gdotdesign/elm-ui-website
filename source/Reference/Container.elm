@@ -8,8 +8,6 @@ import Ui.Chooser
 
 import Html.Attributes exposing (id)
 import Html exposing (node)
-import Html.App
-
 
 type Msg
   = Form Form.Msg
@@ -24,18 +22,18 @@ type alias Model =
 
 directionData : List Ui.Chooser.Item
 directionData =
-  [ { label = "row", value = "row" }
-  , { label = "column", value = "column" }
+  [ { id = "row",    label = "row",    value = "row"    }
+  , { id = "column", label = "column", value = "column" }
   ]
 
 
 alignData : List Ui.Chooser.Item
 alignData =
-  [ { label = "start", value = "start" }
-  , { label = "center", value = "center" }
-  , { label = "space-between", value = "space-between" }
-  , { label = "space-around", value = "space-around" }
-  , { label = "end", value = "end" }
+  [ { id = "start",   label = "start",         value = "start"         }
+  , { id = "center",  label = "center",        value = "center"        }
+  , { id = "between", label = "space-between", value = "space-between" }
+  , { id = "around",  label = "space-around",  value = "space-around"  }
+  , { id = "end",     label = "end",           value = "end"           }
   ]
 
 
@@ -43,8 +41,8 @@ init : Model
 init =
   { container =
       { direction = "row"
-      , align = "start"
       , compact = False
+      , align = "start"
       }
   , form =
       Form.init
@@ -52,8 +50,8 @@ init =
             [ ( "compact", 2, False )
             ]
         , choosers =
-            [ ( "direction", 0, directionData, "", "row" )
-            , ( "align", 1, alignData, "", "start" )
+            [ ( "direction", 0, directionData, "", "row"   )
+            , ( "align",     1, alignData,     "", "start" )
             ]
         , numberRanges = []
         , textareas = []
@@ -90,6 +88,11 @@ updateState ( model, effect ) =
       }
   in
     ( { model | container = updatedComponent model.container }, effect )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg

@@ -1,8 +1,12 @@
 module Components.Terminal exposing (..)
 
+{-| View for rendering a terminal window.
+-}
 import Html exposing (node, text)
 
 
+{-| Renders a terminal window with the given lines.
+-}
 view : List String -> Html.Html msg
 view lines =
   let

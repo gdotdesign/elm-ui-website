@@ -7,8 +7,6 @@ import Ui.Chooser
 import Ui.Loader
 
 import Html exposing (text)
-import Html.App
-
 
 type Msg
   = Loader Ui.Loader.Msg
@@ -25,7 +23,8 @@ init : Model
 init =
   let
     loader =
-      Ui.Loader.init 200
+      Ui.Loader.init ()
+      |> Ui.Loader.timeout 200
   in
     { loader = { loader | loading = True, shown = True }
     , form =
@@ -45,20 +44,20 @@ init =
 
 viewData : List Ui.Chooser.Item
 viewData =
-  [ { label = "Bar", value = "bar" }
-  , { label = "Overlay", value = "overlay" }
+  [ { id = "bar",     label = "Bar",     value = "bar"     }
+  , { id = "overlay", label = "Overlay", value = "overlay" }
   ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     _ ->
@@ -66,12 +65,17 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent loader =
       loader
   in
-    ( { model | loader = updatedComponent model.loader }, effect )
+    ( { model | loader = updatedComponent model.loader }, cmd )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg

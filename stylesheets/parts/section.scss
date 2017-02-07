@@ -1,0 +1,23 @@
+ui-section {
+  display: block;
+
+  ui-section-container {
+    flex-direction: row-reverse;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    height: 600px;
+    display: flex;
+  }
+
+  ui-section-content {
+    margin-left: 60px;
+    flex: 0 0 440px;
+  }
+
+  ui-section-title {
+    color: rgba(#000, 0.7);
+    font-family: Abel;
+    font-size: 40px;
+  }
+}

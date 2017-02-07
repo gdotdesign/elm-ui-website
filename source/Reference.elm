@@ -1,27 +1,26 @@
 module Reference exposing (..)
 
-import Html exposing (div, span, strong, text, node, a)
-import Html.Attributes exposing (classList, class)
-import Html.Events exposing (onClick)
+{-| This is a component for display reference for components.
+-}
+import Html exposing (div, span, strong, text, node)
+import Html.Attributes exposing (class)
 import Html.Lazy
-import Html.App
 
+import Dict exposing (Dict)
 import List.Extra
 import String
 import Regex
-import Dict
 
 import Ui.Helpers.Emitter as Emitter
-import Ui.Container
-import Ui.Button
-import Ui.App
-import Ui
 
 import Reference.NotificationCenter as NotificationCenter
+import Reference.ScrolledPanel as ScrolledPanel
 import Reference.InplaceInput as InplaceInput
 import Reference.DropdownMenu as DropdownMenu
 import Reference.NumberRange as NumberRange
+import Reference.Breadcrumbs as Breadcrumbs
 import Reference.ButtonGroup as ButtonGroup
+import Reference.ColorFields as ColorFields
 import Reference.ColorPicker as ColorPicker
 import Reference.SearchInput as SearchInput
 import Reference.IconButton as IconButton
@@ -48,15 +47,18 @@ import Reference.Pager as Pager
 import Reference.Tabs as Tabs
 import Reference.Time as Time
 
-import Docs.Types exposing (Documentation)
+import Docs.Types exposing (Documentation, Module)
 
+import Components.NavList as NavList exposing (Category)
 import Components.Markdown as Markdown
-import Components.NavList as NavList
 
+{-| Represenation of a reference.
+-}
 type alias Model =
   { notificationCenter : NotificationCenter.Model
   , inplaceInput : InplaceInput.Model
   , dropdownMenu : DropdownMenu.Model
+  , colorFields : ColorFields.Model
   , colorPicker : ColorPicker.Model
   , buttonGroup : ButtonGroup.Model
   , numberRange : NumberRange.Model
@@ -82,30 +84,35 @@ type alias Model =
   , modal : Modal.Model
   , time : Time.Model
   , tabs : Tabs.Model
+
   , documentation : Documentation
   , list : NavList.Model
   }
 
+
+{-| Messages that a reference can receive.
+-}
 type Msg
   = NotificationCenter NotificationCenter.Msg
-  | ColorPickerAction ColorPicker.Msg
-  | ButtonGroupAction ButtonGroup.Msg
-  | ColorPanelAction ColorPanel.Msg
-  | FileInputAction FileInput.Msg
   | InplaceInput InplaceInput.Msg
   | DropdownMenu DropdownMenu.Msg
-  | CalendarAction Calendar.Msg
+  | ColorPicker ColorPicker.Msg
+  | ButtonGroup ButtonGroup.Msg
   | NumberRange NumberRange.Msg
   | SearchInput SearchInput.Msg
+  | ColorFields ColorFields.Msg
   | IconButton IconButton.Msg
   | DatePicker DatePicker.Msg
-  | ChooserAction Chooser.Msg
+  | ColorPanel ColorPanel.Msg
+  | FileInput FileInput.Msg
   | NumberPad NumberPad.Msg
   | Container Container.Msg
-  | ButtonAction Button.Msg
+  | Calendar Calendar.Msg
   | Textarea Textarea.Msg
   | Checkbox Checkbox.Msg
+  | Chooser Chooser.Msg
   | Ratings Ratings.Msg
+  | Button Button.Msg
   | Tagger Tagger.Msg
   | Slider Slider.Msg
   | Loader Loader.Msg
@@ -115,16 +122,21 @@ type Msg
   | Pager Pager.Msg
   | Time Time.Msg
   | Tabs Tabs.Msg
+
   | List NavList.Msg
   | Navigate String
   | Noop
 
+
+{-| Initializes a reference.
+-}
 init : Model
 init =
   { notificationCenter = NotificationCenter.init
   , inplaceInput = InplaceInput.init
   , dropdownMenu = DropdownMenu.init
   , numberRange = NumberRange.init
+  , colorFields = ColorFields.init
   , colorPicker = ColorPicker.init
   , buttonGroup = ButtonGroup.init
   , searchInput = SearchInput.init
@@ -149,290 +161,355 @@ init =
   , modal = Modal.init
   , time = Time.init
   , tabs = Tabs.init
+
   , list = NavList.init "reference" "Search modules..." navItems
-  , documentation = { modules = [] }
+  , documentation =
+    { modules = [] }
   }
 
+
+{-| Sets the documentation of a reference.
+-}
+setDocumentation : Documentation -> Model -> Model
 setDocumentation docs model =
   { model | documentation = docs }
 
+
+{-| Items for the navigation list.
+-}
+navItems : List Category
 navItems =
   let
     convert dictList =
       Dict.toList dictList
         |> List.map (\(url, (name, _)) -> { label = name, href = url })
   in
-    [ ("Components", convert components)
-    , ("Helpers", convert helpers)
-    , ("Native Modules", convert nativeModules)
-    , ("Extensions", convert extensions)
+    [ ( "Components",     convert components    )
+    , ( "Helpers",        convert helpers       )
+    , ( "Native Modules", convert nativeModules )
+    , ( "Extensions",     convert extensions    )
     ]
 
+
+{-| Component category items.
+-}
+components : Dict String (String, Bool)
 components =
   Dict.fromList
-    [ ("app", ("Ui.App", False))
-    , ("button", ("Ui.Button", True))
-    , ("button-group", ("Ui.ButtonGroup", True))
-    , ("calendar", ("Ui.Calendar", True))
-    , ("checkbox", ("Ui.Checkbox", True))
-    , ("chooser", ("Ui.Chooser", True))
-    , ("color-panel", ("Ui.ColorPanel", True))
-    , ("color-picker", ("Ui.ColorPicker", True))
-    , ("container", ("Ui.Container", True))
-    , ("date-picker", ("Ui.DatePicker", True))
-    , ("dropdown-menu", ("Ui.DropdownMenu", True))
-    , ("file-input", ("Ui.FileInput", True))
-    , ("header", ("Ui.Header", True))
-    , ("icon-button", ("Ui.IconButton", True))
-    , ("image", ("Ui.Image", False))
-    , ("inplace-input", ("Ui.InplaceInput", True))
-    , ("input", ("Ui.Input", True))
-    , ("layout", ("Ui.Layout", True))
-    , ("loader", ("Ui.Loader", True))
-    , ("modal", ("Ui.Modal", True))
-    , ("notification-center", ("Ui.NotificationCenter", True))
-    , ("number-pad", ("Ui.NumberPad", True))
-    , ("number-range", ("Ui.NumberRange", True))
-    , ("pager", ("Ui.Pager", True))
-    , ("ratings", ("Ui.Ratings", True))
-    , ("slider", ("Ui.Slider", True))
-    , ("search-input", ("Ui.SearchInput", True))
-    , ("tabs", ("Ui.Tabs", True))
-    , ("tagger", ("Ui.Tagger", True))
-    , ("textarea", ("Ui.Textarea", True))
-    , ("time", ("Ui.Time", True))
+    [ ( "ui",                  ( "Ui",                    False ) )
+    , ( "breadcrumbs",         ( "Ui.Breadcrumbs",        True  ) )
+    , ( "button",              ( "Ui.Button",             True  ) )
+    , ( "button-group",        ( "Ui.ButtonGroup",        True  ) )
+    , ( "calendar",            ( "Ui.Calendar",           True  ) )
+    , ( "checkbox",            ( "Ui.Checkbox",           True  ) )
+    , ( "chooser",             ( "Ui.Chooser",            True  ) )
+    , ( "color-fields",        ( "Ui.ColorFields",        True  ) )
+    , ( "color-panel",         ( "Ui.ColorPanel",         True  ) )
+    , ( "color-picker",        ( "Ui.ColorPicker",        True  ) )
+    , ( "container",           ( "Ui.Container",          True  ) )
+    , ( "date-picker",         ( "Ui.DatePicker",         True  ) )
+    , ( "dropdown-menu",       ( "Ui.DropdownMenu",       True  ) )
+    , ( "fab",                 ( "Ui.Fab",                False ) )
+    , ( "file-input",          ( "Ui.FileInput",          True  ) )
+    , ( "header",              ( "Ui.Header",             True  ) )
+    , ( "icon-button",         ( "Ui.IconButton",         True  ) )
+    , ( "icons",               ( "Ui.Icons",              False ) )
+    , ( "image",               ( "Ui.Image",              False ) )
+    , ( "inplace-input",       ( "Ui.InplaceInput",       True  ) )
+    , ( "input",               ( "Ui.Input",              True  ) )
+    , ( "layout",              ( "Ui.Layout",             True  ) )
+    , ( "link",                ( "Ui.Link",               False ) )
+    , ( "loader",              ( "Ui.Loader",             True  ) )
+    , ( "modal",               ( "Ui.Modal",              True  ) )
+    , ( "notification-center", ( "Ui.NotificationCenter", True  ) )
+    , ( "number-pad",          ( "Ui.NumberPad",          True  ) )
+    , ( "number-range",        ( "Ui.NumberRange",        True  ) )
+    , ( "pager",               ( "Ui.Pager",              True  ) )
+    , ( "ratings",             ( "Ui.Ratings",            True  ) )
+    , ( "scrolled-panel",      ( "Ui.ScrolledPanel",      True  ) )
+    , ( "search-input",        ( "Ui.SearchInput",        True  ) )
+    , ( "slider",              ( "Ui.Slider",             True  ) )
+    , ( "tabs",                ( "Ui.Tabs",               True  ) )
+    , ( "tagger",              ( "Ui.Tagger",             True  ) )
+    , ( "textarea",            ( "Ui.Textarea",           True  ) )
+    , ( "time",                ( "Ui.Time",               True  ) )
     ]
 
+
+{-| Native module category items.
+-}
+nativeModules : Dict String (String, Bool)
 nativeModules =
   Dict.fromList
-    [ ("native/file-manager", ("Ui.Native.FileManager", False))
-    , ("native/browser", ("Ui.Native.Browser", False))
-    , ("native/dom", ("Ui.Native.Dom", False))
-    , ("native/local-storage", ("Ui.Native.LocalStorage", False))
-    , ("native/uid", ("Ui.Native.Uid", False))
-    , ("native/scrolls", ("Ui.Native.Scrolls", False))
+    [ ( "native/file-manager", ( "Ui.Native.FileManager", False ) )
+    , ( "native/scrolls",      ( "Ui.Native.Scrolls",     False ) )
+    , ( "native/uid",          ( "Ui.Native.Uid",         False ) )
     ]
 
+
+{-| Helper category items.
+-}
+helpers : Dict String (String, Bool)
 helpers =
   Dict.fromList
-    [ ("helpers/drag", ("Ui.Helpers.Drag", False))
-    , ("helpers/emitter", ("Ui.Helpers.Emitter", False))
-    , ("helpers/env", ("Ui.Helpers.Env", False))
-    , ("helpers/dropdown", ("Ui.Helpers.Dropdown", False))
-    , ("helpers/ripple", ("Ui.Helpers.Ripple", False))
-    , ("helpers/intendable", ("Ui.Helpers.Intendable", False))
+    [ ( "helpers/drag",            ( "Ui.Helpers.Drag",          False ) )
+    , ( "helpers/dropdown",        ( "Ui.Helpers.Dropdown",      False ) )
+    , ( "helpers/emitter",         ( "Ui.Helpers.Emitter",       False ) )
+    , ( "helpers/env",             ( "Ui.Helpers.Env",           False ) )
+    , ( "helpers/intendable",      ( "Ui.Helpers.Intendable",    False ) )
+    , ( "helpers/periodic-update", ("Ui.Helpers.PeriodicUpdate", False))
+    , ( "helpers/picker",          ( "Ui.Helpers.Picker",        False ) )
+    , ( "helpers/ripple",          ( "Ui.Helpers.Ripple",        False ) )
     ]
 
+
+{-| Extension category items.
+-}
+extensions : Dict String (String, Bool)
 extensions =
   Dict.fromList
-    [ ("ext-color", ("Ext.Color", False))
-    , ("ext-number", ("Ext.Number", False))
-    , ("ext-date", ("Ext.Date", False))
-    , ("html/events/geometry", ("Html.Events.Geometry", False))
-    , ("html/events/extra", ("Html.Events.Extra", False))
-    , ("html/events/options", ("Html.Events.Options", False))
+    [ ( "ext/color",           ( "Ext.Color",           False ) )
+    , ( "ext/number",          ( "Ext.Number",          False ) )
+    , ( "ext/date",            ( "Ext.Date",            False ) )
+    , ( "html/events/extra",   ( "Html.Events.Extra",   False ) )
+    , ( "html/events/options", ( "Html.Events.Options", False ) )
     ]
 
+
+{-| Updates a reference.
+-}
 update : Msg -> Model -> (Model, Cmd Msg)
-update action model =
-  case action of
+update msg_ model =
+  case msg_ of
     Navigate url ->
-      (model, Emitter.sendString "navigation" url)
+      ( model, Emitter.sendString "navigation" url )
 
-    ButtonAction act ->
+    Button msg ->
       let
-        (button, effect) = Button.update act model.button
+        ( button, cmd ) = Button.update msg model.button
       in
-        ({ model | button = button }, Cmd.map ButtonAction effect)
+        ( { model | button = button }, Cmd.map Button cmd )
 
-    ColorPanelAction act ->
+    ColorPanel msg ->
       let
-        (colorPanel, effect) = ColorPanel.update act model.colorPanel
+        ( colorPanel, cmd ) = ColorPanel.update msg model.colorPanel
       in
-        ({ model | colorPanel = colorPanel }, Cmd.map ColorPanelAction effect)
+        ( { model | colorPanel = colorPanel }, Cmd.map ColorPanel cmd )
 
-    ColorPickerAction act ->
+    ColorPicker msg ->
       let
-        (colorPicker, effect) = ColorPicker.update act model.colorPicker
+        ( colorPicker, cmd ) = ColorPicker.update msg model.colorPicker
       in
-        ({ model | colorPicker = colorPicker }, Cmd.map ColorPickerAction effect)
+        ( { model | colorPicker = colorPicker }, Cmd.map ColorPicker cmd )
 
-    CalendarAction act ->
+    ColorFields msg ->
       let
-        (calendar, effect) = Calendar.update act model.calendar
+        ( colorFields, cmd ) = ColorFields.update msg model.colorFields
       in
-        ({ model | calendar = calendar }, Cmd.map CalendarAction effect)
+        ( { model | colorFields = colorFields }, Cmd.map ColorFields cmd )
 
-    ChooserAction act ->
+    Calendar msg ->
       let
-        (chooser, effect) = Chooser.update act model.chooser
+        ( calendar, cmd ) = Calendar.update msg model.calendar
       in
-        ({ model | chooser = chooser }, Cmd.map ChooserAction effect)
+        ( { model | calendar = calendar }, Cmd.map Calendar cmd )
 
-    FileInputAction act ->
+    Chooser msg ->
       let
-        (fileInput, effect) = FileInput.update act model.fileInput
+        ( chooser, cmd ) = Chooser.update msg model.chooser
       in
-        ({ model | fileInput = fileInput }, Cmd.map FileInputAction effect)
+        ( { model | chooser = chooser }, Cmd.map Chooser cmd )
 
-    ButtonGroupAction act ->
+    FileInput msg ->
       let
-        (buttonGroup, effect) = ButtonGroup.update act model.buttonGroup
+        ( fileInput, cmd ) = FileInput.update msg model.fileInput
       in
-        ({ model | buttonGroup = buttonGroup }, Cmd.map ButtonGroupAction effect)
+        ( { model | fileInput = fileInput }, Cmd.map FileInput cmd )
 
-    Checkbox act ->
+    ButtonGroup msg ->
       let
-        (checkbox, effect) = Checkbox.update act model.checkbox
+        ( buttonGroup, cmd ) = ButtonGroup.update msg model.buttonGroup
       in
-        ({ model | checkbox = checkbox }, Cmd.map Checkbox effect)
+        ( { model | buttonGroup = buttonGroup }, Cmd.map ButtonGroup cmd )
 
-    Container act ->
+    Checkbox msg ->
       let
-        (container, effect) = Container.update act model.container
+        ( checkbox, cmd ) = Checkbox.update msg model.checkbox
       in
-        ({ model | container = container }, Cmd.map Container effect)
+        ( { model | checkbox = checkbox }, Cmd.map Checkbox cmd )
 
-    DatePicker act ->
+    Container msg ->
       let
-        (datePicker, effect) = DatePicker.update act model.datePicker
+        (container, cmd) = Container.update msg model.container
       in
-        ({ model | datePicker = datePicker }, Cmd.map DatePicker effect)
+        ({ model | container = container }, Cmd.map Container cmd)
 
-    DropdownMenu act ->
+    DatePicker msg ->
       let
-        (dropdownMenu, effect) = DropdownMenu.update act model.dropdownMenu
+        ( datePicker, cmd) = DatePicker.update msg model.datePicker
       in
-        ({ model | dropdownMenu = dropdownMenu }, Cmd.map DropdownMenu effect)
+        ( { model | datePicker = datePicker }, Cmd.map DatePicker cmd )
 
-    IconButton act ->
+    DropdownMenu msg ->
       let
-        (iconButton, effect) = IconButton.update act model.iconButton
+        ( dropdownMenu, cmd ) = DropdownMenu.update msg model.dropdownMenu
       in
-        ({ model | iconButton = iconButton }, Cmd.map IconButton effect)
+        ( { model | dropdownMenu = dropdownMenu }, Cmd.map DropdownMenu cmd )
 
-    InplaceInput act ->
+    IconButton msg ->
       let
-        (inplaceInput, effect) = InplaceInput.update act model.inplaceInput
+        ( iconButton, cmd ) = IconButton.update msg model.iconButton
       in
-        ({ model | inplaceInput = inplaceInput }, Cmd.map InplaceInput effect)
+        ( { model | iconButton = iconButton }, Cmd.map IconButton cmd )
 
-    Input act ->
+    InplaceInput msg ->
       let
-        (input, effect) = Input.update act model.input
+        ( inplaceInput, cmd ) = InplaceInput.update msg model.inplaceInput
       in
-        ({ model | input = input }, Cmd.map Input effect)
+        ( { model | inplaceInput = inplaceInput }, Cmd.map InplaceInput cmd )
 
-    NumberPad act ->
+    Input msg ->
       let
-        (numberPad, effect) = NumberPad.update act model.numberPad
+        ( input, cmd ) = Input.update msg model.input
       in
-        ({ model | numberPad = numberPad }, Cmd.map NumberPad effect)
+        ( { model | input = input }, Cmd.map Input cmd )
 
-    List act ->
+    NumberPad msg ->
       let
-        (list, effect) = NavList.update act model.list
+        ( numberPad, cmd ) = NumberPad.update msg model.numberPad
       in
-        ({ model | list = list }, Cmd.map List effect)
+        ( { model | numberPad = numberPad }, Cmd.map NumberPad cmd )
 
-    Layout act ->
+    List msg ->
       let
-        (layout, effect) = Layout.update act model.layout
+        ( list, cmd ) = NavList.update msg model.list
       in
-        ({ model | layout = layout }, Cmd.map Layout effect)
+        ( { model | list = list }, Cmd.map List cmd )
 
-    Loader act ->
+    Layout msg ->
       let
-        (loader, effect) = Loader.update act model.loader
+        ( layout, cmd ) = Layout.update msg model.layout
       in
-        ({ model | loader = loader }, Cmd.map Loader effect)
+        ( { model | layout = layout }, Cmd.map Layout cmd )
 
-    Modal act ->
+    Loader msg ->
       let
-        (modal, effect) = Modal.update act model.modal
+        ( loader, cmd ) = Loader.update msg model.loader
       in
-        ({ model | modal = modal }, Cmd.map Modal effect)
+        ( { model | loader = loader }, Cmd.map Loader cmd )
 
-    NumberRange act ->
+    Modal msg ->
       let
-        (numberRange, effect) = NumberRange.update act model.numberRange
+        ( modal, cmd ) = Modal.update msg model.modal
       in
-        ({ model | numberRange = numberRange }, Cmd.map NumberRange effect)
+        ( { model | modal = modal }, Cmd.map Modal cmd )
 
-    Pager act ->
+    NumberRange msg ->
       let
-        (pager, effect) = Pager.update act model.pager
+        ( numberRange, cmd ) = NumberRange.update msg model.numberRange
       in
-        ({ model | pager = pager }, Cmd.map Pager effect)
+        ( { model | numberRange = numberRange }, Cmd.map NumberRange cmd )
 
-    Ratings act ->
+    Pager msg ->
       let
-        (ratings, effect) = Ratings.update act model.ratings
+        ( pager, cmd ) = Pager.update msg model.pager
       in
-        ({ model | ratings = ratings }, Cmd.map Ratings effect)
+        ( { model | pager = pager }, Cmd.map Pager cmd )
 
-    Slider act ->
+    Ratings msg ->
       let
-        (slider, effect) = Slider.update act model.slider
+        ( ratings, cmd ) = Ratings.update msg model.ratings
       in
-        ({ model | slider = slider }, Cmd.map Slider effect)
+        ( { model | ratings = ratings }, Cmd.map Ratings cmd )
 
-    SearchInput act ->
+    Slider msg ->
       let
-        (searchInput, effect) = SearchInput.update act model.searchInput
+        ( slider, cmd ) = Slider.update msg model.slider
       in
-        ({ model | searchInput = searchInput }, Cmd.map SearchInput effect)
+        ( { model | slider = slider }, Cmd.map Slider cmd )
 
-    Textarea act ->
+    SearchInput msg ->
       let
-        (textarea, effect) = Textarea.update act model.textarea
+        ( searchInput, cmd ) = SearchInput.update msg model.searchInput
       in
-        ({ model | textarea = textarea }, Cmd.map Textarea effect)
+        ( { model | searchInput = searchInput }, Cmd.map SearchInput cmd )
 
-    NotificationCenter act ->
+    Textarea msg ->
       let
-        (notificationCenter, effect) = NotificationCenter.update act model.notificationCenter
+        ( textarea, cmd ) = Textarea.update msg model.textarea
       in
-        ({ model | notificationCenter = notificationCenter }, Cmd.map NotificationCenter effect)
+        ( { model | textarea = textarea }, Cmd.map Textarea cmd )
 
-    Time act ->
+    NotificationCenter msg ->
       let
-        (time, effect) = Time.update act model.time
+        ( notificationCenter, cmd )
+          = NotificationCenter.update msg model.notificationCenter
       in
-        ({ model | time = time }, Cmd.map Time effect)
+        ( { model | notificationCenter = notificationCenter }
+        , Cmd.map NotificationCenter cmd
+        )
 
-    Tabs act ->
+    Time msg ->
       let
-        (tabs, effect) = Tabs.update act model.tabs
+        ( time, cmd ) = Time.update msg model.time
       in
-        ({ model | tabs = tabs }, Cmd.map Tabs effect)
+        ( { model | time = time }, Cmd.map Time cmd )
 
-    Tagger act ->
+    Tabs msg ->
       let
-        (tagger, effect) = Tagger.update act model.tagger
+        ( tabs, cmd ) = Tabs.update msg model.tabs
       in
-        ({ model | tagger = tagger }, Cmd.map Tagger effect)
+        ( { model | tabs = tabs }, Cmd.map Tabs cmd )
+
+    Tagger msg ->
+      let
+        ( tagger, cmd ) = Tagger.update msg model.tagger
+      in
+        ( { model | tagger = tagger }, Cmd.map Tagger cmd )
 
     Noop ->
-      (model, Cmd.none)
+      ( model, Cmd.none )
 
+
+{-| Subscriptions for a reference.
+-}
+subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-  [ Sub.map ColorPickerAction (ColorPicker.subscriptions model.colorPicker)
-  , Sub.map ColorPanelAction (ColorPanel.subscriptions model.colorPanel)
-  , Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
+  [ Sub.map DropdownMenu (DropdownMenu.subscriptions model.dropdownMenu)
+  , Sub.map ColorPicker (ColorPicker.subscriptions model.colorPicker)
+  , Sub.map ColorFields (ColorFields.subscriptions model.colorFields)
   , Sub.map NumberRange (NumberRange.subscriptions model.numberRange)
+  , Sub.map ButtonGroup (ButtonGroup.subscriptions model.buttonGroup)
+  , Sub.map ColorPanel (ColorPanel.subscriptions model.colorPanel)
+  , Sub.map DatePicker (DatePicker.subscriptions model.datePicker)
+  , Sub.map IconButton (IconButton.subscriptions model.iconButton)
+  , Sub.map Container (Container.subscriptions model.container)
   , Sub.map NumberPad (NumberPad.subscriptions model.numberPad)
+  , Sub.map Calendar (Calendar.subscriptions model.calendar)
+  , Sub.map Chooser (Chooser.subscriptions model.chooser)
   , Sub.map Ratings (Ratings.subscriptions model.ratings)
+  , Sub.map Layout (Layout.subscriptions model.layout)
+  , Sub.map Loader (Loader.subscriptions model.loader)
   , Sub.map Tagger (Tagger.subscriptions model.tagger)
   , Sub.map Slider (Slider.subscriptions model.slider)
+  , Sub.map Button (Button.subscriptions model.button)
   , Sub.map Pager (Pager.subscriptions model.pager)
   , Sub.map Tabs (Tabs.subscriptions model.tabs)
+  , Sub.map Time (Time.subscriptions model.time)
   ]
 
+
+{-| Finds a module in the documentation with the given name.
+-}
+findDocumentation : String -> Documentation -> Maybe Module
 findDocumentation name docs =
   List.Extra.find (\mod -> mod.name == name) docs.modules
 
+
+{-| Processes a type definition.
+-}
+processType : String -> String
 processType definition =
   let
    code = String.split "," definition
@@ -443,16 +520,22 @@ processType definition =
   in
     "```\n" ++ code ++ "\n```"
 
+
+{-| Renders documentation for a module.
+-}
+renderDocumentation : Module -> Html.Html Msg
 renderDocumentation mod =
   let
     description =
-      String.split "#" mod.comment
+      mod.comment
+      |> String.split "#"
       |> List.head
       |> Maybe.withDefault ""
       |> Markdown.view
 
-    renderDefinition def =
-      String.split "->" def
+    renderDefinition definition =
+      definition
+      |> String.split "->"
       |> List.map String.trim
       |> List.indexedMap (\index item -> if index /= 0 then "-> " ++ item else item)
       |> List.map (\item -> node "span" [] [text item])
@@ -520,15 +603,25 @@ renderDocumentation mod =
     node "ui-docs" []
       ([description] ++ aliases ++ types ++ functions)
 
+
+{-| Renders documentation for the given module.
+-}
+documentation : Documentation -> String -> Html.Html Msg
 documentation docs name =
   findDocumentation name docs
   |> Maybe.map (Html.Lazy.lazy renderDocumentation)
   |> Maybe.withDefault (text "")
 
+
+{-| Renders the reference lazily.
+-}
 viewLazy : Model -> String -> Html.Html Msg
 viewLazy model active =
   Html.Lazy.lazy2 view model active
 
+
+{-| Renders the reference.
+-}
 view : Model -> String -> Html.Html Msg
 view model active =
   let
@@ -539,64 +632,104 @@ view model active =
 
     componentView =
       case active of
-        "button" ->
-          Html.App.map ButtonAction (Button.view model.button)
-        "chooser" ->
-          Html.App.map ChooserAction (Chooser.view model.chooser)
-        "calendar" ->
-          Html.App.map CalendarAction (Calendar.view model.calendar)
-        "color-panel" ->
-          Html.App.map ColorPanelAction (ColorPanel.view model.colorPanel)
-        "color-picker" ->
-          Html.App.map ColorPickerAction (ColorPicker.view model.colorPicker)
-        "file-input" ->
-          Html.App.map FileInputAction (FileInput.view model.fileInput)
-        "button-group" ->
-          Html.App.map ButtonGroupAction (ButtonGroup.view model.buttonGroup)
-        "checkbox" ->
-          Html.App.map Checkbox (Checkbox.view model.checkbox)
-        "container" ->
-          Html.App.map Container (Container.view model.container)
-        "date-picker" ->
-          Html.App.map DatePicker (DatePicker.view model.datePicker)
         "dropdown-menu" ->
-          Html.App.map DropdownMenu (DropdownMenu.view model.dropdownMenu)
-        "icon-button" ->
-          Html.App.map IconButton (IconButton.view model.iconButton)
+          Html.map DropdownMenu (DropdownMenu.view model.dropdownMenu)
+
         "inplace-input" ->
-          Html.App.map InplaceInput (InplaceInput.view model.inplaceInput)
-        "input" ->
-          Html.App.map Input (Input.view model.input)
-        "number-pad" ->
-          Html.App.map NumberPad (NumberPad.view model.numberPad)
+          Html.map InplaceInput (InplaceInput.view model.inplaceInput)
+
+        "color-fields" ->
+          Html.map ColorFields (ColorFields.view model.colorFields)
+
+        "color-picker" ->
+          Html.map ColorPicker (ColorPicker.view model.colorPicker)
+
+        "button-group" ->
+          Html.map ButtonGroup (ButtonGroup.view model.buttonGroup)
+
         "number-range" ->
-          Html.App.map NumberRange (NumberRange.view model.numberRange)
+          Html.map NumberRange (NumberRange.view model.numberRange)
+
+        "search-input" ->
+          Html.map SearchInput (SearchInput.view model.searchInput)
+
+        "color-panel" ->
+          Html.map ColorPanel (ColorPanel.view model.colorPanel)
+
+        "date-picker" ->
+          Html.map DatePicker (DatePicker.view model.datePicker)
+
+        "icon-button" ->
+          Html.map IconButton (IconButton.view model.iconButton)
+
+        "file-input" ->
+          Html.map FileInput (FileInput.view model.fileInput)
+
+        "container" ->
+          Html.map Container (Container.view model.container)
+
+        "number-pad" ->
+          Html.map NumberPad (NumberPad.view model.numberPad)
+
+        "checkbox" ->
+          Html.map Checkbox (Checkbox.view model.checkbox)
+
+        "calendar" ->
+          Html.map Calendar (Calendar.view model.calendar)
+
+        "textarea" ->
+          Html.map Textarea (Textarea.view model.textarea)
+
+        "chooser" ->
+          Html.map Chooser (Chooser.view model.chooser)
+
+        "ratings" ->
+          Html.map Ratings (Ratings.view model.ratings)
+
+        "button" ->
+          Html.map Button (Button.view model.button)
+
+        "slider" ->
+          Html.map Slider (Slider.view model.slider)
+
         "layout" ->
-          Html.App.map Layout (Layout.view model.layout)
+          Html.map Layout (Layout.view model.layout)
+
         "loader" ->
-          Html.App.map Loader (Loader.view model.loader)
+          Html.map Loader (Loader.view model.loader)
+
+        "tagger" ->
+          Html.map Tagger (Tagger.view model.tagger)
+
+        "modal" ->
+          Html.map Modal (Modal.view model.modal)
+
+        "pager" ->
+          Html.map Pager (Pager.view model.pager)
+
+        "input" ->
+          Html.map Input (Input.view model.input)
+
+        "time" ->
+          Html.map Time (Time.view model.time)
+
+        "tabs" ->
+          Html.map Tabs (Tabs.view model.tabs)
+
+        "scrolled-panel" ->
+          ScrolledPanel.view
+
+        "breadcrumbs" ->
+          Breadcrumbs.view Noop
+
         "header" ->
           Header.view Noop
-        "modal" ->
-          Html.App.map Modal (Modal.view model.modal)
-        "pager" ->
-          Html.App.map Pager (Pager.view model.pager)
-        "ratings" ->
-          Html.App.map Ratings (Ratings.view model.ratings)
-        "slider" ->
-          Html.App.map Slider (Slider.view model.slider)
-        "search-input" ->
-          Html.App.map SearchInput (SearchInput.view model.searchInput)
-        "textarea" ->
-          Html.App.map Textarea (Textarea.view model.textarea)
+
         "notification-center" ->
-          Html.App.map NotificationCenter (NotificationCenter.view model.notificationCenter)
-        "time" ->
-          Html.App.map Time (Time.view model.time)
-        "tabs" ->
-          Html.App.map Tabs (Tabs.view model.tabs)
-        "tagger" ->
-          Html.App.map Tagger (Tagger.view model.tagger)
+          Html.map
+            NotificationCenter
+            (NotificationCenter.view model.notificationCenter)
+
         _ ->
           text ""
 
@@ -613,6 +746,7 @@ view model active =
             [ node "ui-reference-title" [class className] [ text title ]
             , documentation model.documentation label
             ]
+
         _ ->
           [ ]
 
@@ -625,10 +759,11 @@ view model active =
             ]
           else
             []
+
         _ ->
           [ text "No component is selected!" ]
   in
     node "ui-reference" []
-      [ Html.App.map List (NavList.view active model.list)
+      [ Html.map List (NavList.view active model.list)
       , node "ui-reference-content" [] (content ++ docs)
       ]

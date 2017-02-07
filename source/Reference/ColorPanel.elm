@@ -4,14 +4,10 @@ import Components.Form as Form
 import Components.Reference
 
 import Ui.ColorPanel
-import Ui
 
 import Ext.Color exposing (Hsv)
 import Color
-
-import Html.App
 import Html
-
 
 type Msg
   = ColorPanel Ui.ColorPanel.Msg
@@ -26,12 +22,12 @@ type alias Model =
 
 hsvColor : Hsv
 hsvColor =
-  Ext.Color.toHsv Color.yellow
+  Ext.Color.toHsv Color.black
 
 
 init : Model
 init =
-  { colorPanel = Ui.ColorPanel.init Color.yellow
+  { colorPanel = Ui.ColorPanel.init ()
   , form =
       Form.init
         { checkboxes =
@@ -39,7 +35,7 @@ init =
             , ( "readonly", 2, False )
             ]
         , colors =
-            [ ( "value", 0, Color.yellow ) ]
+            [ ( "value", 0, Color.black ) ]
         , numberRanges = []
         , textareas = []
         , choosers = []
@@ -50,47 +46,58 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    ColorPanel act ->
+    ColorPanel msg ->
       let
-        ( colorPanel, effect ) =
-          Ui.ColorPanel.update act model.colorPanel
+        ( colorPanel, cmd ) =
+          Ui.ColorPanel.update msg model.colorPanel
       in
-        ( { model | colorPanel = colorPanel }, Cmd.map ColorPanel effect )
+        ( { model | colorPanel = colorPanel }, Cmd.map ColorPanel cmd )
           |> updateForm
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
       Form.updateColor "value"
         (Ext.Color.hsvToRgb model.colorPanel.value)
         model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
-    updatedComponent colorPanel =
-      { colorPanel
+    color =
+      Form.valueOfColor "value" hsvColor model.form
+        |> Ext.Color.hsvToRgb
+
+    ( updatedColorPanel, setCmd ) =
+      Ui.ColorPanel.setValue color model.colorPanel
+
+    updatedComponent =
+      { updatedColorPanel
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
-        , value = Form.valueOfColor "value" hsvColor model.form
       }
   in
-    ( { model | colorPanel = updatedComponent model.colorPanel }, effect )
+    ( { model | colorPanel = updatedComponent }
+    , Cmd.batch
+      [ Cmd.map ColorPanel setCmd
+      , cmd
+      ]
+    )
 
 
 subscriptions : Model -> Sub Msg
@@ -105,7 +112,7 @@ view : Model -> Html.Html Msg
 view model =
   let
     demo =
-      Html.App.map ColorPanel (Ui.ColorPanel.view model.colorPanel)
+      Html.map ColorPanel (Ui.ColorPanel.view model.colorPanel)
 
     form =
       Form.view Form model.form

@@ -1,101 +1,110 @@
 module Pages.Index exposing (..)
 
+{-| This module holds the content for the main page.
+-}
 import Html.Attributes exposing (src, class)
 import Html exposing (node, text, img)
 
-import Components.Terminal as Terminal
 import Components.Markdown as Markdown
 
 import Ui.Button
-import Ui
+import Ui.Link
 
+{-| Renders the hero section.
+-}
 hero : (String -> msg) -> msg -> Html.Html msg
 hero msg noop =
   let
-    url = "/documentation/getting-started/setup"
+    setupUrl = "/documentation/getting-started/setup"
+    refernceUrl = "/reference/ui"
   in
-    node "ui-hero"
-      []
-      [ node "ui-hero-title"
-          []
+    node "ui-hero" []
+      [ node "ui-hero-title" []
           [ img [ src "/images/logo.svg" ] []
           , text "Elm-UI"
           ]
-      , node "ui-hero-subtitle"
-          []
-          [ text "A user interface library and framework for Elm!" ]
-      , Ui.link (Just (msg url)) (Just url) "_self"
-          [ Ui.Button.primaryBig "Get Started" noop ]
-      , Terminal.view
-          [ "npm install elm-ui -g"
-          , "----------------------------------"
-          , "elm-ui init my-project"
-          , "cd my-project"
-          , "elm-ui install"
-          , "elm-ui server"
-          , "> Listening on localhost:8001..."
-          ]
+      , node "ui-hero-subtitle" []
+          [ text "UI library for making web applications with Elm!" ]
+      , node "ui-hero-buttons" []
+        [ Ui.Link.view
+          { msg = Just (msg setupUrl)
+          , url = Just setupUrl
+          , target = Nothing
+          , contents =
+            [ Ui.Button.view
+              noop
+              { text = "Get Started"
+              , readonly = False
+              , disabled = False
+              , kind = "primary"
+              , size = "medium"
+              }
+            ]
+          }
+        , Ui.Link.view
+          { msg = Just (msg refernceUrl)
+          , url = Just refernceUrl
+          , target = Nothing
+          , contents =
+            [ Ui.Button.view
+              noop
+              { text = "Component Reference"
+              , disabled = False
+              , readonly = False
+              , kind = "primary"
+              , size = "medium"
+              }
+            ]
+          }
+        ]
       ]
 
 
-browser : String -> Html.Html msg
-browser url =
-  node "ui-browser"
-    []
-    [ node "ui-browser-title" [] []
-    , node "ui-browser-content"
-        []
-        [ img [ src url ] [] ]
-    ]
-
-
+{-| Renders a section with the given content.
+-}
 section : String -> String -> String -> Html.Html msg
 section title content image =
-  node "ui-section"
-    []
-    [ node "ui-section-container"
-        []
-        [ node "ui-section-content" []
-            [ node "ui-section-title" [] [ text title ]
-            , Markdown.view content
-            ]
-        , img [src image] []
+  node "ui-section" []
+    [ node "ui-section-container"[]
+      [ node "ui-section-content" []
+        [ node "ui-section-title" [] [ text title ]
+        , Markdown.view content
         ]
+      , img [src image] []
+      ]
     ]
 
 
-worklfowContent : String
-worklfowContent =
-  """
-Elm-UI gives you the perfect tools, so you can focus on your code instead of the environment:
-- Colored **error-messages** displayed in the browser
-- Development server with built-in **live reload**
-- **Scaffolding** to quickly start a new projects
-- **Building and minifying** your final files
-- **Environment configurations**
-"""
-
+{-| Content for the section.
+-}
 componentLibraryContent : String
 componentLibraryContent =
   """
-With a plethora of components you can build a wide variety of single-page
-apps.
-- They have **disabled** and **readonly** states
-- They can be controlled by **keyboard**
-- **25+** components
-"""
+  With a plethora of components you can build a wide variaty of single-page
+  apps.
+  - They have **disabled** and **readonly** states
+  - They can be controlled by **keyboard**
+  - More then **25+** components
+  """
 
 
+{-| Renders the index page.
+-}
 view : (String -> msg) -> msg -> Html.Html msg
 view navigateMsg noop =
   node "ui-index"
     []
     [ hero navigateMsg noop
-    , section "Development Workflow" worklfowContent "/images/workflow.svg"
     , section "Component Library" componentLibraryContent "/images/components.png"
-    , node "div"
-      [ class "cta" ]
+    , node "ui-cta" []
       [ node "span" [] [ text "Interested?" ]
-      , Ui.Button.primaryBig "Get Started" (navigateMsg "/documentation/getting-started/setup")
+      , Ui.Button.view
+        (navigateMsg "/documentation/getting-started/setup")
+        { text = "Get Started"
+        , disabled = False
+        , readonly = False
+        , kind = "primary"
+        , size = "medium"
+        }
       ]
     ]

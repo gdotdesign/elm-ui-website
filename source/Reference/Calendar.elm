@@ -6,10 +6,7 @@ import Components.Reference
 import Ui.Calendar
 
 import Ext.Date
-
-import Html.App
 import Html
-
 
 type Msg
   = Calendar Ui.Calendar.Msg
@@ -27,17 +24,19 @@ init =
   let
     date = Ext.Date.createDate 1977 5 25
   in
-    { calendar = Ui.Calendar.init date
+    { calendar =
+        Ui.Calendar.init ()
+          |> Ui.Calendar.setValue date
     , form =
         Form.init
           { checkboxes =
-              [ ( "selectable", 2, True )
-              , ( "disabled", 3, False )
-              , ( "readonly", 4, False )
+              [ ( "selectable", 2, True  )
+              , ( "disabled",   3, False )
+              , ( "readonly",   4, False )
               ]
           , dates =
               [ ( "value", 1, date )
-              , ( "date", 0, date )
+              , ( "date",  0, date )
               ]
           , numberRanges = []
           , textareas = []
@@ -49,37 +48,38 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Calendar act ->
+update msg_ model =
+  case msg_ of
+    Calendar msg ->
       let
-        ( calendar, effect ) =
-          Ui.Calendar.update act model.calendar
+        ( calendar, cmd ) =
+          Ui.Calendar.update msg model.calendar
       in
-        ( { model | calendar = calendar }, Cmd.map Calendar effect )
+        ( { model | calendar = calendar }, Cmd.map Calendar cmd )
           |> updateForm
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
     updatedForm =
-      Form.updateDate "date" model.calendar.date model.form
+      model.form
         |> Form.updateDate "value" model.calendar.value
+        |> Form.updateDate "date" model.calendar.date
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }, cmd )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     now =
       Ext.Date.now ()
@@ -93,7 +93,12 @@ updateState ( model, effect ) =
         , date = Form.valueOfDate "date" now model.form
       }
   in
-    ( { model | calendar = updatedComponent model.calendar }, effect )
+    ( { model | calendar = updatedComponent model.calendar }, cmd )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg
@@ -103,6 +108,6 @@ view model =
       Form.view Form model.form
 
     demo =
-      Html.App.map Calendar (Ui.Calendar.view "en_us" model.calendar)
+      Html.map Calendar (Ui.Calendar.view "en_us" model.calendar)
   in
     Components.Reference.view demo form

@@ -7,10 +7,9 @@ import Components.Reference
 
 import Ui.IconButton
 import Ui.Chooser
+import Ui.Icons
 
-import Html.App
 import Html
-
 
 type Msg
   = Form Form.Msg
@@ -18,33 +17,36 @@ type Msg
 
 
 type alias Model =
-  { iconButton : Ui.IconButton.Model
+  { iconButton : Ui.IconButton.Model Msg
   , form : Form.Model Msg
   }
 
+
 glyphData : List Ui.Chooser.Item
 glyphData =
-  [ { label = "Plus", value = "plus" }
-  , { label = "Checkmark", value = "checkmark" }
-  , { label = "Close Circled", value = "close-circled" }
-  , { label = "Heart", value = "heart" }
+  [ { id = "plus", label = "Plus", value = "plus" }
+  , { id = "checkmark", label = "Checkmark", value = "checkmark" }
+  , { id = "close", label = "Close", value = "close" }
+  , { id = "star", label = "Star", value = "star" }
   ]
+
 
 sideData : List Ui.Chooser.Item
 sideData =
-  [ { label = "Left", value = "left" }
-  , { label = "Right", value = "right" }
+  [ { id = "left", label = "Left", value = "left" }
+  , { id = "right", label = "Right", value = "right" }
   ]
+
 
 init : Model
 init =
   { iconButton =
-      { text = "Add Document"
+      { glyph = Ui.Icons.plus []
+      , text = "Add Document"
       , disabled = False
       , readonly = False
       , kind = "primary"
       , size = "medium"
-      , glyph = "plus"
       , side = "left"
       }
   , form =
@@ -57,10 +59,10 @@ init =
             , ( "readonly", 4, False )
             ]
         , choosers =
-            [ ( "kind", 0, kindData, "", "primary" )
-            , ( "size", 1, sizeData, "", "medium" )
-            , ( "glyph", 2, glyphData, "", "plus")
-            , ( "side", 2, sideData, "", "left")
+            [ ( "kind",  0, kindData,  "", "primary" )
+            , ( "size",  1, sizeData,  "", "medium"  )
+            , ( "glyph", 2, glyphData, "", "plus"    )
+            , ( "side",  2, sideData,  "", "left"    )
             ]
         , numberRanges = []
         , textareas = []
@@ -71,14 +73,14 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     _ ->
@@ -86,20 +88,32 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
+    glyph =
+      case Form.valueOfChooser "glyph" "plus" model.form of
+        "checkmark" -> Ui.Icons.checkmark []
+        "star" -> Ui.Icons.starFull []
+        "close" -> Ui.Icons.close []
+        _ -> Ui.Icons.plus []
+
     updatedComponent iconButton =
       { iconButton
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
         , kind = Form.valueOfChooser "kind" "primary" model.form
         , size = Form.valueOfChooser "size" "medium" model.form
-        , glyph = Form.valueOfChooser "glyph" "plus" model.form
         , side = Form.valueOfChooser "side" "left" model.form
         , text = Form.valueOfInput "text" "Test" model.form
+        , glyph = glyph
       }
   in
-    ( { model | iconButton = updatedComponent model.iconButton }, effect )
+    ( { model | iconButton = updatedComponent model.iconButton }, cmd )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.map Form (Form.subscriptions model.form)
 
 
 view : Model -> Html.Html Msg

@@ -1,0 +1,233 @@
+ui-reference {
+  min-height: calc(100vh - 60px);
+  display: flex;
+}
+
+ui-reference-title {
+  border-bottom: 1px solid rgba(#000, 0.1);
+  font-family: $title-font;
+  padding: 12px 20px;
+  font-size: 26px;
+  display: block;
+
+  &.upcase {
+    text-transform: uppercase;
+    font-size: 20px;
+  }
+}
+
+ui-reference-content {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+}
+
+ui-reference-demo {
+  border-bottom: 1px solid rgba(#000, 0.1);
+  display: flex;
+  min-height: 400px;
+
+  ui-reference-demo-viewport {
+    background: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
+                linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
+    background-position: 0 0, 10px 10px;
+    background-size: 20px 20px;
+
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 40px;
+    flex: 1;
+
+    #time-demo {
+      background: $input;
+      padding: 15px;
+    }
+
+    #test-container {
+      border: 1px dashed rgba(0,0,0,0.4);
+      padding: 20px;
+
+      &[direction=row] {
+        width: 500px;
+      }
+
+      &[direction=column] {
+        height: 500px;
+      }
+
+      test-box {
+        border: 1px solid rgba(#000, 0.1);
+        background: $secondary;
+        height: 100px;
+        width: 100px;
+      }
+    }
+
+    ui-scrolled-panel {
+      background: $input;
+      max-width: 300px;
+      height: 300px;
+      padding: 10px;
+    }
+
+    ui-tabs {
+      width: 400px;
+      height: 150px;
+      display: flex;
+      flex-direction: column;
+
+      ui-panel {
+        padding: 10px;
+      }
+
+      ui-tabs-content {
+        flex: 1;
+      }
+    }
+
+    ui-tagger {
+      background: $background;
+      padding: 20px;
+      width: 300px;
+    }
+
+    ui-pager {
+      border: 3px solid rgba(0,0,0,0.4);
+      height: 300px;
+      width: 400px;
+
+      ui-page > * {
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        display: flex;
+        color: white;
+      }
+
+      .demo-page-1 {
+        background: $primary;
+      }
+
+      .demo-page-2 {
+        background: $success;
+      }
+
+      .demo-page-3 {
+        background: $warning;
+      }
+
+      .demo-page-4 {
+        background: $danger;
+      }
+    }
+
+    > ui-textarea {
+      min-height: 100px;
+      width: 400px;
+    }
+
+    ui-loader {
+      width: 400px;
+      position: relative !important;
+    }
+
+
+    ui-layout-website,
+    ui-layout-app,
+    ui-layout-sidebar {
+      &[style-id] {
+        border: 1px solid rgba(#000, 0.4);
+        background: $input;
+        min-height: 0;
+        height: 300px;
+        width: 600px;
+      }
+    }
+
+    ui-layout-website > *,
+    ui-layout-sidebar > *,
+    ui-layout-app-wrapper > *,
+    ui-layout-app-sidebar {
+      border: 1px dashed rgba(#000, 0.4);
+      margin: 5px;
+      padding: 10px;
+    }
+
+    ui-layout-app-wrapper {
+      min-height: 0;
+      height: inherit;
+    }
+
+    > ui-header {
+      width: 600px;
+    }
+
+    ui-search-input {
+      margin-left: 0;
+    }
+
+    ui-number-pad {
+      min-width: 300px;
+    }
+
+    ui-date-picker {
+      min-width: 210px;
+    }
+
+    > ui-color-fields {
+      border: 1px solid rgba(#000, 0.1);
+      border-radius: $border-radius;
+      background: $input;
+      padding: 20px;
+      width: 450px;
+    }
+
+    ui-color-panel {
+      height: 330px;
+    }
+
+    ui-color-picker {
+      min-width: 240px;
+    }
+
+    ui-file-input {
+      margin-bottom: 10px;
+    }
+
+    ui-chooser {
+      width: 300px;
+
+      ui-dropdown-panel {
+        box-sizing: border-box;
+        width: inherit;
+      }
+    }
+
+    .inplace-input {
+      background: $input;
+      padding: 20px;
+      width: 300px;
+
+      > span {
+        border-bottom: 1px solid rgba(#000, 0.05);
+        text-transform: uppercase;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        display: block;
+        opacity: 0.8;
+      }
+
+      ui-inplace-input {
+        width: 100%;
+      }
+    }
+
+    .notification-center-demo {
+      ui-input {
+        margin-right: 10px;
+      }
+    }
+  }
+}

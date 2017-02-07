@@ -7,8 +7,6 @@ import Ui.Tabs
 import Ui
 
 import Html exposing (text)
-import Html.App
-
 
 type Msg
   = Tabs Ui.Tabs.Msg
@@ -23,7 +21,7 @@ type alias Model =
 
 init : Model
 init =
-  { tabs = Ui.Tabs.init 0
+  { tabs = Ui.Tabs.init ()
   , form =
       Form.init
         { checkboxes =
@@ -43,36 +41,41 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Tabs act ->
+update msg_ model =
+  case msg_ of
+    Tabs msg ->
       let
-        ( tabs, effect ) =
-          Ui.Tabs.update act model.tabs
+        ( tabs, cmd ) =
+          Ui.Tabs.update msg model.tabs
       in
-        ( { model | tabs = tabs }, Cmd.map Tabs effect )
+        ( { model | tabs = tabs }, Cmd.map Tabs cmd )
           |> updateForm
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
-    updatedForm =
-      Form.updateNumberRange "selected" (toFloat model.tabs.selected) model.form
+    ( updatedForm, formCmd ) =
+      Form.updateNumberRange
+        "selected"
+        (toFloat model.tabs.selected)
+        model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent tabs =
       { tabs
@@ -81,7 +84,7 @@ updateState ( model, effect ) =
         , selected = round (Form.valueOfNumberRange "selected" 0 model.form)
       }
   in
-    ( { model | tabs = updatedComponent model.tabs }, effect )
+    ( { model | tabs = updatedComponent model.tabs }, cmd )
 
 
 subscriptions : Model -> Sub Msg
@@ -96,15 +99,12 @@ view model =
       Form.view Form model.form
 
     tabs =
-      [ ( "Tab 1", Ui.panel [] [ text "Tab 1 Contents" ] )
-      , ( "Tab 2", Ui.panel [] [ text "Tab 2 Contents" ] )
-      , ( "Tab 3", Ui.panel [] [ text "Tab 3 Contents" ] )
+      [ ( "Tab 1", text "Tab 1 Contents" )
+      , ( "Tab 2", text "Tab 2 Contents" )
+      , ( "Tab 3", text "Tab 3 Contents" )
       ]
 
     demo =
-      Ui.Tabs.view
-        tabs
-        Tabs
-        model.tabs
+      Ui.Tabs.view { address = Tabs, contents = tabs } model.tabs
   in
     Components.Reference.view demo form

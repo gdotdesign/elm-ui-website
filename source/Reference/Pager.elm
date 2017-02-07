@@ -7,8 +7,6 @@ import Ui.Pager
 
 import Html.Attributes exposing (class)
 import Html exposing (div, text)
-import Html.App
-
 
 type Msg
   = Pager Ui.Pager.Msg
@@ -25,40 +23,33 @@ type alias Model =
 
 init : Model
 init =
-  let
-    pager = Ui.Pager.init 0
-  in
-    { pager = {
-        pager
-        | width = "460px"
-        , height = "200px"
-      }
-    , form =
-        Form.init
-          { numberRanges = []
-          , checkboxes = []
-          , textareas = []
-          , choosers = []
-          , colors = []
-          , inputs = []
-          , dates = []
-          }
-        |> Form.button "Next Page" "primary" Next
-        |> Form.button "Previous Page" "primary" Previous
-    }
+  { pager = Ui.Pager.init ()
+  , form =
+      Form.init
+        { numberRanges = []
+        , checkboxes = []
+        , textareas = []
+        , choosers = []
+        , colors = []
+        , inputs = []
+        , dates = []
+        }
+      |> Form.button "Next Page"     "primary" Next
+      |> Form.button "Previous Page" "primary" Previous
+  }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Pager act ->
-      ( { model | pager = Ui.Pager.update act model.pager }, Cmd.none )
+update msg_ model =
+  case msg_ of
+    Pager msg ->
+      ( { model | pager = Ui.Pager.update msg model.pager }, Cmd.none )
 
-    Form act ->
+    Form msg ->
       let
-        ( form, effect ) = Form.update act model.form
+        ( form, cmd ) = Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
     Next ->
@@ -75,12 +66,12 @@ update action model =
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent pager =
       pager
   in
-    ( { model | pager = updatedComponent model.pager }, effect )
+    ( { model | pager = updatedComponent model.pager }, cmd )
 
 
 subscriptions : Model -> Sub Msg
@@ -96,12 +87,14 @@ view model =
 
     demo =
       Ui.Pager.view
-        Pager
-        [ div [ class "demo-page-1" ] [ text "Page 1" ]
-        , div [ class "demo-page-2" ] [ text "Page 2" ]
-        , div [ class "demo-page-3" ] [ text "Page 3" ]
-        , div [ class "demo-page-4" ] [ text "Page 4" ]
-        ]
+        { address = Pager
+        , pages =
+          [ div [ class "demo-page-1" ] [ text "Page 1" ]
+          , div [ class "demo-page-2" ] [ text "Page 2" ]
+          , div [ class "demo-page-3" ] [ text "Page 3" ]
+          , div [ class "demo-page-4" ] [ text "Page 4" ]
+          ]
+        }
         model.pager
   in
     Components.Reference.view demo form

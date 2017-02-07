@@ -1,0 +1,25 @@
+ui-documentation {
+  min-height: calc(100vh - 110px);
+  background: $input;
+  display: flex;
+
+  div.markdown-medium {
+    max-width: 800px;
+    flex: 1;
+
+    padding: 30px;
+    padding-bottom: 150px;
+  }
+
+  p {
+    margin: 10px 0;
+  }
+
+  h2 {
+    border-bottom: 1px solid rgba(#000, 0.1);
+    padding-bottom: 10px;
+
+    margin: 0;
+    margin-top: 40px;
+  }
+}

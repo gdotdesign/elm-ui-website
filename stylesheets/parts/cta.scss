@@ -1,0 +1,17 @@
+ui-cta {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: $input;
+  padding: 100px 0;
+  font-size: 40px;
+  display: flex;
+
+  ui-button {
+    text-transform: uppercase;
+  }
+
+  > span {
+    margin-bottom: 30px;
+  }
+}

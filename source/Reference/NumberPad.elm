@@ -6,8 +6,6 @@ import Components.Reference
 import Ui.NumberPad
 
 import Html exposing (text)
-import Html.App
-
 
 type Msg
   = NumberPad Ui.NumberPad.Msg
@@ -22,7 +20,9 @@ type alias Model =
 
 init : Model
 init =
-  { numberPad = Ui.NumberPad.init 42
+  { numberPad =
+      Ui.NumberPad.init ()
+        |> Ui.NumberPad.setValue 42
   , form =
       Form.init
         { numberRanges =
@@ -33,12 +33,12 @@ init =
         , dates = []
         , inputs =
             [ ( "prefix", 1, "Prefix...", "" )
-            , ( "affix", 2, "Affix...", "" )
+            , ( "affix",  2, "Affix...",  "" )
             ]
         , checkboxes =
             [ ( "disabled", 4, False )
             , ( "readonly", 5, False )
-            , ( "format", 3, True)
+            , ( "format",   3, True  )
             ]
         , choosers =
             []
@@ -47,50 +47,52 @@ init =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-  case action of
-    Form act ->
+update msg_ model =
+  case msg_ of
+    Form msg ->
       let
-        ( form, effect ) =
-          Form.update act model.form
+        ( form, cmd ) =
+          Form.update msg model.form
       in
-        ( { model | form = form }, Cmd.map Form effect )
+        ( { model | form = form }, Cmd.map Form cmd )
           |> updateState
 
-    NumberPad act ->
+    NumberPad msg ->
       let
-        ( numberPad, effect ) =
-          Ui.NumberPad.update act model.numberPad
+        ( numberPad, cmd ) =
+          Ui.NumberPad.update msg model.numberPad
       in
-        ( { model | numberPad = numberPad }, Cmd.map NumberPad effect )
+        ( { model | numberPad = numberPad }, Cmd.map NumberPad cmd )
         |> updateForm
 
 
 updateForm : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateForm ( model, effect ) =
+updateForm ( model, cmd ) =
   let
-    updatedForm =
+    ( updatedForm, formCmd ) =
       Form.updateNumberRange "value"
         (toFloat model.numberPad.value)
         model.form
   in
-    ( { model | form = updatedForm }, effect )
+    ( { model | form = updatedForm }
+    , Cmd.batch [ Cmd.map Form formCmd, cmd ]
+    )
 
 
 updateState : ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-updateState ( model, effect ) =
+updateState ( model, cmd ) =
   let
     updatedComponent numberPad =
       { numberPad
         | disabled = Form.valueOfCheckbox "disabled" False model.form
         , readonly = Form.valueOfCheckbox "readonly" False model.form
-        , format = Form.valueOfCheckbox "format" False model.form
         , value = round (Form.valueOfNumberRange "value" 0 model.form)
+        , format = Form.valueOfCheckbox "format" False model.form
         , prefix = Form.valueOfInput "prefix" "" model.form
         , affix = Form.valueOfInput "affix" "" model.form
       }
   in
-    ( { model | numberPad = updatedComponent model.numberPad }, effect )
+    ( { model | numberPad = updatedComponent model.numberPad }, cmd )
 
 
 subscriptions : Model -> Sub Msg
@@ -106,8 +108,7 @@ view model =
 
     demo =
       Ui.NumberPad.view
-        { bottomLeft = text "", bottomRight = text "" }
-        NumberPad
+        { bottomLeft = text "", bottomRight = text "", address = NumberPad }
         model.numberPad
   in
     Components.Reference.view demo form
