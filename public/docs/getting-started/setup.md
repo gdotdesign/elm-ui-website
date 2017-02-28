@@ -19,7 +19,7 @@ Add the Elm-UI as a dependency as you would any other pacakge to your
 }
 ```
 
-Since Elm-UI uses stuff that are not allowed in the official repository
+Since Elm-UI uses stuff that are [not allowed](https://github.com/gdotdesign/elm-ui/issues/24#issuecomment-209217352) in the official repository
 you cannot installed it via the default method, however you can install it and
 other packages like it with [elm-github-install](https://github.com/gdotdesign/elm-github-install)
 which gives you the `elm-install` command, which installs all your packages from
