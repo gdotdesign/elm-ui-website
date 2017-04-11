@@ -80,11 +80,11 @@ section title content image =
 componentLibraryContent : String
 componentLibraryContent =
   """
-  With a plethora of components you can build a wide variaty of single-page
+  With a plethora of components you can build a wide variety of single-page
   apps.
   - They have **disabled** and **readonly** states
   - They can be controlled by **keyboard**
-  - More then **25+** components
+  - More than **25+** components
   """
 
 
